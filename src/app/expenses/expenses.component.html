@@ -1,0 +1,41 @@
+<div>
+
+  <ion-buttons slot="start">
+    <ion-button (click)="onAdd()">
+      <ion-icon slot="start" name="add"></ion-icon>
+      Add New
+    </ion-button>
+    <ion-button *ngIf="selected" (click)="onDelete()">
+      <ion-icon slot="start" name="trash-outline"></ion-icon>
+      DELETE
+    </ion-button>
+    <ion-button *ngIf="selected" (click)="onEdit()">
+      <ion-icon slot="start" name="create-outline"></ion-icon>
+      EDIT
+    </ion-button>
+  </ion-buttons>
+
+<ion-grid>
+  <ion-row *ngFor="let expense of expenses; index as i" (click)="onSelect(i)">
+    <ion-col>
+      <ion-row (click)="onSelectRow(i)">
+        <ion-col size="2">{{i}}</ion-col>
+        <ion-col size="6">{{expense.name}}</ion-col>
+        <ion-col size="4">{{expense.amount}}</ion-col>
+      </ion-row>
+      <ion-row *ngIf="selectedRow === i && isSelectedRow">
+        <ion-col size="4">{{expense.category}}</ion-col>
+        <ion-col size="4">{{expense.methodPay}}</ion-col>
+        <ion-col size="4">{{expense.freqPay}}</ion-col>
+      </ion-row>
+      <ion-row *ngIf="selectedRow === i && isSelectedRow">
+        <ion-col size="3">{{expense.benef}}</ion-col>
+        <ion-col size="3">{{expense.commitDate | date :'MM/dd/yy, HH:mm a'}}</ion-col>
+        <ion-col size="3">{{expense.fristPayDate | date :'MM/dd/yy'}}</ion-col>
+        <ion-col size="3">{{expense.numberOfPay}}</ion-col>
+      </ion-row>
+    </ion-col>
+  </ion-row>
+
+</ion-grid>
+</div>

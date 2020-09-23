@@ -1,0 +1,20 @@
+ion-row {
+    background-color: rgb(230, 230, 230);
+   // margin-bottom: 5px;
+}
+
+div {
+ 
+    position: relative;
+}
+
+ion-buttons {
+    background-color: peru;
+    position:absolute;
+}
+
+ion-grid {
+    padding-top: 40px;
+    overflow: scroll;
+    height: 600px;
+}

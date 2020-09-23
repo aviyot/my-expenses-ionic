@@ -1,0 +1,19 @@
+<ion-toolbar>
+  <ion-buttons slot="start">
+    <ion-button (click)="onAdd()">
+      <ion-icon slot="start" name="add"></ion-icon>
+      {{(source==='home')? 'Add New' : 'Add' }}
+    </ion-button>
+    <ion-button (click)="onDelete()">
+      <ion-icon slot="start" name="trash-outline"></ion-icon>
+      DELETE
+    </ion-button>
+    <ion-button *ngIf="source==='home'" (click)="onEdit()">
+      <ion-icon slot="start" name="create-outline"></ion-icon>
+      EDIT
+    </ion-button>
+    <ion-button *ngIf="!(source==='home')" (click)="onUpdate()">
+      <ion-icon slot="start" name="save-outline"></ion-icon>      UPDATE
+    </ion-button>
+  </ion-buttons>
+</ion-toolbar>

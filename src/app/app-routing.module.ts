@@ -11,6 +11,10 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
+  {
+    path: 'expense-add-form',
+    loadChildren: () => import('./expense-add-form/expense-add-form.module').then( m => m.ExpenseAddFormPageModule)
+  },
 ];
 
 @NgModule({
