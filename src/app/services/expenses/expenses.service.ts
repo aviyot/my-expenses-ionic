@@ -14,6 +14,8 @@ export class ExpensesService {
   public dataLoaded = new BehaviorSubject<boolean>(false);
   public localCategoriesLoaded = new BehaviorSubject(false);
   public localPaymentMethodsLoaded = new BehaviorSubject(false);
+  public dataChanged = new BehaviorSubject(false);
+
 
   private _expenses: Expense[] = [];
 
@@ -28,14 +30,16 @@ export class ExpensesService {
   }
 
   set expense(value: Expense) {
-    this._expenses.push(value);
+    this._expenses = [...this._expenses, value]
     this.calcTotalExpenses();
   }
 
   delete(key: number) {
+   this._expenses.sort((a,b)=> b.amount-a.amount)
     this._expenses.splice(key, 1);
     this.calcTotalExpenses();
     this.saveLocalExpenses();
+    this.dataChanged.next(true);
   }
 
   get selectedExpense(): number {
@@ -52,23 +56,48 @@ export class ExpensesService {
 
   set category(value: string) {
     this._categories.push(value);
+    this.saveLocalCategories();
+    this.dataChanged.next(true);
   }
+ 
+  removeCategory(val){
+    this._categories = this._categories.filter(item => item !== val)
+    this.saveLocalCategories();
+    this.dataChanged.next(true);
+    return this.categories
+  }
+
 set paymentMethod(value:string){
   this._paymentMethods.push(value);
+  this.saveLocalPaymentMethods();
+this.dataChanged.next(true);
 }
   get paymentMethods(): string[] {
     return [...this._paymentMethods];
   }
+  removePayMethod(val){
+this._paymentMethods = this._paymentMethods.filter(item=>item !== val);
+this.saveLocalPaymentMethods();
+this.dataChanged.next(true);
+
+return this.paymentMethods;
+  }
 
   update(id: number, expense: Expense) {
-    this._expenses[id] = expense;
+    console.log(expense);
+    this._expenses = [...this._expenses.filter(item => item.name !== expense.name ) , expense]
+    //this._expenses[id] = expense;
     this.calcTotalExpenses();
     this.saveLocalExpenses();
+    this.dataChanged.next(true);
   }
 
   addNew(expense: Expense) {
-    this.expense = expense;
+    let expenseWithId = {...expense,key:Date.now()};
+    this._expenses = [...this._expenses,expenseWithId];
     this.saveLocalExpenses();
+    this.dataChanged.next(true);
+    //this.dataChanged.next(true);
   }
 
   calcTotalExpenses(): void {

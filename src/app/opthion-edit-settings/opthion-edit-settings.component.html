@@ -1,21 +1,42 @@
-<ion-tabs>
+<ion-toolbar>
+  <ion-buttons slot="secondary">
+    <ion-button *ngIf="!opthions.editMode" (click) = "onAddNewItem()">
+      <ion-icon  name="add-circle-outline" size="large"></ion-icon>
+    </ion-button>
+    <ion-button *ngIf="!opthions.editMode" (click) = "onRemoveNewItem()">
+      <ion-icon name="remove-circle-outline" size="large"></ion-icon>
+    </ion-button>
+    <ion-button color="secondary" *ngIf="!opthions.editMode" (click)="onBack()">
+      <ion-icon name="arrow-back-circle-outline"  size="large" ></ion-icon>
+    </ion-button>
+  </ion-buttons>
+  <ion-title >Opthins</ion-title>
+</ion-toolbar>
 
-  <ion-tab tab="cat">
-    <h1>cattegorios</h1>
-  </ion-tab>
-  <ion-tab tab="paym">
-    <h1>Pay Methods</h1>
-  </ion-tab>
-
-  <ion-tab-bar>
-    <ion-tab-button tab="cat">
-      <ion-label>Categores</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button tab="paym">
-      <ion-label>Pay Methods</ion-label>
-    </ion-tab-button>
-
-  </ion-tab-bar>
-
-</ion-tabs>
+<ion-grid>
+  <ion-row *ngIf="opthions.editMode">
+    <ion-col >
+      <ion-button (click)="onClickCat()" expand="block" fill="clear" shape="round">
+        Edit Categoery
+      </ion-button>
+    </ion-col>
+    <ion-col>
+      <ion-button (click)="onClickPay()" expand="block" fill="clear" shape="round">
+        Edit Expense Method
+      </ion-button>
+    </ion-col>
+    
+  </ion-row>
+</ion-grid>
+<ion-list *ngIf="!opthions.editMode && opthions.editPay">
+  <ion-item>
+    <ion-input  color="primary" [formControl] = "payMethod" placeholder="Enter New Pay Opthion"></ion-input>
+  </ion-item>
+  <ion-item [ngClass]="{'my-class': payMethod == 'selectedVlaue'}" *ngFor = "let payMethod of paymentMethods" (click) = "onSelectPayMethod(payMethod)"> {{payMethod}} </ion-item>
+</ion-list>
+<ion-list *ngIf="!opthions.editMode && opthions.editCat">
+  <ion-item>
+    <ion-input  color="primary" [formControl] = "category" placeholder="Enter New Category"></ion-input>
+  </ion-item>
+  <ion-item  *ngFor = "let catgory of categories" (click) = "onSelectCatgory(catgory)" [ngClass]="'my-class'"> {{catgory}}  </ion-item>
+</ion-list>

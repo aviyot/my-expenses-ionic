@@ -15,6 +15,7 @@ export class ExpensesComponent implements OnInit{
   expenses : Expense[] = [];
   selectedRow : number = null;
   isSelectedRow:boolean = false;
+
   constructor(private router : Router,private expensesService: ExpensesService) { }
 
   ngOnInit() {
@@ -22,7 +23,13 @@ export class ExpensesComponent implements OnInit{
     this.expensesService.dataLoaded.subscribe((val)=>{
          if(val){
           this.expenses = this.expensesService.expenses;
+          this.expenses.sort((a,b)=> b.amount-a.amount)
          }
+    })
+
+    this.expensesService.dataChanged.subscribe(()=>{
+      this.expenses = this.expensesService.expenses;
+      this.expenses.sort((a,b)=> b.amount-a.amount)
     })
   }
   
@@ -31,11 +38,14 @@ export class ExpensesComponent implements OnInit{
   onSelect(selectedIndex:number){
     this.selected = true;
     this.selectedIndex = selectedIndex;
+    console.log(this.expenses[this.selectedIndex]);
   }
 
   onAdd() {
     this.router.navigate(['/','expense-add-form']);
     this.selected = false;
+    this.expensesService.dataChanged.next(true);
+
   }
 
   onEdit(){
@@ -47,7 +57,6 @@ export class ExpensesComponent implements OnInit{
   onDelete(){
     console.log("delete:",this.selectedIndex);
     this.expensesService.delete(this.selectedIndex);
-    this.expenses = this.expensesService.expenses;
     this.selected = false;
 
   }

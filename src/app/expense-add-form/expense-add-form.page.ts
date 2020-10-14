@@ -35,6 +35,11 @@ export class ExpenseAddFormPage implements OnInit {
 
   ngOnInit() {
    
+    this.expensesService.dataChanged.subscribe(val => {
+      this.categories = this.expensesService.categories;
+      this.paymentMethods = this.expensesService.paymentMethods;
+
+    })
     this.expensesService.localCategoriesLoaded.subscribe((val) => {
       if (val) {
         this.categories = this.expensesService.categories;
@@ -115,72 +120,17 @@ export class ExpenseAddFormPage implements OnInit {
     this.expensesService.update(+this.id, this.form.value);
     this.router.navigate(["/", "home"]);
   }
-  /*  onUpdate() {
-    console.log("onUpdate");
-    const {
-      name,
-      amount,
-      category,
-      methodPay,
-      freqPay,
-      benef,
-      commitDate,
-      fristPayDate,
-      numberOfPay,
-    } = this.form.value;
-    this.expensesService.expenses[+this.id] = new Expense(
-      name,
-      amount,
-      category,
-      methodPay,
-      freqPay,
-      benef,
-      commitDate,
-      fristPayDate,
-      numberOfPay
-    );
-
-    console.log(this.expensesService.expenses);
-    this.router.navigate(["/", "home"]);
-    //this.form.controls['name'].setValue(this.expensesService.expenses[this.expensesService.selectedExpense].name);
-  } */
 
   onAdd() {
-
-
     if(this.form.valid) {
      this.expensesService.addNew(this.form.value);
-     this.router.navigate(["/", "home"]);
+    this.form.reset();
+     //this.router.navigate(["/", "home"]);
     }
     else {
       alert("enter requided data(amount,category")
     }
-    /*     const {
-      name,
-      amount,
-      category,
-      methodPay,
-      freqPay,
-      benef,
-      commitDate,
-      fristPayDate,
-      numberOfPay,
-    } = this.form.value;
-    this.expensesService.expense = new Expense(
-      name,
-      amount,
-      category,
-      methodPay,
-      freqPay,
-      benef,
-      commitDate,
-      fristPayDate,
-      numberOfPay
-    );
- */
-  
   }
-
   onDelete() {
     this.expensesService.delete(+this.id);
   }

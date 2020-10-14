@@ -20,6 +20,10 @@ totalExpenses:number = 0;
     this.expensesService.totalExpenses.subscribe((val) => {
       this.totalExpenses = val;
     })
+
+    this.expensesService.dataChanged.subscribe(()=>{
+      this.expensesService.calcTotalExpenses();
+    })
   /*   this.storage.set('name', 'Max');
     this.storage.get('name').then((val) => {
       console.log('Your age is', val);
