@@ -4,9 +4,8 @@ import { ExpensesService } from "../services/expenses/expenses.service";
 import { Expense } from "../models/expense.model";
 import { Router, ActivatedRoute } from "@angular/router";
 import { formatDate } from "@angular/common";
-import { PopoverController } from '@ionic/angular';
-import {OpthionEditSettingsComponent} from '../opthion-edit-settings/opthion-edit-settings.component'
-
+import { PopoverController } from "@ionic/angular";
+import { OpthionEditSettingsComponent } from "../opthion-edit-settings/opthion-edit-settings.component";
 
 @Component({
   selector: "app-expense-add-form",
@@ -32,14 +31,11 @@ export class ExpenseAddFormPage implements OnInit {
     public popoverController: PopoverController
   ) {}
 
-
   ngOnInit() {
-   
-    this.expensesService.dataChanged.subscribe(val => {
+    this.expensesService.dataChanged.subscribe((val) => {
       this.categories = this.expensesService.categories;
       this.paymentMethods = this.expensesService.paymentMethods;
-
-    })
+    });
     this.expensesService.localCategoriesLoaded.subscribe((val) => {
       if (val) {
         this.categories = this.expensesService.categories;
@@ -77,7 +73,9 @@ export class ExpenseAddFormPage implements OnInit {
         commitDate,
         fristPayDate,
         numberOfPay,
-      } = this.expensesService.expenses[+this.id]);
+      } = this.expensesService.expenses.filter(
+        (expense) => expense.id === +this.id
+      )[0]);
     } else {
       this.editMode = false;
     }
@@ -122,13 +120,12 @@ export class ExpenseAddFormPage implements OnInit {
   }
 
   onAdd() {
-    if(this.form.valid) {
-     this.expensesService.addNew(this.form.value);
-    this.form.reset();
-     //this.router.navigate(["/", "home"]);
-    }
-    else {
-      alert("enter requided data(amount,category")
+    if (this.form.valid) {
+      this.expensesService.addNew(this.form.value);
+      this.form.reset();
+      //this.router.navigate(["/", "home"]);
+    } else {
+      alert("enter requided data(amount,category");
     }
   }
   onDelete() {
@@ -142,7 +139,7 @@ export class ExpenseAddFormPage implements OnInit {
     this.isAddCategory = true;
   }
 
-  addPaymentMethod(){
+  addPaymentMethod() {
     this.isAddPaymentMethod = true;
   }
 
@@ -151,34 +148,31 @@ export class ExpenseAddFormPage implements OnInit {
     this.expensesService.category = this.newCategory;
     this.expensesService.saveLocalCategories();
     this.isAddCategory = false;
-    this.form.controls['category'].setValue(this.newCategory);
+    this.form.controls["category"].setValue(this.newCategory);
   }
 
-  savePaymentMethod(){
+  savePaymentMethod() {
     this.paymentMethods.push(this.newPaymentMethod);
     this.expensesService.paymentMethod = this.newPaymentMethod;
-   this.expensesService.saveLocalPaymentMethods();
-   this.isAddPaymentMethod = false;
-   this.form.controls['methodPay'].setValue(this.newPaymentMethod);
+    this.expensesService.saveLocalPaymentMethods();
+    this.isAddPaymentMethod = false;
+    this.form.controls["methodPay"].setValue(this.newPaymentMethod);
   }
 
   onInputCategory(val) {
     this.newCategory = val.target.value;
-    
   }
 
-  onInputPaymentMethod(val){
+  onInputPaymentMethod(val) {
     this.newPaymentMethod = val.target.value;
   }
-  async onSettingClick(ev: any){
- 
-      const popover = await this.popoverController.create({
-        component: OpthionEditSettingsComponent,
-        cssClass: 'my-custom-class',
-        event: ev,
-        translucent: true
-      });
-      return await popover.present();
-
+  async onSettingClick(ev: any) {
+    const popover = await this.popoverController.create({
+      component: OpthionEditSettingsComponent,
+      cssClass: "my-custom-class",
+      event: ev,
+      translucent: true,
+    });
+    return await popover.present();
   }
 }

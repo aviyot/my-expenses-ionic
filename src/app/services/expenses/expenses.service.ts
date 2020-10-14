@@ -7,9 +7,11 @@ import { BehaviorSubject, Subject } from "rxjs";
   providedIn: "root",
 })
 export class ExpensesService {
-  private _selectedExpense: number = null;
+
+  private _expenses: Expense[] = [];
   private _categories: string[] = ["food", "clothing", "car"];
   private _paymentMethods: string[] = ["cash", "cash credit", "credit"];
+
   public totalExpenses = new BehaviorSubject<number>(0);
   public dataLoaded = new BehaviorSubject<boolean>(false);
   public localCategoriesLoaded = new BehaviorSubject(false);
@@ -17,7 +19,6 @@ export class ExpensesService {
   public dataChanged = new BehaviorSubject(false);
 
 
-  private _expenses: Expense[] = [];
 
   constructor(private storage: Storage) {
     this.loadLocalExpenses();
@@ -32,22 +33,14 @@ export class ExpensesService {
   set expense(value: Expense) {
     this._expenses = [...this._expenses, value]
     this.calcTotalExpenses();
-  }
-
-  delete(key: number) {
-   this._expenses.sort((a,b)=> b.amount-a.amount)
-    this._expenses.splice(key, 1);
-    this.calcTotalExpenses();
     this.saveLocalExpenses();
+
+  }
+
+  delete(id: number) {
+    this._expenses = this._expenses.filter(expense => expense.id !== id)
     this.dataChanged.next(true);
-  }
-
-  get selectedExpense(): number {
-    return this._selectedExpense;
-  }
-
-  set selectedExpense(value: number) {
-    this._selectedExpense = value;
+    this.saveLocalExpenses();
   }
 
   get categories(): string[] {
@@ -55,7 +48,7 @@ export class ExpensesService {
   }
 
   set category(value: string) {
-    this._categories.push(value);
+    this._categories = [...this._categories,value]
     this.saveLocalCategories();
     this.dataChanged.next(true);
   }
@@ -68,7 +61,7 @@ export class ExpensesService {
   }
 
 set paymentMethod(value:string){
-  this._paymentMethods.push(value);
+  this._paymentMethods = [...this._paymentMethods , value]
   this.saveLocalPaymentMethods();
 this.dataChanged.next(true);
 }
@@ -83,21 +76,20 @@ this.dataChanged.next(true);
 return this.paymentMethods;
   }
 
-  update(id: number, expense: Expense) {
-    console.log(expense);
-    this._expenses = [...this._expenses.filter(item => item.name !== expense.name ) , expense]
-    //this._expenses[id] = expense;
+  update(id: number , updateExpense:Expense) {
+
+    this._expenses = [...this._expenses.filter(item => item.id !== id ), {...updateExpense,id:id}]
     this.calcTotalExpenses();
     this.saveLocalExpenses();
     this.dataChanged.next(true);
+    
   }
 
   addNew(expense: Expense) {
-    let expenseWithId = {...expense,key:Date.now()};
+    let expenseWithId = {...expense,id:Date.now()};
     this._expenses = [...this._expenses,expenseWithId];
     this.saveLocalExpenses();
     this.dataChanged.next(true);
-    //this.dataChanged.next(true);
   }
 
   calcTotalExpenses(): void {

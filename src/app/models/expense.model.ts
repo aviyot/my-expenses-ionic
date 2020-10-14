@@ -1,6 +1,7 @@
 
 export class Expense {
     constructor(
+    public id :number,
     public name:string,
     public amount:number,
     public category:string,
@@ -9,7 +10,7 @@ export class Expense {
     public benef: string,
     public commitDate:Date,
     public fristPayDate:Date, 
-    public numberOfPay: number
+    public numberOfPay:number
     ){
   
     }
