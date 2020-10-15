@@ -4,7 +4,7 @@ import { ExpensesService } from "../services/expenses/expenses.service";
 import { Expense } from "../models/expense.model";
 import { Router, ActivatedRoute } from "@angular/router";
 import { formatDate } from "@angular/common";
-import { PopoverController } from "@ionic/angular";
+import { PopoverController, ToastController } from "@ionic/angular";
 import { OpthionEditSettingsComponent } from "../opthion-edit-settings/opthion-edit-settings.component";
 
 @Component({
@@ -28,7 +28,8 @@ export class ExpenseAddFormPage implements OnInit {
     private expensesService: ExpensesService,
     private router: Router,
     private route: ActivatedRoute,
-    public popoverController: PopoverController
+    public popoverController: PopoverController,
+    public toastController: ToastController
   ) {}
 
   ngOnInit() {
@@ -123,9 +124,11 @@ export class ExpenseAddFormPage implements OnInit {
     if (this.form.valid) {
       this.expensesService.addNew(this.form.value);
       this.form.reset();
-      this.router.navigate(["/", "home"]);
+     // this.router.navigate(["/", "home"]);
+     this.presentToastDataAdded();
     } else {
-      alert("enter requided data(amount,category");
+      this.presentToast();
+      //alert("enter requided data(amount,category");
     }
   }
   onDelete() {
@@ -174,5 +177,22 @@ export class ExpenseAddFormPage implements OnInit {
       translucent: true,
     });
     return await popover.present();
+  }
+
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'Enter requided data(amount,category)',
+      duration: 2000,
+      color:'warning'
+    });
+    toast.present();
+  }
+  async presentToastDataAdded() {
+    const toast = await this.toastController.create({
+      message: 'DATA ADDED',
+      duration: 1000,
+      color:'success'
+    });
+    toast.present();
   }
 }
