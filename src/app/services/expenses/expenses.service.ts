@@ -9,8 +9,8 @@ import { BehaviorSubject, Subject } from "rxjs";
 export class ExpensesService {
 
   private _expenses: Expense[] = [];
-  private _categories: string[] = ["food", "clothing", "car"];
-  private _paymentMethods: string[] = ["cash", "cash credit", "credit"];
+  private _categories: string[] = [];
+  private _paymentMethods: string[] = [];
 
   public totalExpenses = new BehaviorSubject<number>(0);
   public dataLoaded = new BehaviorSubject<boolean>(false);
