@@ -1,10 +1,32 @@
 <ion-header>
-
-      <ion-toolbar>
-        <ion-title class="ion-text-center">TOTAL EXPENSES : {{totalExpenses | number}}</ion-title>
-      </ion-toolbar>  
+  <ion-toolbar>
+  <ion-buttons slot="start">
+    <ion-button (click)="onAdd()">
+      <ion-icon slot="start" name="add"></ion-icon>
+  
+    </ion-button>
+    <ion-button *ngIf="selectedId" (click)="onDelete()">
+      <ion-icon slot="start" name="trash-outline"></ion-icon>
+  
+    </ion-button>
+    <ion-button *ngIf="selectedId" (click)="onEdit()">
+      <ion-icon slot="start" name="create-outline"></ion-icon>
+  
+    </ion-button>
+    <ion-button *ngIf="selectedId" (click)="showDetail()">
+      <ion-icon name="list-outline"></ion-icon>
+  
+    </ion-button>
+  </ion-buttons>
+</ion-toolbar>
 </ion-header>
-<ion-content >
 
-<app-expenses></app-expenses>
+<ion-content >
+<app-expenses (select) = "onSelect($event)" [expenses] = "expenses" [showDetails]="showDetails"></app-expenses>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+      <ion-title class="ion-text-center">TOTAL EXPENSES : {{totalExpenses | number}}</ion-title>
+    </ion-toolbar>  
+</ion-footer>

@@ -9,36 +9,37 @@ import { Router } from "@angular/router";
   styleUrls: ["./expenses.component.scss"],
 })
 export class ExpensesComponent implements OnInit {
-  expenses: Expense[] = [];
-  selectedId: number = null;
+  @Output() select: EventEmitter<number> = new EventEmitter();
+  @Input() expenses: Expense[] = [];
+  @Input() showDetails : boolean = false;
+  selectedId:number = null;
 
-  constructor(
-    private router: Router,
-    private expensesService: ExpensesService
-  ) {}
+  constructor() {}
 
   ngOnInit() {
-    this.expensesService.dataLoaded.subscribe((val) => {
+/*     this.expensesService.dataLoaded.subscribe((val) => {
       if (val) {
         this.expenses = this.expensesService.expenses;
-        this.expenses.sort((a, b) => b.amount - a.amount);
       }
     });
 
     this.expensesService.dataChanged.subscribe(() => {
       this.expenses = this.expensesService.expenses;
-      this.expenses.sort((a, b) => b.amount - a.amount);
-    });
+    }); */
   }
 
   onSelect(selectedId: number) {
-    if (this.selectedId) {
+
+    if (this.selectedId === selectedId) {
       this.selectedId = null;
     } else {
       this.selectedId = selectedId;
     }
-  }
 
+    this.select.emit(selectedId);
+
+  }
+/* 
   onAdd() {
     this.router.navigate(["/", "expense-add-form"]);
     this.expensesService.dataChanged.next(true);
@@ -54,4 +55,13 @@ export class ExpensesComponent implements OnInit {
     this.expensesService.delete(this.selectedId);
     this.selectedId = null;
   }
+
+  showDetail(){
+    if(!this.showDetails ){
+    this.showDetails = true;
+    }
+    else {
+      this.showDetails = false;
+    }
+  } */
 }

@@ -123,7 +123,7 @@ export class ExpenseAddFormPage implements OnInit {
     if (this.form.valid) {
       this.expensesService.addNew(this.form.value);
       this.form.reset();
-      //this.router.navigate(["/", "home"]);
+      this.router.navigate(["/", "home"]);
     } else {
       alert("enter requided data(amount,category");
     }
