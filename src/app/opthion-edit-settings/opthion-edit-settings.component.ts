@@ -14,7 +14,8 @@ export class OpthionEditSettingsComponent implements OnInit {
   paymentMethods: string[];
   category = new FormControl("", [Validators.required]);
   payMethod = new FormControl("", [Validators.required]);
-  selectedVlaue = "";
+  selectedVlaue = null;
+  itemSelected : boolean = false;
   constructor(private expensesService: ExpensesService) {}
 
   ngOnInit() {
@@ -42,6 +43,12 @@ export class OpthionEditSettingsComponent implements OnInit {
     this.opthions.editMode = true;
     this.opthions.editPay = false;
     this.opthions.editCat = false;
+
+    this.itemSelected = false;
+    this.selectedVlaue = false;
+
+    this.category.reset();
+    this.payMethod.reset();
   }
 
   onRemoveNewItem(){
@@ -59,10 +66,12 @@ export class OpthionEditSettingsComponent implements OnInit {
 
   onSelectCatgory(val){
       this.selectedVlaue = val;
+      this.itemSelected = true;
   }
 
   onSelectPayMethod(val){
         this.selectedVlaue = val ;
+        this.itemSelected = true;
   }
 
   onAddNewItem() {
@@ -80,12 +89,5 @@ export class OpthionEditSettingsComponent implements OnInit {
     this.payMethod.reset();
   }
 
-  onFocus() {
-console.log("focus")
-  }
 
-  onBlur(){
-    console.log("blur")
-
-  }
 }

@@ -1,42 +1,45 @@
 <ion-toolbar>
   <ion-buttons slot="secondary">
-    <ion-button *ngIf="!opthions.editMode" (click) = "onAddNewItem()">
-      <ion-icon  name="add-circle-outline" size="large"></ion-icon>
+    <ion-button *ngIf="!opthions.editMode" (click)="onAddNewItem()" [disabled]="category.invalid && payMethod.invalid">
+      <ion-icon name="add-circle-outline" size="large"></ion-icon>
     </ion-button>
-    <ion-button *ngIf="!opthions.editMode" (click) = "onRemoveNewItem()">
+    <ion-button *ngIf="!opthions.editMode" (click)="onRemoveNewItem()" [disabled]="!itemSelected">
       <ion-icon name="remove-circle-outline" size="large"></ion-icon>
     </ion-button>
     <ion-button color="secondary" *ngIf="!opthions.editMode" (click)="onBack()">
-      <ion-icon name="arrow-back-circle-outline"  size="large" ></ion-icon>
+      <ion-icon name="arrow-back-circle-outline" size="large"></ion-icon>
     </ion-button>
   </ion-buttons>
-  <ion-title >Opthins</ion-title>
+  <ion-title>Options edit</ion-title>
 </ion-toolbar>
 
-<ion-grid>
-  <ion-row *ngIf="opthions.editMode">
-    <ion-col >
-      <ion-button (click)="onClickCat()" expand="block" fill="clear" shape="round">
-        Edit Categoery
-      </ion-button>
-    </ion-col>
-    <ion-col>
-      <ion-button (click)="onClickPay()" expand="block" fill="clear" shape="round">
-        Edit Expense Method
-      </ion-button>
-    </ion-col>
-    
-  </ion-row>
-</ion-grid>
+<ion-list *ngIf="opthions.editMode">
+  <ion-item>
+    <ion-button (click)="onClickCat()" expand="block" fill="clear" shape="round">
+      Edit Expense Categoery
+    </ion-button>
+  </ion-item>
+  <ion-item>
+    <ion-button (click)="onClickPay()" expand="block" fill="clear" shape="round">
+      Edit Expense Method
+    </ion-button>
+  </ion-item>
+</ion-list>
+
+
 <ion-list *ngIf="!opthions.editMode && opthions.editPay">
   <ion-item>
-    <ion-input  color="primary" [formControl] = "payMethod" placeholder="Enter New Pay Opthion"></ion-input>
+    <ion-input color="primary" [formControl]="payMethod" placeholder="Enter New Pay Opthion"></ion-input>
   </ion-item>
-  <ion-item [ngClass]="{'my-class': payMethod == 'selectedVlaue'}" *ngFor = "let payMethod of paymentMethods" (click) = "onSelectPayMethod(payMethod)"> {{payMethod}} </ion-item>
+  <ion-item *ngFor="let payMethod of paymentMethods"
+    [ngStyle]="(selectedVlaue === payMethod && itemSelected) && {'color':'red'}" (click)="onSelectPayMethod(payMethod)">
+    {{payMethod}} </ion-item>
 </ion-list>
 <ion-list *ngIf="!opthions.editMode && opthions.editCat">
   <ion-item>
-    <ion-input  color="primary" [formControl] = "category" placeholder="Enter New Category"></ion-input>
+    <ion-input color="primary" [formControl]="category" placeholder="Enter New Category"></ion-input>
   </ion-item>
-  <ion-item  *ngFor = "let catgory of categories" (click) = "onSelectCatgory(catgory)" [ngClass]="'my-class'"> {{catgory}}  </ion-item>
+  <ion-item *ngFor="let catgory of categories" (click)="onSelectCatgory(catgory)"
+    [ngStyle]="(selectedVlaue === catgory && itemSelected) && {'color':'red'}">
+    {{catgory}} </ion-item>
 </ion-list>
