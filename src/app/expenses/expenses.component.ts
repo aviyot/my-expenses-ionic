@@ -13,6 +13,7 @@ export class ExpensesComponent implements OnInit {
   @Input() expenses: Expense[] = [];
   @Input() showDetails : boolean = false;
   selectedId:number = null;
+  expensesSelected = false;
 
   constructor() {}
 
@@ -32,8 +33,11 @@ export class ExpensesComponent implements OnInit {
 
     if (this.selectedId === selectedId) {
       this.selectedId = null;
+      this.expensesSelected = false;
     } else {
       this.selectedId = selectedId;
+      this.expensesSelected = true;
+
     }
 
     this.select.emit(selectedId);

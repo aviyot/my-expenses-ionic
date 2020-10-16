@@ -26,12 +26,12 @@
         <ion-col size="6">{{expense.name}}</ion-col>
         <ion-col size="4">{{expense.amount}}</ion-col>
       </ion-row>
-      <ion-row *ngIf="showDetails && (selectedId === expense.id)">
+      <ion-row *ngIf="(showDetails && (selectedId === expense.id)) || (showDetails && !expensesSelected)">
         <ion-col size="4">{{expense.category}}</ion-col>
         <ion-col size="4">{{expense.methodPay}}</ion-col>
         <ion-col size="4">{{expense.freqPay}}</ion-col>
       </ion-row>
-      <ion-row *ngIf="showDetails && (selectedId === expense.id)">
+      <ion-row *ngIf="showDetails && (selectedId === expense.id) ||  (showDetails && !expensesSelected)">
         <ion-col size="3">{{expense.benef}}</ion-col>
         <ion-col size="3">{{expense.commitDate | date :'MM/dd/yy, HH:mm a'}}</ion-col>
         <ion-col size="3">{{expense.fristPayDate | date :'MM/dd/yy'}}</ion-col>
