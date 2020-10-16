@@ -1,41 +1,16 @@
-<!-- <ion-buttons slot="start">
-  <ion-button (click)="onAdd()">
-    <ion-icon slot="start" name="add"></ion-icon>
-
-  </ion-button>
-  <ion-button *ngIf="selectedId" (click)="onDelete()">
-    <ion-icon slot="start" name="trash-outline"></ion-icon>
-
-  </ion-button>
-  <ion-button *ngIf="selectedId" (click)="onEdit()">
-    <ion-icon slot="start" name="create-outline"></ion-icon>
-
-  </ion-button>
-  <ion-button *ngIf="selectedId" (click)="showDetail()">
-    <ion-icon name="list-outline"></ion-icon>
-
-  </ion-button>
-</ion-buttons>
- -->
-<ion-grid>
+<ion-grid style="background-color:lightgrey">
   <ion-row *ngFor="let expense of expenses; index as i" (click)="onSelect(expense.id)"
-    [ngStyle]="(selectedId && (selectedId === expense.id))&&{'color':'red'}">
+  [ngStyle]="(selectedId && (selectedId === expense.id))?{'background-color':'darkgrey'}:{'background-color':'lightgrey'}">
     <ion-col>
-      <ion-row>
-        <ion-col size="2">{{i}}</ion-col>
+      <ion-row >
+        <ion-col size="2">{{i+1}}</ion-col>
         <ion-col size="6">{{expense.name}}</ion-col>
         <ion-col size="4">{{expense.amount}}</ion-col>
       </ion-row>
-      <ion-row *ngIf="(showDetails && (selectedId === expense.id)) || (showDetails && !expensesSelected)">
-        <ion-col size="4">{{expense.category}}</ion-col>
-        <ion-col size="4">{{expense.methodPay}}</ion-col>
-        <ion-col size="4">{{expense.freqPay}}</ion-col>
-      </ion-row>
-      <ion-row *ngIf="showDetails && (selectedId === expense.id) ||  (showDetails && !expensesSelected)">
-        <ion-col size="3">{{expense.benef}}</ion-col>
-        <ion-col size="3">{{expense.commitDate | date :'MM/dd/yy, HH:mm a'}}</ion-col>
-        <ion-col size="3">{{expense.fristPayDate | date :'MM/dd/yy'}}</ion-col>
-        <ion-col size="3">{{expense.numberOfPay}}</ion-col>
+      <ion-row *ngIf="(selectedId && (selectedId === expense.id)) ||showDetails">
+        <ion-col>
+          <app-expense-details [expense]="expense"></app-expense-details>
+        </ion-col>
       </ion-row>
     </ion-col>
   </ion-row>

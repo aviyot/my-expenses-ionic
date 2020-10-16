@@ -18,8 +18,6 @@ export class ExpensesService {
   public localPaymentMethodsLoaded = new BehaviorSubject(false);
   public dataChanged = new BehaviorSubject(false);
 
-
-
   constructor(private storage: Storage) {
     this.loadLocalExpenses();
     this.loadLocalCategories();
@@ -31,14 +29,13 @@ export class ExpensesService {
   }
 
   set expense(value: Expense) {
-    this._expenses = [...this._expenses, value]
+    this._expenses = [...this._expenses, value];
     this.calcTotalExpenses();
     this.saveLocalExpenses();
-
   }
 
   delete(id: number) {
-    this._expenses = this._expenses.filter(expense => expense.id !== id)
+    this._expenses = this._expenses.filter((expense) => expense.id !== id);
     this.dataChanged.next(true);
     this.saveLocalExpenses();
   }
@@ -48,46 +45,47 @@ export class ExpensesService {
   }
 
   set category(value: string) {
-    this._categories = [...this._categories,value]
+    this._categories = [...this._categories, value];
     this.saveLocalCategories();
     this.dataChanged.next(true);
-  }
- 
-  removeCategory(val){
-    this._categories = this._categories.filter(item => item !== val)
-    this.saveLocalCategories();
-    this.dataChanged.next(true);
-    return this.categories
   }
 
-set paymentMethod(value:string){
-  this._paymentMethods = [...this._paymentMethods , value]
-  this.saveLocalPaymentMethods();
-this.dataChanged.next(true);
-}
+  removeCategory(val) {
+    this._categories = this._categories.filter((item) => item !== val);
+    this.saveLocalCategories();
+    this.dataChanged.next(true);
+    return this.categories;
+  }
+
+  set paymentMethod(value: string) {
+    this._paymentMethods = [...this._paymentMethods, value];
+    this.saveLocalPaymentMethods();
+    this.dataChanged.next(true);
+  }
   get paymentMethods(): string[] {
     return [...this._paymentMethods];
   }
-  removePayMethod(val){
-this._paymentMethods = this._paymentMethods.filter(item=>item !== val);
-this.saveLocalPaymentMethods();
-this.dataChanged.next(true);
+  removePayMethod(val) {
+    this._paymentMethods = this._paymentMethods.filter((item) => item !== val);
+    this.saveLocalPaymentMethods();
+    this.dataChanged.next(true);
 
-return this.paymentMethods;
+    return this.paymentMethods;
   }
 
-  update(id: number , updateExpense:Expense) {
-
-    this._expenses = [...this._expenses.filter(item => item.id !== id ), {...updateExpense,id:id}]
+  update(id: number, updateExpense: Expense) {
+    this._expenses = [
+      ...this._expenses.filter((item) => item.id !== id),
+      { ...updateExpense, id: id },
+    ];
     this.calcTotalExpenses();
     this.saveLocalExpenses();
     this.dataChanged.next(true);
-    
   }
 
   addNew(expense: Expense) {
-    let expenseWithId = {...expense,id:Date.now()};
-    this._expenses = [...this._expenses,expenseWithId];
+    let expenseWithId = { ...expense, id: Date.now() };
+    this._expenses = [...this._expenses, expenseWithId];
     this.saveLocalExpenses();
     this.dataChanged.next(true);
   }
@@ -100,13 +98,18 @@ return this.paymentMethods;
     );
   }
 
-  saveLocalExpenses() {
-    this.storage.set("expenses", this._expenses);
+  async saveLocal(value:any,key:string):Promise<any>{
+    const val = await this.storage.set(key, value);
+    console.log(val);
+  }
+
+  async saveLocalExpenses() {
+    const val = await this.storage.set("expenses", this._expenses);
+    console.log(val);
   }
 
   saveLocalCategories() {
     this.storage.set("categories", this._categories);
- 
   }
 
   saveLocalPaymentMethods() {
@@ -126,13 +129,12 @@ return this.paymentMethods;
   }
 
   loadLocalCategories() {
-    this.storage.get("categories").then((val:string[]) => {
+    this.storage.get("categories").then((val: string[]) => {
       if (val) {
         this._categories = val;
         this.localCategoriesLoaded.next(true);
       } else {
         this.storage.set("categories", this._categories);
-
       }
     });
   }
@@ -143,48 +145,35 @@ return this.paymentMethods;
         this._paymentMethods = val;
         this.localPaymentMethodsLoaded.next(true);
       } else {
-        
         this.storage.set("paymentMethods", this._paymentMethods);
       }
     });
   }
 
-  sortExpenses(expenses:Expense[],sortBy:string,sortType?:string) : Expense[]{
-    if(sortType === "acs"){
-      return [...expenses.sort(function(a,b) {
-        if(a[sortBy] > b[sortBy])
-           return -1
-        if(a[sortBy] < b[sortBy])
-           return 1
-  
-        return 0
-      })]
+  sortExpenses(
+    expenses: Expense[],
+    sortBy: string,
+    sortType?: string
+  ): Expense[] {
+    if (sortType === "acs") {
+      return [
+        ...expenses.sort(function (a, b) {
+          if (a[sortBy] > b[sortBy]) return -1;
+          if (a[sortBy] < b[sortBy]) return 1;
+
+          return 0;
+        }),
+      ];
+    } else {
+      return [
+        ...expenses.sort(function (a, b) {
+          if (a[sortBy] < b[sortBy]) return -1;
+          if (a[sortBy] > b[sortBy]) return 1;
+
+          return 0;
+        }),
+      ];
     }
-    else {
-    return [...expenses.sort(function(a,b) {
-      if(a[sortBy] < b[sortBy])
-         return -1
-      if(a[sortBy] > b[sortBy])
-         return 1
-
-      return 0
-    })]
-  }
-  
-   
-     /* if(sortBy === "amount") {
-     sortedExpenses = expenses.sort(function(a,b) {
-          if(a['amount'] < b['amount'])
-             return -1
-          if(a.amount > b.amount)
-             return 1
-
-          return 0
-        })
-       
-      } */
-
-
 
   }
 }

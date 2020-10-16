@@ -1,34 +1,35 @@
 <ion-header>
   <ion-toolbar>
-  <ion-buttons slot="start">
-    <ion-button (click)="onAdd()">
-      <ion-icon slot="start" size="large" name="add"></ion-icon>
-  
-    </ion-button>
-    <ion-button *ngIf="selectedId" (click)="onDelete()">
-      <ion-icon slot="start" size="large" name="trash-outline"></ion-icon>
-  
-    </ion-button>
-    <ion-button *ngIf="selectedId" (click)="onEdit()">
-      <ion-icon slot="start" size="large" name="create-outline"></ion-icon>
-  
-    </ion-button>
-    <ion-button *ngIf="selectedId" (click)="showDetail()">
-      <ion-icon size="large" name="list-outline"></ion-icon>
-    </ion-button>
-    <ion-button (click)="showFilterAlert()">
-      <ion-icon  size="large" name="swap-vertical-outline"></ion-icon> 
-   </ion-button>
-  </ion-buttons>
-</ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="onAdd()">
+        <ion-icon slot="start" size="large" name="add"></ion-icon>
+
+      </ion-button>
+      <ion-button *ngIf="selectedId" (click)="onDelete()">
+        <ion-icon slot="start" size="large" name="trash-outline"></ion-icon>
+
+      </ion-button>
+      <ion-button *ngIf="selectedId" (click)="onEdit()">
+        <ion-icon slot="start" size="large" name="create-outline"></ion-icon>
+
+      </ion-button>
+      <ion-button *ngIf="selectedId" (click)="showDetail()">
+        <ion-icon size="large" name="list-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="showFilterAlert()">
+        <ion-icon size="large" name="swap-vertical-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content >
-<app-expenses (select) = "onSelect($event)" [expenses] = "expenses" [showDetails]="showDetails"></app-expenses>
+<ion-content>
+  <app-expenses (select)="onSelect($event)" [expenses]="expenses" [showDetails]="showDetails" [selectedId]="selectedId">
+  </app-expenses>
 </ion-content>
 
 <ion-footer>
   <ion-toolbar>
-      <ion-title class="ion-text-center">TOTAL EXPENSES : {{totalExpenses | number}}</ion-title>
-    </ion-toolbar>  
+    <ion-title class="ion-text-center">TOTAL EXPENSES : {{totalExpenses | number}}</ion-title>
+  </ion-toolbar>
 </ion-footer>

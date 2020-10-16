@@ -42,7 +42,15 @@ export class HomePage implements OnInit {
   }
 
   onSelect(expenseId) {
-    this.selectedId = expenseId;
+
+    if (this.selectedId === expenseId) {
+      this.selectedId = null;
+    } else {
+      this.selectedId = expenseId;
+
+    }
+
+    this.showDetails = false
   }
 
   onAdd() {
