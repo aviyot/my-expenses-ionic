@@ -148,4 +148,43 @@ return this.paymentMethods;
       }
     });
   }
+
+  sortExpenses(expenses:Expense[],sortBy:string,sortType?:string) : Expense[]{
+    if(sortType === "acs"){
+      return [...expenses.sort(function(a,b) {
+        if(a[sortBy] > b[sortBy])
+           return -1
+        if(a[sortBy] < b[sortBy])
+           return 1
+  
+        return 0
+      })]
+    }
+    else {
+    return [...expenses.sort(function(a,b) {
+      if(a[sortBy] < b[sortBy])
+         return -1
+      if(a[sortBy] > b[sortBy])
+         return 1
+
+      return 0
+    })]
+  }
+  
+   
+     /* if(sortBy === "amount") {
+     sortedExpenses = expenses.sort(function(a,b) {
+          if(a['amount'] < b['amount'])
+             return -1
+          if(a.amount > b.amount)
+             return 1
+
+          return 0
+        })
+       
+      } */
+
+
+
+  }
 }

@@ -2,21 +2,23 @@
   <ion-toolbar>
   <ion-buttons slot="start">
     <ion-button (click)="onAdd()">
-      <ion-icon slot="start" name="add"></ion-icon>
+      <ion-icon slot="start" size="large" name="add"></ion-icon>
   
     </ion-button>
     <ion-button *ngIf="selectedId" (click)="onDelete()">
-      <ion-icon slot="start" name="trash-outline"></ion-icon>
+      <ion-icon slot="start" size="large" name="trash-outline"></ion-icon>
   
     </ion-button>
     <ion-button *ngIf="selectedId" (click)="onEdit()">
-      <ion-icon slot="start" name="create-outline"></ion-icon>
+      <ion-icon slot="start" size="large" name="create-outline"></ion-icon>
   
     </ion-button>
     <ion-button *ngIf="selectedId" (click)="showDetail()">
-      <ion-icon name="list-outline"></ion-icon>
-  
+      <ion-icon size="large" name="list-outline"></ion-icon>
     </ion-button>
+    <ion-button (click)="showFilterAlert()">
+      <ion-icon  size="large" name="swap-vertical-outline"></ion-icon> 
+   </ion-button>
   </ion-buttons>
 </ion-toolbar>
 </ion-header>
