@@ -30,11 +30,14 @@
  
   <ion-item *ngIf ="expense.commitDate ">
     <ion-label>Commit Date</ion-label>
-     <ion-text>{{expense.commitDate | date :'MM/dd/yy, HH:mm a'}}</ion-text>
+     <ion-text>{{expense.commitDate | date :'dd/MM/yy, HH:mm'}}</ion-text>
   </ion-item>
   <ion-item *ngIf ="expense.fristPayDate">
     <ion-label>Frist Pay Date</ion-label>
-     <ion-text>{{expense.fristPayDate | date :'MM/dd/yy'}}</ion-text>
+     <ion-text>{{expense.fristPayDate | date :'dd/MM/yy'}}</ion-text>
   </ion-item>
-
+  <ion-item *ngIf ="expense.numberOfPay">
+    <ion-label>Last Pay Date</ion-label>
+     <ion-text>{{ calcLastPayDate() | date :'dd/MM/yy'}}</ion-text>
+  </ion-item>
 </ion-list>

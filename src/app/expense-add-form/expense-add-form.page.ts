@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExpensesService } from "../services/expenses/expenses.service";
-import { Expense } from "../models/expense.model";
 import { Router, ActivatedRoute } from "@angular/router";
 import { formatDate } from "@angular/common";
 import { PopoverController, ToastController } from "@ionic/angular";
@@ -97,14 +96,12 @@ export class ExpenseAddFormPage implements OnInit {
       }),
       freqPay: new FormControl(freqPay, { updateOn: "blur" }),
       benef: new FormControl(benef, { updateOn: "blur" }),
-      commitDate: new FormControl(
-        formatDate(commitDate, "yyyy-MM-ddTHH:mm", "en"),
+      commitDate: new FormControl(commitDate,
         {
           updateOn: "blur",
         }
       ),
-      fristPayDate: new FormControl(
-        formatDate(fristPayDate, "yyyy-MM-dd", "en"),
+      fristPayDate: new FormControl(fristPayDate,
         {
           updateOn: "blur",
         }

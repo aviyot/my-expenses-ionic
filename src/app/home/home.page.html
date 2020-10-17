@@ -5,15 +5,15 @@
         <ion-icon slot="start" size="large" name="add"></ion-icon>
 
       </ion-button>
-      <ion-button *ngIf="selectedId" (click)="onDelete()">
+      <ion-button  (click)="onDelete()" [disabled]="!selectedId" color="danger">
         <ion-icon slot="start" size="large" name="trash-outline"></ion-icon>
 
       </ion-button>
-      <ion-button *ngIf="selectedId" (click)="onEdit()">
+      <ion-button  (click)="onEdit()" [disabled]="!selectedId">
         <ion-icon slot="start" size="large" name="create-outline"></ion-icon>
 
       </ion-button>
-      <ion-button *ngIf="selectedId" (click)="showDetail()">
+      <ion-button  (click)="showDetail()">
         <ion-icon size="large" name="list-outline"></ion-icon>
       </ion-button>
       <ion-button (click)="showFilterAlert()">

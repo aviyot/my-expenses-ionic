@@ -1,6 +1,6 @@
-<ion-grid style="background-color:lightgrey">
+<ion-grid>
   <ion-row *ngFor="let expense of expenses; index as i" (click)="onSelect(expense.id)"
-  [ngStyle]="(selectedId && (selectedId === expense.id))?{'background-color':'darkgrey'}:{'background-color':'lightgrey'}">
+  [ngStyle]="(i%2 === 0) ? {'background-color':'darkgrey'}:{'background-color':'lightgrey'}">
     <ion-col>
       <ion-row >
         <ion-col size="2">{{i+1}}</ion-col>

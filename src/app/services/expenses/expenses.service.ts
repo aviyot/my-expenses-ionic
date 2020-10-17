@@ -7,7 +7,6 @@ import { BehaviorSubject, Subject } from "rxjs";
   providedIn: "root",
 })
 export class ExpensesService {
-
   private _expenses: Expense[] = [];
   private _categories: string[] = [];
   private _paymentMethods: string[] = [];
@@ -98,14 +97,12 @@ export class ExpensesService {
     );
   }
 
-  async saveLocal(value:any,key:string):Promise<any>{
-    const val = await this.storage.set(key, value);
-    console.log(val);
+  async saveLocal(value: any, key: string): Promise<any> {
+    await this.storage.set(key, value);
   }
 
-  async saveLocalExpenses() {
-    const val = await this.storage.set("expenses", this._expenses);
-    console.log(val);
+  saveLocalExpenses() {
+    this.storage.set("expenses", this._expenses);
   }
 
   saveLocalCategories() {
@@ -150,6 +147,11 @@ export class ExpensesService {
     });
   }
 
+calcLastPayDate(fristPayDate,numberOfPay:number):number {
+    let fd = new Date(fristPayDate);
+    return new Date(fd.setMonth(fd.getMonth()+numberOfPay)).getTime();
+}
+
   sortExpenses(
     expenses: Expense[],
     sortBy: string,
@@ -157,23 +159,46 @@ export class ExpensesService {
   ): Expense[] {
     if (sortType === "acs") {
       return [
-        ...expenses.sort(function (a, b) {
-          if (a[sortBy] > b[sortBy]) return -1;
-          if (a[sortBy] < b[sortBy]) return 1;
+        ...expenses.sort((a, b)=> {
+          if (sortBy === "fristPayDate") {
+            if (new Date(a[sortBy]).getTime() > new Date(b[sortBy]).getTime()) return -1;
+            if (new Date(a[sortBy]).getTime() < new Date(b[sortBy]).getTime()) return 1;
+            return 0;
+          } 
+          if ((sortBy === "lastPayDate") && (a.fristPayDate && a.numberOfPay)) {
+            if (this.calcLastPayDate(a.fristPayDate,a.numberOfPay) > this.calcLastPayDate(b.fristPayDate,b.numberOfPay)) return -1;
+            if (this.calcLastPayDate(a.fristPayDate,a.numberOfPay) < this.calcLastPayDate(b.fristPayDate,b.numberOfPay)) return 1;
+            return 0;
 
-          return 0;
+          }
+          else {
+            if (a[sortBy] > b[sortBy]) return -1;
+            if (a[sortBy] < b[sortBy]) return 1;
+            return 0;
+          }
         }),
       ];
     } else {
       return [
-        ...expenses.sort(function (a, b) {
-          if (a[sortBy] < b[sortBy]) return -1;
-          if (a[sortBy] > b[sortBy]) return 1;
+        ...expenses.sort((a, b) =>  {
+          if (sortBy === "fristPayDate") {
+            if (new Date(a[sortBy]).getTime() < new Date(b[sortBy]).getTime()) return -1;
+            if (new Date(a[sortBy]).getTime() > new Date(b[sortBy]).getTime()) return 1;
+            return 0;
+          } 
+          if ((sortBy === "lastPayDate") && (a.fristPayDate && a.numberOfPay)) {
+            if (this.calcLastPayDate(a.fristPayDate,a.numberOfPay) < this.calcLastPayDate(b.fristPayDate,b.numberOfPay)) return -1;
+            if (this.calcLastPayDate(a.fristPayDate,a.numberOfPay) > this.calcLastPayDate(b.fristPayDate,b.numberOfPay)) return 1;
+            return 0;
 
-          return 0;
+          }
+          else {
+            if (a[sortBy] < b[sortBy]) return -1;
+            if (a[sortBy] > b[sortBy]) return 1;
+            return 0;
+          }
         }),
       ];
     }
-
   }
 }

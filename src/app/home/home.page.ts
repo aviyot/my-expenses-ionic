@@ -65,8 +65,7 @@ export class HomePage implements OnInit {
   }
 
   onDelete() {
-    this.expensesService.delete(this.selectedId);
-    this.selectedId = null;
+    this.deleteWarning();
   }
 
   showDetail() {
@@ -137,6 +136,24 @@ export class HomePage implements OnInit {
           type: 'radio',
           label: 'Pay Method',
           value: 'methodPay',
+        },
+        {
+          name: 'sortType',
+          type: 'radio',
+          label: 'Frist Pay Date',
+          value: 'fristPayDate',
+        },
+        {
+          name: 'sortType',
+          type: 'radio',
+          label: 'Number of Pays',
+          value: 'numberOfPay',
+        },
+        {
+          name: 'sortType',
+          type: 'radio',
+          label: 'Last Pay Date',
+          value: 'lastPayDate',
         }
       
      
@@ -144,5 +161,29 @@ export class HomePage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  async deleteWarning(){
+        const alert = await this.alertController.create({
+          header:"Delete?",
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              handler: () => {
+                this.selectedId = null
+              }
+            },
+              {
+               text: 'Yes',
+               handler: () => {
+                this.expensesService.delete(this.selectedId);
+                this.selectedId = null;
+              }
+            }
+          ]
+        })
+
+       const pr = await alert.present();
   }
 }
