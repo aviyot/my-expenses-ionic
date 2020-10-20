@@ -1,43 +1,43 @@
 <ion-list>
   <ion-item >
-    <ion-label>Name</ion-label>
+    <ion-label>{{languageWords.name}}</ion-label>
      <ion-text>{{expense.name}}</ion-text>
   </ion-item>
   <ion-item >
-    <ion-label>Amount</ion-label>
+    <ion-label>{{languageWords.amount}}</ion-label>
      <ion-text>{{expense.amount}}</ion-text>
   </ion-item>
   <ion-item *ngIf="expense.category">
-    <ion-label>Category</ion-label>
+    <ion-label>{{languageWords.category}}</ion-label>
      <ion-text>{{expense.category}} </ion-text>
   </ion-item>
   <ion-item *ngIf ="expense.benef">
-    <ion-label >Beneficiary</ion-label>
+    <ion-label >{{languageWords.beneficiary}}</ion-label>
      <ion-text>{{expense.benef}}</ion-text>
   </ion-item>
   <ion-item *ngIf ="expense.methodPay">
-    <ion-label>Pay Method</ion-label>
+    <ion-label>{{languageWords.payMethod}}</ion-label>
      <ion-text>{{expense.methodPay}}</ion-text>
   </ion-item>
   <ion-item *ngIf ="expense.numberOfPay">
-    <ion-label>Number Of Pay</ion-label>
+    <ion-label>{{languageWords.numberPays}}</ion-label>
      <ion-text>{{expense.numberOfPay}}</ion-text>
   </ion-item>
   <ion-item *ngIf ="expense.freqPay">
-    <ion-label>Freq Pay</ion-label>
+    <ion-label>{{languageWords.freqPay}}</ion-label>
      <ion-text>{{expense.freqPay}}</ion-text>
   </ion-item>
  
   <ion-item *ngIf ="expense.commitDate ">
-    <ion-label>Commit Date</ion-label>
+    <ion-label>{{languageWords.commitTime}}</ion-label>
      <ion-text>{{expense.commitDate | date :'dd/MM/yy, HH:mm'}}</ion-text>
   </ion-item>
   <ion-item *ngIf ="expense.fristPayDate">
-    <ion-label>Frist Pay Date</ion-label>
+    <ion-label>{{languageWords.fristPayDate}}</ion-label>
      <ion-text>{{expense.fristPayDate | date :'dd/MM/yy'}}</ion-text>
   </ion-item>
   <ion-item *ngIf ="expense.numberOfPay">
-    <ion-label>Last Pay Date</ion-label>
+    <ion-label>{{languageWords.lastPayDate}}</ion-label>
      <ion-text>{{ calcLastPayDate() | date :'dd/MM/yy'}}</ion-text>
   </ion-item>
 </ion-list>

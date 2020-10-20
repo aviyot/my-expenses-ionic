@@ -10,18 +10,17 @@
       <ion-icon name="arrow-back-circle-outline" size="large"></ion-icon>
     </ion-button>
   </ion-buttons>
-  <ion-title>Options edit</ion-title>
+  <ion-title>{{languageWords.opthionEdit}}</ion-title>
 </ion-toolbar>
-
 <ion-list *ngIf="opthions.editMode">
   <ion-item>
     <ion-button (click)="onClickCat()" expand="block" fill="clear" shape="round">
-      Edit Expense Categoery
+     {{languageWords.editExpenseCat}}
     </ion-button>
   </ion-item>
   <ion-item>
     <ion-button (click)="onClickPay()" expand="block" fill="clear" shape="round">
-      Edit Expense Method
+      {{languageWords.editExpenseMethod}}
     </ion-button>
   </ion-item>
 </ion-list>
@@ -29,7 +28,7 @@
 
 <ion-list *ngIf="!opthions.editMode && opthions.editPay">
   <ion-item>
-    <ion-input color="primary" [formControl]="payMethod" placeholder="Enter New Pay Opthion"></ion-input>
+    <ion-input color="primary" [formControl]="payMethod" [placeholder]="languageWords.enterMethod"></ion-input>
   </ion-item>
   <ion-item *ngFor="let payMethod of paymentMethods"
     [ngStyle]="(selectedVlaue === payMethod && itemSelected) && {'color':'red'}" (click)="onSelectPayMethod(payMethod)">
@@ -37,7 +36,7 @@
 </ion-list>
 <ion-list *ngIf="!opthions.editMode && opthions.editCat">
   <ion-item>
-    <ion-input color="primary" [formControl]="category" placeholder="Enter New Category"></ion-input>
+    <ion-input color="primary" [formControl]="category" [placeholder]="languageWords.enterCat"></ion-input>
   </ion-item>
   <ion-item *ngFor="let catgory of categories" (click)="onSelectCatgory(catgory)"
     [ngStyle]="(selectedVlaue === catgory && itemSelected) && {'color':'red'}">

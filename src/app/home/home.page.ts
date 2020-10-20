@@ -4,6 +4,7 @@ import { ExpensesService } from "../services/expenses/expenses.service";
 import { Expense } from "../models/expense.model";
 import { Router } from "@angular/router";
 import { AlertController } from "@ionic/angular";
+import { LanguageService } from '../services/language/language.service';
 
 @Component({
   selector: "app-home",
@@ -15,10 +16,13 @@ export class HomePage implements OnInit {
   totalExpenses: number = 0;
   selectedId: number = null;
   showDetails: boolean = false;
+  languageWords:any
+  
   constructor(
     private expensesService: ExpensesService,
     private router: Router,
-    public alertController: AlertController
+    public alertController: AlertController,
+    private languageServ:LanguageService
   ) {}
 
   ngOnInit() {
@@ -39,6 +43,10 @@ export class HomePage implements OnInit {
     this.expensesService.dataChanged.subscribe(() => {
       this.expenses = this.expensesService.expenses;
     });
+    
+    this.languageServ.selectedLanguage.subscribe(languageWords => {
+      this.languageWords = languageWords;
+    })
   }
 
   onSelect(expenseId) {
@@ -82,20 +90,20 @@ export class HomePage implements OnInit {
   async presentAlert() {
     const alert = await this.alertController.create({
       cssClass: "my-custom-class",
-      header: "Sort by ",
+      header:  this.languageWords.sortBy,
       buttons: [
         {
-          text: "Cancel",
+          text: this.languageWords.cancel,
           role: "cancel",
         },
         {
-          text: "Sort Acs",
+          text: this.languageWords.ok,
           handler: (sortType) => {
             this.expenses = this.expensesService.sortExpenses([...this.expenses],sortType,"acs");
           },
         },
         {
-          text: "Sort Des",
+          text: this.languageWords.sorDcs,
           handler: (sortType) => {
             this.expenses = this.expensesService.sortExpenses([...this.expenses],sortType);
           },
@@ -105,7 +113,7 @@ export class HomePage implements OnInit {
         {
           name: 'sortType',
           type: 'radio',
-          label: 'Amount',
+          label: this.languageWords.amount,
           value: 'amount',
         },
         {
@@ -121,38 +129,38 @@ export class HomePage implements OnInit {
           public numberOfPay:number */
           name: 'sortType',
           type: 'radio',
-          label: 'Name',
+          label: this.languageWords.name,
           value: 'name',
           checked: true
         },
         {
           name: 'sortType',
           type: 'radio',
-          label: 'Category',
+          label: this.languageWords.category,
           value: 'category',
         },
         {
           name: 'sortType',
           type: 'radio',
-          label: 'Pay Method',
+          label: this.languageWords.payMethod,
           value: 'methodPay',
         },
         {
           name: 'sortType',
           type: 'radio',
-          label: 'Frist Pay Date',
+          label: this.languageWords.fristPayDate,
           value: 'fristPayDate',
         },
         {
           name: 'sortType',
           type: 'radio',
-          label: 'Number of Pays',
+          label: this.languageWords.numberPays,
           value: 'numberOfPay',
         },
         {
           name: 'sortType',
           type: 'radio',
-          label: 'Last Pay Date',
+          label:  this.languageWords.lastPayDate,
           value: 'lastPayDate',
         }
       
@@ -165,17 +173,17 @@ export class HomePage implements OnInit {
 
   async deleteWarning(){
         const alert = await this.alertController.create({
-          header:"Delete?",
+          header: this.languageWords.del + " ? ",
           buttons: [
             {
-              text: 'Cancel',
+              text: this.languageWords.cancel,
               role: 'cancel',
               handler: () => {
                 this.selectedId = null
               }
             },
               {
-               text: 'Yes',
+               text: this.languageWords.ok,
                handler: () => {
                 this.expensesService.delete(this.selectedId);
                 this.selectedId = null;

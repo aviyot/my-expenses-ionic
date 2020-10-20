@@ -2,7 +2,13 @@
     <ion-header>
         <ion-toolbar>
             <ion-title>
-                My Expenses
+                {{title}}
+                <ion-button (click)="onClick1()" expand="block" fill="clear" shape="round">
+                    English
+                </ion-button>
+                <ion-button (click)="onClick2()" expand="block" fill="clear" shape="round">
+                    Hebrew
+                </ion-button>
             </ion-title>
         </ion-toolbar>
     </ion-header>

@@ -1,6 +1,7 @@
 import { Component, OnInit , } from "@angular/core";
 import { ExpensesService } from "../services/expenses/expenses.service";
 import {FormControl, Validators } from "@angular/forms";
+import { LanguageService } from '../services/language/language.service';
 
 
 @Component({
@@ -16,7 +17,8 @@ export class OpthionEditSettingsComponent implements OnInit {
   payMethod = new FormControl("", [Validators.required]);
   selectedVlaue = null;
   itemSelected : boolean = false;
-  constructor(private expensesService: ExpensesService) {}
+  languageWords: any;
+  constructor(private expensesService: ExpensesService,private languageServ:LanguageService) {}
 
   ngOnInit() {
     this.categories = this.expensesService.categories;
@@ -26,7 +28,9 @@ export class OpthionEditSettingsComponent implements OnInit {
       this.categories = this.expensesService.categories;
       this.paymentMethods = this.expensesService.paymentMethods;
     })
-   
+    this.languageServ.selectedLanguage.subscribe(languageWords => {
+      this.languageWords = languageWords;
+    })
 
   }
 

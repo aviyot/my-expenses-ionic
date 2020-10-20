@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { formatDate } from "@angular/common";
 import { PopoverController, ToastController } from "@ionic/angular";
 import { OpthionEditSettingsComponent } from "../opthion-edit-settings/opthion-edit-settings.component";
+import { LanguageService } from '../services/language/language.service';
 
 @Component({
   selector: "app-expense-add-form",
@@ -22,16 +23,21 @@ export class ExpenseAddFormPage implements OnInit {
   newCategory = "new cat";
   newPaymentMethod = "new pay";
   isAddPaymentMethod = false;
-
+  languageWords = null;
   constructor(
     private expensesService: ExpensesService,
     private router: Router,
     private route: ActivatedRoute,
     public popoverController: PopoverController,
-    public toastController: ToastController
+    public toastController: ToastController,
+    private languageServ : LanguageService
+
   ) {}
 
-  ngOnInit() {
+  ngOnInit(){
+    this.languageServ.selectedLanguage.subscribe(languageWords => {
+      this.languageWords = languageWords;
+    })
     this.expensesService.dataChanged.subscribe((val) => {
       this.categories = this.expensesService.categories;
       this.paymentMethods = this.expensesService.paymentMethods;
@@ -178,7 +184,7 @@ export class ExpenseAddFormPage implements OnInit {
 
   async presentToast() {
     const toast = await this.toastController.create({
-      message: 'Enter requided data(amount,category)',
+      message: this.languageWords.enterRequired,
       duration: 2000,
       color:'warning'
     });
@@ -186,7 +192,7 @@ export class ExpenseAddFormPage implements OnInit {
   }
   async presentToastDataAdded() {
     const toast = await this.toastController.create({
-      message: 'DATA ADDED',
+      message: this.languageWords.dataAdded,
       duration: 1000,
       color:'success'
     });
