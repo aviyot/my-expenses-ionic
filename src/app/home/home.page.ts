@@ -17,6 +17,7 @@ export class HomePage implements OnInit {
   selectedId: number = null;
   showDetails: boolean = false;
   languageWords:any
+  selectedSortType: string;
   
   constructor(
     private expensesService: ExpensesService,
@@ -97,15 +98,30 @@ export class HomePage implements OnInit {
           role: "cancel",
         },
         {
-          text: this.languageWords.ok,
+          text: this.languageWords.sortAcs,
           handler: (sortType) => {
-            this.expenses = this.expensesService.sortExpenses([...this.expenses],sortType,"acs");
+            this.expenses = this.expensesService.sortExpenses([...this.expenses],sortType,"acs")
+            if(sortType !=="name" && sortType !== "amount"){
+              this.selectedSortType = sortType;
+              }
+              else {
+                this.selectedSortType="";
+
+              }
           },
         },
         {
-          text: this.languageWords.sorDcs,
+          text: this.languageWords.sortDcs,
           handler: (sortType) => {
             this.expenses = this.expensesService.sortExpenses([...this.expenses],sortType);
+            if(sortType !=="name" && sortType !=="amount"){
+            this.selectedSortType = sortType;
+            }
+            else {
+              this.selectedSortType="";
+
+            }
+       
           },
         }
       ],
