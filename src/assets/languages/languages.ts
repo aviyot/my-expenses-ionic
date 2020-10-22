@@ -38,7 +38,11 @@ const languages = {
       editExpenseCat:"ערוך קטגורית הוצאות",
       editExpenseMethod:"ערוך סוג התשלום",
       enterCat:"הכנס קטגוריה חדשה",
-      enterMethod:"הכנס סוג תשלום חדש"
+      enterMethod:"הכנס סוג תשלום חדש",
+      menu:"תפריט",
+      english:"אנגלית",
+      hebrew:"עברית",
+      language:"שפה"
     },
     english: {
       title:"my expenses",
@@ -79,7 +83,11 @@ const languages = {
       editExpenseCat:"Edit Expenses Category",
       editExpenseMethod:"Edit Expense Pay Method",
       enterCat:"Enter Category",
-      enterMethod:"Enter pay method"
+      enterMethod:"Enter pay method",
+      menu:"Menu",
+      english:"English",
+      hebrew:"Hebrew",
+      language:"Language"
     }
   }
 
