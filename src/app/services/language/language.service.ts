@@ -8,7 +8,7 @@ import languages from "../../../assets/languages/languages"
 })
 export class LanguageService {
   languages = languages
-  private _selectedLanguage:BehaviorSubject<any> = new BehaviorSubject(this.languages["hebrew"]);
+  private _selectedLanguage:BehaviorSubject<any> = new BehaviorSubject(this.languages["english"]);
   public selectedLanguage:Observable<string> = this._selectedLanguage.asObservable();
 
   constructor() {}
