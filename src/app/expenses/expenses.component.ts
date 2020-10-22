@@ -12,7 +12,9 @@ export class ExpensesComponent implements OnChanges,OnInit {
   @Input() showDetails : boolean = false;
   @Input() selectedId:number = null;
   @Input() selectedSortType:string;
-  colDiv:string;
+  colDiv:number;
+  @Input() selectedArr:number[] = [];
+  @Input() multiypleSelect = false;
 
   constructor() {}
 
@@ -20,10 +22,10 @@ export class ExpensesComponent implements OnChanges,OnInit {
   }
   ngOnChanges(){
     if(this.selectedSortType){
-      this.colDiv = "3";
+      this.colDiv = 0;
     }
     else {
-      this.colDiv = "4";
+      this.colDiv = 2;
 
     }
 
@@ -32,5 +34,9 @@ export class ExpensesComponent implements OnChanges,OnInit {
 
     this.select.emit(selectedId);
 
+  }
+
+  isItemInclude(id:number):boolean{
+    return this.selectedArr.includes(id)
   }
 }
