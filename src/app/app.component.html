@@ -1,20 +1,25 @@
 <ion-app>
 
-    <ion-menu side="start" menuId="custom" contentId="main" class="my-custom-menu">
+    <ion-menu side="start" menuId="custom" contentId="main" class="my-custom-menu" (ionDidClose)="onMenuClose()">
         <ion-header>
             <ion-toolbar color="tertiary">
-                <ion-title>Custom Menu</ion-title>
+                <ion-title>{{languageWords.menu}}</ion-title>
             </ion-toolbar>
         </ion-header>
         <ion-content>
-            <ion-list>
+            <div>
+            <ion-button (click)="openLanguageMenu()" expand="full">
+                <ion-text>{{languageWords.language}}</ion-text>
+            </ion-button>
+            <ion-list *ngIf="languageMenuOpen">
                 <ion-button (click)="onClick1()" expand="block" fill="clear" shape="round">
-                    English
+                    {{languageWords.english}}
                 </ion-button>
                 <ion-button (click)="onClick2()" expand="block" fill="clear" shape="round">
-                    Hebrew
+                    {{languageWords.hebrew}}
                 </ion-button>
             </ion-list>
+        </div>
         </ion-content>
     </ion-menu>
     <ion-header>
@@ -23,7 +28,7 @@
                 <ion-row>
                     <ion-col>
                         <ion-title>
-                            {{title}}
+                            {{languageWords.title | uppercase }}
                         </ion-title>
                     </ion-col>
                     <ion-col size="3">
