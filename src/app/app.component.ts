@@ -16,11 +16,13 @@ export class AppComponent implements OnInit {
   selectedLanguageWords = null;
   title="";
   sb:Subscription = new Subscription();
+  languageWords: any;
+  languageMenuOpen:boolean = false
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private languageServ : LanguageService
+    private languageServ : LanguageService,
   ) {
     this.initializeApp();
   }
@@ -34,12 +36,17 @@ export class AppComponent implements OnInit {
   
   ngOnInit(){
    this.sb = this.languageServ.selectedLanguage.subscribe((words:any)=>{
-         this.selectedLanguageWords  = {...words};
-         const {title} = this.selectedLanguageWords;
-         this.title = title;
+         this.languageWords  = words;
+      
     })
   }
 
+  openLanguageMenu(){
+    this.languageMenuOpen = !this.languageMenuOpen;
+  }
+  onMenuClose(){
+    this.languageMenuOpen = false;
+  }
   onClick1(){
     this.languageServ.changeLang("english");
   }
