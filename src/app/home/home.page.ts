@@ -4,7 +4,7 @@ import { ExpensesService } from "../services/expenses/expenses.service";
 import { Expense } from "../models/expense.model";
 import { Router } from "@angular/router";
 import { AlertController } from "@ionic/angular";
-import { LanguageService } from '../services/language/language.service';
+import { LanguageService } from "../services/language/language.service";
 
 @Component({
   selector: "app-home",
@@ -16,14 +16,17 @@ export class HomePage implements OnInit {
   totalExpenses: number = 0;
   selectedId: number = null;
   showDetails: boolean = false;
-  languageWords:any
+  languageWords: any;
   selectedSortType: string;
-  
+  selectedTotalAmount = 0;
+  selectedArr:number[] = [];
+  multiypleSelect = false;
+
   constructor(
     private expensesService: ExpensesService,
     private router: Router,
     public alertController: AlertController,
-    private languageServ:LanguageService
+    private languageServ: LanguageService
   ) {}
 
   ngOnInit() {
@@ -44,23 +47,40 @@ export class HomePage implements OnInit {
     this.expensesService.dataChanged.subscribe(() => {
       this.expenses = this.expensesService.expenses;
     });
-    
-    this.languageServ.selectedLanguage.subscribe(languageWords => {
+
+    this.languageServ.selectedLanguage.subscribe((languageWords) => {
       this.languageWords = languageWords;
-    })
+    });
   }
 
+  
   onSelect(expenseId) {
-
+    if(this.multiypleSelect){
+    if(this.selectedArr.includes(expenseId)){
+     this.selectedArr = this.selectedArr.filter((item)=> item!== expenseId)
+     this.selectedTotalAmount -= this.expenses.find((ex) => {
+      return ex.id === expenseId;
+    }).amount;
+    }
+    else{
+     this.selectedArr = [...this.selectedArr,expenseId];
+     this.selectedTotalAmount += this.expenses.find((ex) => {
+      return ex.id === expenseId;
+    }).amount;
+    }
+  }
     if (this.selectedId === expenseId) {
       this.selectedId = null;
     } else {
       this.selectedId = expenseId;
-
     }
 
-    this.showDetails = false
+
+    this.showDetails = false;
+
+
   }
+
 
   onAdd() {
     this.router.navigate(["/", "expense-add-form"]);
@@ -85,13 +105,22 @@ export class HomePage implements OnInit {
     }
   }
 
+  selectMultiplt(isMultiyplySelect){
+    if(!isMultiyplySelect){
+      let ar=[];
+      this.selectedArr = ar;
+      this.selectedId = null;
+      this.selectedTotalAmount = 0;
+    }
+  }
+
   showFilterAlert() {
     this.presentAlert();
   }
   async presentAlert() {
     const alert = await this.alertController.create({
       cssClass: "my-custom-class",
-      header:  this.languageWords.sortBy,
+      header: this.languageWords.sortBy,
       buttons: [
         {
           text: this.languageWords.cancel,
@@ -100,114 +129,105 @@ export class HomePage implements OnInit {
         {
           text: this.languageWords.sortAcs,
           handler: (sortType) => {
-            this.expenses = this.expensesService.sortExpenses([...this.expenses],sortType,"acs")
-            if(sortType !=="name" && sortType !== "amount"){
+            this.expenses = this.expensesService.sortExpenses(
+              [...this.expenses],
+              sortType,
+              "acs"
+            );
+            if (sortType !== "name" && sortType !== "amount") {
               this.selectedSortType = sortType;
-              }
-              else {
-                this.selectedSortType="";
-
-              }
+            } else {
+              this.selectedSortType = "";
+            }
           },
         },
         {
           text: this.languageWords.sortDcs,
           handler: (sortType) => {
-            this.expenses = this.expensesService.sortExpenses([...this.expenses],sortType);
-            if(sortType !=="name" && sortType !=="amount"){
-            this.selectedSortType = sortType;
+            this.expenses = this.expensesService.sortExpenses(
+              [...this.expenses],
+              sortType
+            );
+            if (sortType !== "name" && sortType !== "amount") {
+              this.selectedSortType = sortType;
+            } else {
+              this.selectedSortType = "";
             }
-            else {
-              this.selectedSortType="";
-
-            }
-       
           },
-        }
+        },
       ],
-      inputs : [
+      inputs: [
         {
-          name: 'sortType',
-          type: 'radio',
+          name: "sortType",
+          type: "radio",
           label: this.languageWords.amount,
-          value: 'amount',
+          value: "amount",
         },
         {
-      /*     public id :number,
-          public name:string,
-          public amount:number,
-          public category:string,
-          public methodPay:string,
-          public freqPay: number,
-          public benef: string,
-          public commitDate:Date,
-          public fristPayDate:Date, 
-          public numberOfPay:number */
-          name: 'sortType',
-          type: 'radio',
+    
+          name: "sortType",
+          type: "radio",
           label: this.languageWords.name,
-          value: 'name',
-          checked: true
+          value: "name",
+          checked: true,
         },
         {
-          name: 'sortType',
-          type: 'radio',
+          name: "sortType",
+          type: "radio",
           label: this.languageWords.category,
-          value: 'category',
+          value: "category",
         },
         {
-          name: 'sortType',
-          type: 'radio',
+          name: "sortType",
+          type: "radio",
           label: this.languageWords.payMethod,
-          value: 'methodPay',
+          value: "methodPay",
         },
         {
-          name: 'sortType',
-          type: 'radio',
+          name: "sortType",
+          type: "radio",
           label: this.languageWords.fristPayDate,
-          value: 'fristPayDate',
+          value: "fristPayDate",
         },
         {
-          name: 'sortType',
-          type: 'radio',
+          name: "sortType",
+          type: "radio",
           label: this.languageWords.numberPays,
-          value: 'numberOfPay',
+          value: "numberOfPay",
         },
         {
-          name: 'sortType',
-          type: 'radio',
-          label:  this.languageWords.lastPayDate,
-          value: 'lastPayDate',
-        }
-      
-     
-      ]
+          name: "sortType",
+          type: "radio",
+          label: this.languageWords.lastPayDate,
+          value: "lastPayDate",
+        },
+      ],
     });
 
     await alert.present();
   }
 
-  async deleteWarning(){
-        const alert = await this.alertController.create({
-          header: this.languageWords.del + " ? ",
-          buttons: [
-            {
-              text: this.languageWords.cancel,
-              role: 'cancel',
-              handler: () => {
-                this.selectedId = null
-              }
-            },
-              {
-               text: this.languageWords.ok,
-               handler: () => {
-                this.expensesService.delete(this.selectedId);
-                this.selectedId = null;
-              }
-            }
-          ]
-        })
+  async deleteWarning() {
+    const alert = await this.alertController.create({
+      header: this.languageWords.del + " ? ",
+      buttons: [
+        {
+          text: this.languageWords.cancel,
+          role: "cancel",
+          handler: () => {
+            this.selectedId = null;
+          },
+        },
+        {
+          text: this.languageWords.ok,
+          handler: () => {
+            this.expensesService.delete(this.selectedId);
+            this.selectedId = null;
+          },
+        },
+      ],
+    });
 
-       const pr = await alert.present();
+    const pr = await alert.present();
   }
 }
