@@ -13,10 +13,11 @@
       <ion-button (click)="showDetail()">
         <ion-icon size="large" name="list-outline"></ion-icon>
       </ion-button>
+      <ion-button>
       <ion-label>
-        <ion-icon size="large" name="duplicate-outline"></ion-icon>
-        <ion-toggle [(ngModel)]="multiypleSelect" (ionChange)="selectMultiplt(multiypleSelect)"></ion-toggle>
+        <ion-toggle style="font-size: x-large;" [(ngModel)]="multiypleSelect" (ionChange)="selectMultiplt(multiypleSelect)"></ion-toggle>
       </ion-label>
+    </ion-button>
       <ion-button (click)="showFilterAlert()">
         <ion-icon size="large" name="swap-vertical-outline"></ion-icon>
       </ion-button>
