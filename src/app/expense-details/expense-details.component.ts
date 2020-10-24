@@ -10,7 +10,7 @@ import { LanguageService } from '../services/language/language.service';
 })
 export class ExpenseDetailsComponent implements OnInit {
   @Input() expense:Expense = null;
-  languageWords: string;
+  languageWords: any;
   constructor( private expensesService: ExpensesService, private languageServ:LanguageService
     ) { }
 
