@@ -14,7 +14,8 @@
    [selectedId]="selectedId"
    [selectedSortType]="selectedSortType" 
    [selectedArr]="selectedArr" 
-   [multiypleSelect]="multiypleSelect">
+   [multiypleSelect]="multiypleSelect"
+   (selectedOp) = "onSelectOp($event)">
   </app-expenses>
 </ion-content>
 

@@ -80,19 +80,23 @@ export class HomePage implements OnInit {
 
 
   }
-
+  onSelectOp(op:string){
+     switch(op){
+      case "edit":
+        this.onEdit();
+        break;
+      case "delete":
+        this.onDelete()
+        break;
+     }
+  }
   actionRespone(actionType:string){
 
     switch(actionType) {
       case "add" :
         this.onAdd();
         break;
-      case "edit":
-        this.onEdit();
-        break;
-      case "delete":
-        this.onDelete
-        break;
+   
       case "detial":
         this.showDetail();
         break;

@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input, OnChanges } from "@angular/core";
+import { Router } from '@angular/router';
 import { Expense } from "../models/expense.model";
 
 @Component({
@@ -8,6 +9,7 @@ import { Expense } from "../models/expense.model";
 })
 export class ExpensesComponent implements OnChanges,OnInit {
   @Output() select: EventEmitter<number> = new EventEmitter();
+  @Output() selectedOp : EventEmitter<string> = new EventEmitter(null);
   @Input() expenses: Expense[] = [];
   @Input() showDetails : boolean = false;
   @Input() selectedId:number = null;
@@ -16,7 +18,7 @@ export class ExpensesComponent implements OnChanges,OnInit {
   @Input() selectedArr:number[] = [];
   @Input() multiypleSelect = false;
 
-  constructor() {}
+  constructor(private router:Router) {}
 
   ngOnInit() {
   }
@@ -36,7 +38,25 @@ export class ExpensesComponent implements OnChanges,OnInit {
 
   }
 
+ 
+  onEdit(ev) {
+    this.selectedOp.emit("edit")
+    ev.stopPropagation()
+
+
+ /*    this.router.navigate(["/", "expense-add-form", "edit", this.selectedId]);
+    this.selectedId = null; */
+  }
+ onDelete(ev){
+   this.selectedOp.emit("delete")
+  ev.stopPropagation()
+
+
+ }
+
   isItemInclude(id:number):boolean{
     return this.selectedArr.includes(id)
   }
+
+ 
 }

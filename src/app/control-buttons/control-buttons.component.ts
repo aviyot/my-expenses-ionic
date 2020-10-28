@@ -18,10 +18,6 @@ export class ControlButtonsComponent {
      this.actionType.emit("add")
    }
 
-  onDelete(){
-    this.actionType.emit("delete")
-
-  }
 
   onEdit(){
     this.actionType.emit("edit")

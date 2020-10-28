@@ -1,7 +1,7 @@
 const languages = {
     hebrew: {
       title: "הוצאות שלי",
-      totalExpenses: 'סה"כ הוצאות',
+      totalExpenses: 'סה"כ',
       sortBy: "מיין לפי",
       cancel: "בטל",
       ok: "אשר",
@@ -46,7 +46,7 @@ const languages = {
     },
     english: {
       title:"my expenses",
-      totalExpenses:"total expenses",
+      totalExpenses:"total",
       sortBy: "Sort By",
       cancel: "Cancel",
       ok: "Ok",
