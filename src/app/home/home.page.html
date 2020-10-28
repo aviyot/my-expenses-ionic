@@ -1,34 +1,20 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button (click)="onAdd()">
-        <ion-icon slot="start" size="large" name="add"></ion-icon>
-      </ion-button>
-      <ion-button (click)="onDelete()" [disabled]="!selectedId || multiypleSelect" color="danger">
-        <ion-icon slot="start" size="large" name="trash-outline"></ion-icon>
-      </ion-button>
-      <ion-button (click)="onEdit()" [disabled]="!selectedId || multiypleSelect">
-        <ion-icon slot="start" size="large" name="create-outline"></ion-icon>
-      </ion-button>
-      <ion-button (click)="showDetail()">
-        <ion-icon size="large" name="list-outline"></ion-icon>
-      </ion-button>
-      <ion-button>
-      <ion-label>
-        <ion-toggle style="font-size: x-large;" [(ngModel)]="multiypleSelect" (ionChange)="selectMultiplt(multiypleSelect)"></ion-toggle>
-      </ion-label>
-    </ion-button>
-      <ion-button (click)="showFilterAlert()">
-        <ion-icon size="large" name="swap-vertical-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
+  <app-control-buttons 
+     (actionType)="actionRespone($event)" 
+     [expenseSelected]="selectedId" 
+     [multiypleSelect]="multiypleSelect">
+  </app-control-buttons>
 </ion-header>
 
 <ion-content>
-  <app-expenses (select)="onSelect($event)" [expenses]="expenses" [showDetails]="showDetails" [selectedId]="selectedId"
-    [selectedSortType]="selectedSortType" [selectedArr]="selectedArr" 
-    [multiypleSelect]="multiypleSelect">
+  <app-expenses 
+   (select)="onSelect($event)" 
+   [expenses]="expenses" 
+   [showDetails]="showDetails" 
+   [selectedId]="selectedId"
+   [selectedSortType]="selectedSortType" 
+   [selectedArr]="selectedArr" 
+   [multiypleSelect]="multiypleSelect">
   </app-expenses>
 </ion-content>
 
@@ -36,11 +22,17 @@
   <ion-toolbar>
     <ion-grid fixed>
       <ion-row>
-        <ion-col *ngIf="!multiypleSelect">
-          <ion-title class="ion-text-center">{{languageWords.totalExpenses | uppercase }}{{" ( "+expenses.length+" ) "}}:{{totalExpenses | number}}</ion-title>
+        <ion-col 
+         *ngIf="!multiypleSelect">
+          <ion-title 
+            class="ion-text-center">{{languageWords.totalExpenses | uppercase }}{{" ( "+expenses.length+" ) "}}:{{totalExpenses | number}}
+          </ion-title>
         </ion-col>
-        <ion-col *ngIf="multiypleSelect">
-          <ion-title class="ion-text-center">Selected Amount {{" ( " +selectedArr.length + " )"}}  :{{selectedTotalAmount |number }}</ion-title>
+        <ion-col 
+          *ngIf="multiypleSelect">
+          <ion-title 
+            class="ion-text-center">Selected Amount {{" ( " +selectedArr.length + " )"}}  :{{selectedTotalAmount |number }}
+          </ion-title>
         </ion-col>
       </ion-row>
     </ion-grid>

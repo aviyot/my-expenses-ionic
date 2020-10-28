@@ -81,6 +81,35 @@ export class HomePage implements OnInit {
 
   }
 
+  actionRespone(actionType:string){
+
+    switch(actionType) {
+      case "add" :
+        this.onAdd();
+        break;
+      case "edit":
+        this.onEdit();
+        break;
+      case "delete":
+        this.onDelete
+        break;
+      case "detial":
+        this.showDetail();
+        break;
+      case "sort":
+        this.showFilterAlert();
+        break;
+      case "multipplaySelect":
+        this.selectMultiplt(true);
+        break;
+      case "disableMultipplaySelect":
+         this.selectMultiplt(false);
+         break;
+
+    }
+
+  }
+
 
   onAdd() {
     this.router.navigate(["/", "expense-add-form"]);
@@ -107,10 +136,15 @@ export class HomePage implements OnInit {
 
   selectMultiplt(isMultiyplySelect){
     if(!isMultiyplySelect){
+      this.multiypleSelect = false;
       let ar=[];
       this.selectedArr = ar;
       this.selectedId = null;
       this.selectedTotalAmount = 0;
+    }
+    else {
+      this.selectedId = null;
+      this.multiypleSelect = true;
     }
   }
 
