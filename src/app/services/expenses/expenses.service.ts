@@ -26,7 +26,10 @@ export class ExpensesService {
   get expenses(): Expense[] {
     return [...this._expenses];
   }
-
+  set expenses(expenses:Expense[]){
+    this._expenses = [...expenses];
+    this.dataChanged.next(true);
+  }
   set expense(value: Expense) {
     this._expenses = [...this._expenses, value];
     this.calcTotalExpenses();
@@ -200,5 +203,6 @@ calcLastPayDate(fristPayDate,numberOfPay:number):number {
         }),
       ];
     }
+
   }
 }

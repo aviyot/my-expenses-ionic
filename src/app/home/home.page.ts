@@ -3,8 +3,9 @@ import { Storage } from "@ionic/storage";
 import { ExpensesService } from "../services/expenses/expenses.service";
 import { Expense } from "../models/expense.model";
 import { Router } from "@angular/router";
-import { AlertController } from "@ionic/angular";
+import { AlertController, ModalController } from "@ionic/angular";
 import { LanguageService } from "../services/language/language.service";
+import { SortModalComponent } from '../sort-modal/sort-modal.component';
 
 @Component({
   selector: "app-home",
@@ -26,7 +27,8 @@ export class HomePage implements OnInit {
     private expensesService: ExpensesService,
     private router: Router,
     public alertController: AlertController,
-    private languageServ: LanguageService
+    private languageServ: LanguageService,
+    public modalController: ModalController
   ) {}
 
   ngOnInit() {
@@ -101,7 +103,7 @@ export class HomePage implements OnInit {
         this.showDetail();
         break;
       case "sort":
-        this.showFilterAlert();
+        this.showModalSort();
         break;
       case "multipplaySelect":
         this.selectMultiplt(true);
@@ -152,99 +154,15 @@ export class HomePage implements OnInit {
     }
   }
 
-  showFilterAlert() {
-    this.presentAlert();
-  }
-  async presentAlert() {
-    const alert = await this.alertController.create({
-      cssClass: "my-custom-class",
-      header: this.languageWords.sortBy,
-      buttons: [
-        {
-          text: this.languageWords.cancel,
-          role: "cancel",
-        },
-        {
-          text: this.languageWords.sortAcs,
-          handler: (sortType) => {
-            this.expenses = this.expensesService.sortExpenses(
-              [...this.expenses],
-              sortType,
-              "acs"
-            );
-            if (sortType !== "name" && sortType !== "amount") {
-              this.selectedSortType = sortType;
-            } else {
-              this.selectedSortType = "";
-            }
-          },
-        },
-        {
-          text: this.languageWords.sortDcs,
-          handler: (sortType) => {
-            this.expenses = this.expensesService.sortExpenses(
-              [...this.expenses],
-              sortType
-            );
-            if (sortType !== "name" && sortType !== "amount") {
-              this.selectedSortType = sortType;
-            } else {
-              this.selectedSortType = "";
-            }
-          },
-        },
-      ],
-      inputs: [
-        {
-          name: "sortType",
-          type: "radio",
-          label: this.languageWords.amount,
-          value: "amount",
-        },
-        {
-    
-          name: "sortType",
-          type: "radio",
-          label: this.languageWords.name,
-          value: "name",
-          checked: true,
-        },
-        {
-          name: "sortType",
-          type: "radio",
-          label: this.languageWords.category,
-          value: "category",
-        },
-        {
-          name: "sortType",
-          type: "radio",
-          label: this.languageWords.payMethod,
-          value: "methodPay",
-        },
-        {
-          name: "sortType",
-          type: "radio",
-          label: this.languageWords.fristPayDate,
-          value: "fristPayDate",
-        },
-        {
-          name: "sortType",
-          type: "radio",
-          label: this.languageWords.numberPays,
-          value: "numberOfPay",
-        },
-        {
-          name: "sortType",
-          type: "radio",
-          label: this.languageWords.lastPayDate,
-          value: "lastPayDate",
-        },
-      ],
+  
+
+  async showModalSort(){
+    const modal = await this.modalController.create({
+      component: SortModalComponent,
+      cssClass: 'sort-modal'
     });
-
-    await alert.present();
+    return await modal.present();
   }
-
   async deleteWarning() {
     const alert = await this.alertController.create({
       header: this.languageWords.del + " ? ",

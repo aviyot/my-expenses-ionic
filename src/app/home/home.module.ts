@@ -8,6 +8,7 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { ControlButtonsComponent } from '../control-buttons/control-buttons.component';
 import { ExpensesComponent } from '../expenses/expenses.component';
 import { ExpenseDetailsComponent } from '../expense-details/expense-details.component';
+import { SortModalComponent } from '../sort-modal/sort-modal.component';
 
 
 @NgModule({
@@ -17,6 +18,6 @@ import { ExpenseDetailsComponent } from '../expense-details/expense-details.comp
     IonicModule,
     HomePageRoutingModule
   ],
-  declarations: [HomePage,ControlButtonsComponent ,ExpensesComponent,ExpenseDetailsComponent]
+  declarations: [HomePage,ControlButtonsComponent ,ExpensesComponent,ExpenseDetailsComponent,SortModalComponent]
 })
 export class HomePageModule {}
