@@ -1,0 +1,60 @@
+<ion-header>
+  <h1>Filter</h1>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-radio-group  #rg (ionChange)="endTimeFilter(rg)" value="futture">
+      <ion-list-header>
+        <ion-label>
+         Sort By End Time
+        </ion-label>
+      </ion-list-header>
+  
+      <ion-item>
+        <ion-label>From Date</ion-label>
+        <ion-radio value="fromDate"></ion-radio>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label>Until Date</ion-label>
+        <ion-radio value="untilDate"></ion-radio>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label>Future</ion-label>
+        <ion-radio value="futture"></ion-radio>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label>Finished</ion-label>
+        <ion-radio value="finished"></ion-radio>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label>Betwwen Date</ion-label>
+        <ion-radio value="betwwen"></ion-radio>
+      </ion-item>
+      <ion-item>
+        <ion-label>All</ion-label>
+        <ion-radio value="all"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+  </ion-list>
+
+  <ion-item *ngIf="showStartDate" >
+    <ion-label></ion-label>
+    <ion-datetime displayFormat="DD MM YY" max="2050" #valstart placeholder="Select Start Date"
+      (ionChange)="changeStartTime(valstart.value)"></ion-datetime>
+  </ion-item>
+  <ion-item *ngIf="showEndDate">
+    <ion-label></ion-label>
+    <ion-datetime   displayFormat="DD MM YY" max="2050" #valend placeholder="Select End Date"
+      (ionChange)="changeEndTime(valend.value)"></ion-datetime>
+  </ion-item>
+  <ion-button (click)="filter()" expand="block" fill="clear" shape="round">
+    filter
+  </ion-button>
+</ion-content>
+<ion-footer>
+  <h1>footer</h1>
+</ion-footer>

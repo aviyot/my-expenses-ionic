@@ -3,9 +3,10 @@ import { Storage } from "@ionic/storage";
 import { ExpensesService } from "../services/expenses/expenses.service";
 import { Expense } from "../models/expense.model";
 import { Router } from "@angular/router";
-import { AlertController, ModalController } from "@ionic/angular";
+import { AlertController, ModalController, PopoverController } from "@ionic/angular";
 import { LanguageService } from "../services/language/language.service";
 import { SortModalComponent } from '../sort-modal/sort-modal.component';
+import { FilterExpensesComponent } from '../filter-expenses/filter-expenses.component';
 
 @Component({
   selector: "app-home",
@@ -22,27 +23,35 @@ export class HomePage implements OnInit {
   selectedTotalAmount = 0;
   selectedArr:number[] = [];
   multiypleSelect = false;
+  ev:any
 
   constructor(
     private expensesService: ExpensesService,
     private router: Router,
     public alertController: AlertController,
     private languageServ: LanguageService,
-    public modalController: ModalController
+    public modalController: ModalController,
+    public popoverController: PopoverController
   ) {}
 
   ngOnInit() {
+
+    this.expensesService.expensesSorted.subscribe((val)=>{
+       this.expenses = this.expensesService.filteredExpenses;
+    })
     this.expensesService.totalExpenses.subscribe((val) => {
       this.totalExpenses = val;
     });
 
     this.expensesService.dataChanged.subscribe(() => {
-      this.expensesService.calcTotalExpenses();
+      this.expensesService.calcTotalExpenses(this.expenses);
     });
 
     this.expensesService.dataLoaded.subscribe((val) => {
       if (val) {
         this.expenses = this.expensesService.expenses;
+        //this.expenses = this.expensesService.filterDateExpenses(this.expenses, new Date(2022,1,1).getTime(),new Date(2024,5,1).getTime())
+        this.expensesService.calcTotalExpenses(this.expenses);
       }
     });
 
@@ -92,9 +101,13 @@ export class HomePage implements OnInit {
         break;
      }
   }
-  actionRespone(actionType:string){
+  actionRespone(actionType:any){
+    let {action,ev} = actionType;
+    if(!ev){
+       action = actionType;
+    }
 
-    switch(actionType) {
+    switch(action) {
       case "add" :
         this.onAdd();
         break;
@@ -111,7 +124,9 @@ export class HomePage implements OnInit {
       case "disableMultipplaySelect":
          this.selectMultiplt(false);
          break;
-
+      case "filter":
+        this.showFilter(ev);
+        break;
     }
 
   }
@@ -186,4 +201,15 @@ export class HomePage implements OnInit {
 
     const pr = await alert.present();
   }
+
+   async showFilter(ev){
+    const popover = await this.popoverController.create({
+      component: FilterExpensesComponent,
+      cssClass: 'my-custom-class',
+      translucent: true,
+      event:ev
+    });
+    return await popover.present();
+  }
+
 }

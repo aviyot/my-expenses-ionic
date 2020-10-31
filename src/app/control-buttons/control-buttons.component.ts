@@ -7,7 +7,7 @@ import { Component,Output,EventEmitter, Input} from '@angular/core';
 })
 export class ControlButtonsComponent {
 
-  @Output() actionType:EventEmitter<string> =  new EventEmitter<string>();
+  @Output() actionType:EventEmitter<any> =  new EventEmitter<any>();
   @Input() expenseSelected = false;
   @Input() multiypleSelect:boolean = false;
 
@@ -40,6 +40,10 @@ export class ControlButtonsComponent {
      else 
      this.actionType.emit("disableMultipplaySelect")
 
+  }
+
+  filterClicked(ev:any){
+    this.actionType.emit({ev,action:"filter"})
   }
 
 }
