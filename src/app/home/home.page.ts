@@ -16,6 +16,7 @@ import { FilterExpensesComponent } from '../filter-expenses/filter-expenses.comp
 export class HomePage implements OnInit {
   expenses: Expense[] = [];
   totalExpenses: number = 0;
+  income:number = 7500;
   selectedId: number = null;
   showDetails: boolean = false;
   languageWords: any;
@@ -23,7 +24,8 @@ export class HomePage implements OnInit {
   selectedTotalAmount = 0;
   selectedArr:number[] = [];
   multiypleSelect = false;
-  ev:any
+  savings:number;
+  ev:any;
 
   constructor(
     private expensesService: ExpensesService,
@@ -32,7 +34,10 @@ export class HomePage implements OnInit {
     private languageServ: LanguageService,
     public modalController: ModalController,
     public popoverController: PopoverController
-  ) {}
+  ) {
+
+
+  }
 
   ngOnInit() {
 
@@ -41,6 +46,7 @@ export class HomePage implements OnInit {
     })
     this.expensesService.totalExpenses.subscribe((val) => {
       this.totalExpenses = val;
+      this.savings = this.income - this.totalExpenses; 
     });
 
     this.expensesService.dataChanged.subscribe(() => {
