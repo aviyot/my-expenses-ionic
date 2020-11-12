@@ -23,6 +23,7 @@ export class ExpensesComponent implements OnChanges,OnInit {
   ngOnInit() {
   }
   ngOnChanges(){
+
     if(this.selectedSortType){
       this.colDiv = 0;
     }

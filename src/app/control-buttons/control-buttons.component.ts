@@ -1,4 +1,4 @@
-import { Component,Output,EventEmitter, Input} from '@angular/core';
+import { Component,Output,EventEmitter, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-control-buttons',
@@ -10,7 +10,7 @@ export class ControlButtonsComponent {
   @Output() actionType:EventEmitter<any> =  new EventEmitter<any>();
   @Input() expenseSelected = false;
   @Input() multiypleSelect:boolean = false;
-
+  @Input() expandToolbar;
   constructor() { 
   }
 
@@ -32,7 +32,9 @@ export class ControlButtonsComponent {
     this.actionType.emit("sort")
   }
 
- 
+  editIncome() {
+    this.actionType.emit("income")
+  }
 
   selectMultiplt(multiypleSelect){
     if(multiypleSelect)
@@ -44,6 +46,10 @@ export class ControlButtonsComponent {
 
   filterClicked(ev:any){
     this.actionType.emit({ev,action:"filter"})
+  }
+
+  onClick(){
+    this.expandToolbar = !this.expandToolbar;
   }
 
 }

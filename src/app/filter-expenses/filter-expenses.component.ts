@@ -20,11 +20,11 @@ export class FilterExpensesComponent implements OnInit {
     this.filteredExpenses = this.expensesService.expenses;
   }
 
-  changeStartTime(val: Date) {
+  changeStartTime(val: any) {
     this.startTime = val;
   }
 
-  changeEndTime(val: Date) {
+  changeEndTime(val: any) {
     this.endTime = val;
   }
 

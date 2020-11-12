@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Income</ion-title>
+    <ion-button (click)="closeModal()" expand="block" fill="clear" shape="round">
+      <ion-icon name="close-outline" size="large" color="danger"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>Income Type</ion-label>
+          <ion-select [formControl]="incomeType" placeholder="Select Income Type">
+            <ion-select-option value="salary">Salary</ion-select-option>
+            <ion-select-option value="loan">Loan</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Amount</ion-label>
+          <ion-input [formControl]="amount" type="number"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>From</ion-label>
+          <ion-input [formControl]="from" type="text" placeholder="From"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label>Start Date</ion-label>
+          <ion-datetime [formControl]="startDate" display-format="DD/MM/YYYY"></ion-datetime>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-button (click)="onSave()" expand="block" fill="clear" shape="round">
+    Save
+  </ion-button>
+<ion-list *ngFor="let income of incomes">
+  <ion-item >
+    <ion-label>{{income.id}}</ion-label>
+    <ion-label>{{income.type}}</ion-label>
+    <ion-label>{{income.from}}</ion-label>
+    <ion-label>{{income.amount}}</ion-label>
+    <ion-label>{{income.startDate}}</ion-label>
+  </ion-item>
+</ion-list>
+<h1>Total Incomes : {{totalIncomes}}</h1>
+</ion-content>

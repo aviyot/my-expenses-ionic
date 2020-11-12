@@ -7,6 +7,7 @@ import { AlertController, ModalController, PopoverController } from "@ionic/angu
 import { LanguageService } from "../services/language/language.service";
 import { SortModalComponent } from '../sort-modal/sort-modal.component';
 import { FilterExpensesComponent } from '../filter-expenses/filter-expenses.component';
+import { IncomeComponent } from '../income/income.component';
 
 @Component({
   selector: "app-home",
@@ -26,6 +27,7 @@ export class HomePage implements OnInit {
   multiypleSelect = false;
   savings:number;
   ev:any;
+  expandToolbar = false;
 
   constructor(
     private expensesService: ExpensesService,
@@ -70,6 +72,10 @@ export class HomePage implements OnInit {
     });
   }
 
+  ionViewDidEnter(){
+    this.expandToolbar = false;
+  }
+  
   
   onSelect(expenseId) {
     if(this.multiypleSelect){
@@ -133,6 +139,9 @@ export class HomePage implements OnInit {
       case "filter":
         this.showFilter(ev);
         break;
+      case "income":
+         this.editIncome();
+      break;
     }
 
   }
@@ -216,6 +225,13 @@ export class HomePage implements OnInit {
       event:ev
     });
     return await popover.present();
+  }
+
+  async editIncome() {
+     const incomeModal = await this.modalController.create({
+        component:IncomeComponent
+      })
+      return await incomeModal.present();
   }
 
 }
