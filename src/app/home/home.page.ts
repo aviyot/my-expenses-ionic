@@ -1,13 +1,23 @@
-import { Component, OnInit } from "@angular/core";
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from "@angular/core";
 import { Storage } from "@ionic/storage";
 import { ExpensesService } from "../services/expenses/expenses.service";
 import { Expense } from "../models/expense.model";
 import { Router } from "@angular/router";
-import { AlertController, ModalController, PopoverController } from "@ionic/angular";
+import {
+  AlertController,
+  ModalController,
+  PopoverController,
+} from "@ionic/angular";
 import { LanguageService } from "../services/language/language.service";
-import { SortModalComponent } from '../sort-modal/sort-modal.component';
-import { FilterExpensesComponent } from '../filter-expenses/filter-expenses.component';
-import { IncomeComponent } from '../income/income.component';
+import { SortModalComponent } from "../sort-modal/sort-modal.component";
+import { FilterExpensesComponent } from "../filter-expenses/filter-expenses.component";
+import { IncomeComponent } from "../income/income.component";
+import { IncomesService } from "../services/incomes/incomes.service";
 
 @Component({
   selector: "app-home",
@@ -17,16 +27,16 @@ import { IncomeComponent } from '../income/income.component';
 export class HomePage implements OnInit {
   expenses: Expense[] = [];
   totalExpenses: number = 0;
-  income:number = 7500;
+  income = 0;
   selectedId: number = null;
   showDetails: boolean = false;
   languageWords: any;
   selectedSortType: string;
   selectedTotalAmount = 0;
-  selectedArr:number[] = [];
+  selectedArr: number[] = [];
   multiypleSelect = false;
-  savings:number;
-  ev:any;
+  savings = 0;
+  ev: any;
   expandToolbar = false;
 
   constructor(
@@ -35,20 +45,34 @@ export class HomePage implements OnInit {
     public alertController: AlertController,
     private languageServ: LanguageService,
     public modalController: ModalController,
-    public popoverController: PopoverController
-  ) {
-
-
-  }
+    public popoverController: PopoverController,
+    private incomesService: IncomesService
+  ) {}
 
   ngOnInit() {
-
-    this.expensesService.expensesSorted.subscribe((val)=>{
-       this.expenses = this.expensesService.filteredExpenses;
+    this.incomesService.loadIncomesLocal().then(incomes => {
+      this.income = this.incomesService.calcTotalIncomes(incomes);
+      this.savings = this.totalExpenses - this.income;
     })
+
+    this.incomesService.incomeAction$.subscribe((action:string)=>{
+      if(action === "delete"){
+        this.incomesService.loadIncomesLocal().then(incomes => {
+          this.income = this.incomesService.calcTotalIncomes(incomes);
+          this.savings = this.totalExpenses - this.income;
+        })
+      }
+    })
+    this.incomesService.income$.subscribe((income) => {
+      this.income += income.amount;
+      this.savings = this.totalExpenses - this.income;
+    });
+    this.expensesService.expensesSorted.subscribe((val) => {
+      this.expenses = this.expensesService.filteredExpenses;
+    });
     this.expensesService.totalExpenses.subscribe((val) => {
+      console.log(val);
       this.totalExpenses = val;
-      this.savings = this.income - this.totalExpenses; 
     });
 
     this.expensesService.dataChanged.subscribe(() => {
@@ -70,60 +94,68 @@ export class HomePage implements OnInit {
     this.languageServ.selectedLanguage.subscribe((languageWords) => {
       this.languageWords = languageWords;
     });
+
+    /*     this.expensesService.loadLocalIncomesTotalAmount().then((val) => {
+      if (val) {
+        this.income$.next(val);
+      } else {
+        this.expensesService
+          .saveLoacalIncomesTotalAmount(this.income)
+          .then((val) => {
+            this.income$.next(val);
+          });
+      }
+    }); */
   }
 
-  ionViewDidEnter(){
+  ionViewDidEnter() {
     this.expandToolbar = false;
   }
-  
-  
+
   onSelect(expenseId) {
-    if(this.multiypleSelect){
-    if(this.selectedArr.includes(expenseId)){
-     this.selectedArr = this.selectedArr.filter((item)=> item!== expenseId)
-     this.selectedTotalAmount -= this.expenses.find((ex) => {
-      return ex.id === expenseId;
-    }).amount;
+    if (this.multiypleSelect) {
+      if (this.selectedArr.includes(expenseId)) {
+        this.selectedArr = this.selectedArr.filter(
+          (item) => item !== expenseId
+        );
+        this.selectedTotalAmount -= this.expenses.find((ex) => {
+          return ex.id === expenseId;
+        }).amount;
+      } else {
+        this.selectedArr = [...this.selectedArr, expenseId];
+        this.selectedTotalAmount += this.expenses.find((ex) => {
+          return ex.id === expenseId;
+        }).amount;
+      }
     }
-    else{
-     this.selectedArr = [...this.selectedArr,expenseId];
-     this.selectedTotalAmount += this.expenses.find((ex) => {
-      return ex.id === expenseId;
-    }).amount;
-    }
-  }
     if (this.selectedId === expenseId) {
       this.selectedId = null;
     } else {
       this.selectedId = expenseId;
     }
 
-
     this.showDetails = false;
-
-
   }
-  onSelectOp(op:string){
-     switch(op){
+  onSelectOp(op: string) {
+    switch (op) {
       case "edit":
         this.onEdit();
         break;
       case "delete":
-        this.onDelete()
+        this.onDelete();
         break;
-     }
+    }
   }
-  actionRespone(actionType:any){
-    let {action,ev} = actionType;
-    if(!ev){
-       action = actionType;
+  actionRespone(actionType: any) {
+    let { action, ev } = actionType;
+    if (!ev) {
+      action = actionType;
     }
 
-    switch(action) {
-      case "add" :
+    switch (action) {
+      case "add":
         this.onAdd();
         break;
-   
       case "detial":
         this.showDetail();
         break;
@@ -134,18 +166,16 @@ export class HomePage implements OnInit {
         this.selectMultiplt(true);
         break;
       case "disableMultipplaySelect":
-         this.selectMultiplt(false);
-         break;
+        this.selectMultiplt(false);
+        break;
       case "filter":
         this.showFilter(ev);
         break;
       case "income":
-         this.editIncome();
-      break;
+        this.editIncome();
+        break;
     }
-
   }
-
 
   onAdd() {
     this.router.navigate(["/", "expense-add-form"]);
@@ -170,26 +200,23 @@ export class HomePage implements OnInit {
     }
   }
 
-  selectMultiplt(isMultiyplySelect){
-    if(!isMultiyplySelect){
+  selectMultiplt(isMultiyplySelect) {
+    if (!isMultiyplySelect) {
       this.multiypleSelect = false;
-      let ar=[];
+      let ar = [];
       this.selectedArr = ar;
       this.selectedId = null;
       this.selectedTotalAmount = 0;
-    }
-    else {
+    } else {
       this.selectedId = null;
       this.multiypleSelect = true;
     }
   }
 
-  
-
-  async showModalSort(){
+  async showModalSort() {
     const modal = await this.modalController.create({
       component: SortModalComponent,
-      cssClass: 'sort-modal'
+      cssClass: "sort-modal",
     });
     return await modal.present();
   }
@@ -217,21 +244,20 @@ export class HomePage implements OnInit {
     const pr = await alert.present();
   }
 
-   async showFilter(ev){
+  async showFilter(ev) {
     const popover = await this.popoverController.create({
       component: FilterExpensesComponent,
-      cssClass: 'my-custom-class',
+      cssClass: "my-custom-class",
       translucent: true,
-      event:ev
+      event: ev,
     });
     return await popover.present();
   }
 
   async editIncome() {
-     const incomeModal = await this.modalController.create({
-        component:IncomeComponent
-      })
-      return await incomeModal.present();
+    const incomeModal = await this.modalController.create({
+      component: IncomeComponent,
+    });
+    return await incomeModal.present();
   }
-
 }

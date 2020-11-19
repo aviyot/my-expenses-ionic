@@ -40,17 +40,18 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <ion-button (click)="onSave()" expand="block" fill="clear" shape="round">
+  <ion-button (click)="onSave()">
     Save
   </ion-button>
-<ion-list *ngFor="let income of incomes">
-  <ion-item >
-    <ion-label>{{income.id}}</ion-label>
-    <ion-label>{{income.type}}</ion-label>
-    <ion-label>{{income.from}}</ion-label>
-    <ion-label>{{income.amount}}</ion-label>
-    <ion-label>{{income.startDate}}</ion-label>
-  </ion-item>
-</ion-list>
-<h1>Total Incomes : {{totalIncomes}}</h1>
+  <ion-button (click)="onDelete()" *ngIf="selectedIncomeId">Delete</ion-button>
+  <ion-list>
+    <ion-item *ngFor="let income of incomes" (click)="onSelectIncome(income.id)">
+      <ion-label>{{income.id}}</ion-label>
+      <ion-label>{{income.type}}</ion-label>
+      <ion-label>{{income.from}}</ion-label>
+      <ion-label>{{income.amount}}</ion-label>
+      <ion-label>{{income.startDate}}</ion-label>
+    </ion-item>
+  </ion-list>
+  <h1>Total Incomes : {{totalIncomes}}</h1>
 </ion-content>

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Expense } from "src/app/models/expense.model";
 import { Storage } from "@ionic/storage";
-import { BehaviorSubject, Subject } from "rxjs";
+import { BehaviorSubject} from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -11,6 +11,7 @@ export class ExpensesService {
   private _categories: string[] = [];
   private _paymentMethods: string[] = [];
   private _filteredExpenses:Expense[] = [];
+  private _incomesTotalAmount:number = 9000;
 
   public totalExpenses = new BehaviorSubject<number>(0);
   public dataLoaded = new BehaviorSubject<boolean>(false);
@@ -40,6 +41,7 @@ export class ExpensesService {
 
   delete(id: number) {
     this._expenses = this._expenses.filter((expense) => expense.id !== id);
+    this.calcTotalExpenses(this._expenses);
     this.dataChanged.next(true);
     this.saveLocalExpenses();
   }
@@ -97,12 +99,13 @@ set filteredExpenses(val:Expense[]){
   addNew(expense: Expense) {
     let expenseWithId = { ...expense, id: Date.now() };
     this._expenses = [...this._expenses, expenseWithId];
+    this.calcTotalExpenses(this._expenses);
     this.saveLocalExpenses();
     this.dataChanged.next(true);
   }
 
   calcTotalExpenses(expenses: Expense[]): void {
-    this.totalExpenses.next(
+    return this.totalExpenses.next(
       expenses.reduce((total: number, val: Expense) => {
         return total + val.amount;
       }, 0)
@@ -123,6 +126,10 @@ set filteredExpenses(val:Expense[]){
 
   saveLocalPaymentMethods() {
     this.storage.set("paymentMethods", this._paymentMethods);
+  }
+
+  saveLoacalIncomesTotalAmount(val){
+    return this.storage.set('incomesTotalAmount',val);
   }
 
   loadLocalExpenses() {
@@ -156,6 +163,10 @@ set filteredExpenses(val:Expense[]){
         this.storage.set("paymentMethods", this._paymentMethods);
       }
     });
+  }
+
+  loadLocalIncomesTotalAmount():Promise<any>{
+    return this.storage.get("incomesTotalAmount");
   }
 
   calcLastPayDate(fristPayDate, numberOfPay: number): number {
