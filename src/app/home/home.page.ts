@@ -4,7 +4,6 @@ import {
   Component,
   OnInit,
 } from "@angular/core";
-import { Storage } from "@ionic/storage";
 import { ExpensesService } from "../services/expenses/expenses.service";
 import { Expense } from "../models/expense.model";
 import { Router } from "@angular/router";
@@ -50,32 +49,38 @@ export class HomePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.incomesService.loadIncomesLocal().then(incomes => {
-      this.income = this.incomesService.calcTotalIncomes(incomes);
-      this.savings = this.totalExpenses - this.income;
-    })
+    this.expensesService.expenses.subscribe((expenses) => {
+      this.expenses = expenses;
+      this.expensesService.calcTotalExpenses(this.expenses);
+    });
 
-    this.incomesService.incomeAction$.subscribe((action:string)=>{
-      if(action === "delete"){
-        this.incomesService.loadIncomesLocal().then(incomes => {
+    this.expensesService.totalExpenses.subscribe((totalExpenses) => {
+      this.totalExpenses = totalExpenses;
+    });
+
+    this.incomesService.loadIncomesLocal().then((incomes) => {
+      this.income = this.incomesService.calcTotalIncomes(incomes);
+      this.savings =  this.income - this.totalExpenses;
+    });
+
+    this.incomesService.incomeAction$.subscribe((action: string) => {
+      if (action === "delete") {
+        this.incomesService.loadIncomesLocal().then((incomes) => {
           this.income = this.incomesService.calcTotalIncomes(incomes);
           this.savings = this.totalExpenses - this.income;
-        })
+        });
       }
-    })
+    });
     this.incomesService.income$.subscribe((income) => {
       this.income += income.amount;
-      this.savings = this.totalExpenses - this.income;
+      this.savings = this.income - this.totalExpenses ;
+      console.log(this.savings);
     });
     this.expensesService.expensesSorted.subscribe((val) => {
       this.expenses = this.expensesService.filteredExpenses;
     });
-    this.expensesService.totalExpenses.subscribe((val) => {
-      console.log(val);
-      this.totalExpenses = val;
-    });
 
-    this.expensesService.dataChanged.subscribe(() => {
+    /*    this.expensesService.dataChanged.subscribe(() => {
       this.expensesService.calcTotalExpenses(this.expenses);
     });
 
@@ -89,7 +94,7 @@ export class HomePage implements OnInit {
 
     this.expensesService.dataChanged.subscribe(() => {
       this.expenses = this.expensesService.expenses;
-    });
+    }); */
 
     this.languageServ.selectedLanguage.subscribe((languageWords) => {
       this.languageWords = languageWords;
@@ -112,8 +117,8 @@ export class HomePage implements OnInit {
     this.expandToolbar = false;
   }
 
-  onSelect(expenseId) {
-    if (this.multiypleSelect) {
+  onSelectExpense(expenseId:number) {
+    if (this.multiypleSelect){
       if (this.selectedArr.includes(expenseId)) {
         this.selectedArr = this.selectedArr.filter(
           (item) => item !== expenseId
@@ -184,7 +189,13 @@ export class HomePage implements OnInit {
   }
 
   onEdit() {
-    this.router.navigate(["/", "expense-add-form", "edit", this.selectedId]);
+    const selectedExpense: Expense = this.expenses.find(
+      (val) => val.id === this.selectedId
+    );
+    this.router.navigate(
+      ["/", "expense-add-form", "edit", selectedExpense.id],
+      { state: { selectedExpense: selectedExpense } }
+    );
     this.selectedId = null;
   }
 
@@ -234,7 +245,7 @@ export class HomePage implements OnInit {
         {
           text: this.languageWords.ok,
           handler: () => {
-            this.expensesService.delete(this.selectedId);
+            this.expensesService.removeExpense(this.selectedId, this.expenses);
             this.selectedId = null;
           },
         },

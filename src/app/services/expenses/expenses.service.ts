@@ -1,19 +1,24 @@
 import { Injectable } from "@angular/core";
-import { Expense } from "src/app/models/expense.model";
+import { Expense } from "../../models/expense.model";
 import { Storage } from "@ionic/storage";
-import { BehaviorSubject} from "rxjs";
+import { BehaviorSubject, Observable, Subject} from "rxjs";
+import { Expenses } from '../../models/expenses.model';
 
 @Injectable({
   providedIn: "root",
 })
 export class ExpensesService {
-  private _expenses: Expense[] = [];
-  private _categories: string[] = [];
-  private _paymentMethods: string[] = [];
+/*   private _exps = new Subject<Expenses>();
+ */
+  private _expenses : Subject<Expense[]> = new BehaviorSubject<Expense[]>([]);
+  private _categories: Subject<string[]> = new BehaviorSubject<string[]>([]);
+  private _paymentMethods: Subject<string[]> = new BehaviorSubject<string[]>([]);
+
+
   private _filteredExpenses:Expense[] = [];
   private _incomesTotalAmount:number = 9000;
+  private _totalExpenses = new BehaviorSubject<number>(0);
 
-  public totalExpenses = new BehaviorSubject<number>(0);
   public dataLoaded = new BehaviorSubject<boolean>(false);
   public localCategoriesLoaded = new BehaviorSubject(false);
   public localPaymentMethodsLoaded = new BehaviorSubject(false);
@@ -22,62 +27,168 @@ export class ExpensesService {
 
 
   constructor(private storage: Storage) {
+
+   /*  this.storage.get("expenses_data").then((expensesData:Expenses)=>{
+      if(expensesData){
+        this._exps.next(expensesData);
+      }
+    }) */
     this.loadLocalExpenses();
     this.loadLocalCategories();
     this.loadLocalPaymentMethods();
   }
 
-  get expenses(): Expense[] {
-    return [...this._expenses];
-  }
-  set expenses(expenses: Expense[]) {
-    this._expenses = [...expenses];
-    this.dataChanged.next(true);
-  }
-  set expense(value: Expense) {
-    this._expenses = [...this._expenses, value];
-    this.saveLocalExpenses();
+  get expenses(): Observable<Expense[]> {
+    return this._expenses.asObservable();
   }
 
-  delete(id: number) {
+  get categories(): Observable<string[]> {
+    return this._categories.asObservable();
+  }
+
+  get paymentMethods():Observable<string[]>{
+    return this._paymentMethods.asObservable();
+  }
+
+  get totalExpenses():Observable<number>{
+      return this._totalExpenses.asObservable();
+  }
+
+  setExpenses(expenses:Expense[]){
+    this._expenses.next(expenses);
+  }
+
+  loadLocalExpenses() {
+    this.storage.get("expenses").then((expenses) => {
+      if (expenses) {
+        this._expenses.next(expenses);     }
+    
+    });
+  }
+
+  loadLocalCategories() {
+    this.storage.get("categories").then((categories: string[]) => {
+      if (categories) {
+        this._categories.next(categories);
+      } 
+    });
+  }
+
+  loadLocalPaymentMethods() {
+    this.storage.get("paymentMethods").then((paymentMethods) => {
+      if (paymentMethods) {
+        this._paymentMethods.next(paymentMethods);
+      } 
+    });
+  }
+
+  loadLocalIncomesTotalAmount():Promise<any>{
+    return this.storage.get("incomesTotalAmount");
+  }
+
+  addNewExpense(expense: Expense,expenses:Expense[]) {
+    let expenseWithId = { ...expense, id: Date.now() };
+
+    const newExpenses = [...expenses, expenseWithId];
+
+    this.storage.set("expenses",newExpenses).then(()=>{
+      this._expenses.next(newExpenses);
+    }).catch((err)=>{
+      throw Error(err);
+    })
+
+  }
+
+  updateExpense(id: number, updatedExpense: Expense, expenses:Expense[]) {
+    const updatedExpenses:Expense[] = [
+      ...expenses.filter((item) => item.id !== id),
+      { ...updatedExpense, id: id },
+    ];
+    this.storage.set("expenses",updatedExpenses).then(()=>{
+      this._expenses.next(updatedExpenses);
+    }).catch((err)=>{
+      throw Error(err);
+    })
+  }
+
+  removeExpense(id:number,expenses:Expense[]){
+    const newExpenses = expenses.filter((expense) => expense.id !== id);
+    this.storage.set("expenses",newExpenses).then(()=>{
+      this._expenses.next(newExpenses);
+    }).catch((err)=>{
+      throw Error(err);
+    })
+    
+  }
+ 
+
+/*   set expenses(expenses: Expense[]) {
+    this._expenses = [...expenses];
+    this.dataChanged.next(true);
+  } */
+ /*  set expense(value: Expense) {
+    this._expenses = [...this._expenses, value];
+    this.saveLocalExpenses();
+  } */
+
+/*   delete(id: number) {
     this._expenses = this._expenses.filter((expense) => expense.id !== id);
     this.calcTotalExpenses(this._expenses);
     this.dataChanged.next(true);
     this.saveLocalExpenses();
-  }
+  } */
 
-  get categories(): string[] {
-    return [...this._categories];
-  }
+
+/*  
 
   set category(value: string) {
     this._categories = [...this._categories, value];
     this.saveLocalCategories();
     this.dataChanged.next(true);
+  } */
+
+  removeCategory(categoryName:string,categories:string[]) {
+    const newCategories = categories.filter((item) => item !== categoryName);
+    this._categories.next(newCategories);
   }
 
-  removeCategory(val) {
-    this._categories = this._categories.filter((item) => item !== val);
-    this.saveLocalCategories();
-    this.dataChanged.next(true);
-    return this.categories;
+  removePayMethod(payMethodName:string,paymentMethods:string[]) {
+    const newpaymentMethods = paymentMethods.filter((item) => item !== payMethodName);
+    this._paymentMethods.next(paymentMethods);
   }
 
-  set paymentMethod(value: string) {
+
+  addNewCategory(newCategory:string,categories:string[]):Promise<any>{
+
+    const newCategories = [...categories,newCategory];
+    return this.storage.set("categories",newCategories).then(()=>{
+      this._categories.next(newCategories)
+    })
+   
+  }
+
+  addNewPaymentMethod(newPaymentMethod:string,paymentMethods:string[]):Promise<any> {
+    const newPaymentMethods = [...paymentMethods,newPaymentMethod];
+
+    return this.storage.set("paymentMethods",newPaymentMethods).then(()=>{
+         this._paymentMethods.next(newPaymentMethods);
+    })
+
+  }
+
+ /*  set paymentMethod(value: string) {
     this._paymentMethods = [...this._paymentMethods, value];
     this.saveLocalPaymentMethods();
     this.dataChanged.next(true);
-  }
-  get paymentMethods(): string[] {
-    return [...this._paymentMethods];
-  }
-  removePayMethod(val) {
+  } */
+  
+/*   removePayMethod(val) {
     this._paymentMethods = this._paymentMethods.filter((item) => item !== val);
     this.saveLocalPaymentMethods();
     this.dataChanged.next(true);
 
     return this.paymentMethods;
-  }
+  } */
 get filteredExpenses(){
   return [...this._filteredExpenses];
 }
@@ -87,31 +198,16 @@ set filteredExpenses(val:Expense[]){
    this.expensesSorted.next(true);
 }
 
-  update(id: number, updateExpense: Expense) {
-    this._expenses = [
-      ...this._expenses.filter((item) => item.id !== id),
-      { ...updateExpense, id: id },
-    ];
-    this.saveLocalExpenses();
-    this.dataChanged.next(true);
-  }
-
-  addNew(expense: Expense) {
-    let expenseWithId = { ...expense, id: Date.now() };
-    this._expenses = [...this._expenses, expenseWithId];
-    this.calcTotalExpenses(this._expenses);
-    this.saveLocalExpenses();
-    this.dataChanged.next(true);
-  }
+ 
 
   calcTotalExpenses(expenses: Expense[]): void {
-    return this.totalExpenses.next(
+    this._totalExpenses.next(
       expenses.reduce((total: number, val: Expense) => {
         return total + val.amount;
       }, 0)
     );
   }
-
+/* 
   async saveLocal(value: any, key: string): Promise<any> {
     await this.storage.set(key, value);
   }
@@ -130,44 +226,10 @@ set filteredExpenses(val:Expense[]){
 
   saveLoacalIncomesTotalAmount(val){
     return this.storage.set('incomesTotalAmount',val);
-  }
+  } */
 
-  loadLocalExpenses() {
-    this.storage.get("expenses").then((val) => {
-      if (val) {
-        this._expenses = val;
-        this.dataLoaded.next(true);
-      } else {
-        this.storage.set("expenses", this._expenses);
-      }
-    });
-  }
 
-  loadLocalCategories() {
-    this.storage.get("categories").then((val: string[]) => {
-      if (val) {
-        this._categories = val;
-        this.localCategoriesLoaded.next(true);
-      } else {
-        this.storage.set("categories", this._categories);
-      }
-    });
-  }
 
-  loadLocalPaymentMethods() {
-    this.storage.get("paymentMethods").then((val) => {
-      if (val) {
-        this._paymentMethods = val;
-        this.localPaymentMethodsLoaded.next(true);
-      } else {
-        this.storage.set("paymentMethods", this._paymentMethods);
-      }
-    });
-  }
-
-  loadLocalIncomesTotalAmount():Promise<any>{
-    return this.storage.get("incomesTotalAmount");
-  }
 
   calcLastPayDate(fristPayDate, numberOfPay: number): number {
     let fd = new Date(fristPayDate);

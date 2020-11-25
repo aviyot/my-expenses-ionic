@@ -1,7 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { ModalController } from '@ionic/angular';
+import { Expense } from '../models/expense.model';
 import { ExpensesService } from "../services/expenses/expenses.service";
 import { LanguageService } from "../services/language/language.service";
+import { Storage } from "@ionic/storage";
+
 
 interface sortType {
   label: string;
@@ -17,18 +20,23 @@ export class SortModalComponent implements OnInit {
   selectedLanguage: string;
   sortTypes: sortType[];
   lng: any;
- 
+ expenses:Expense[];
   selectedSortType="name";
   sortType="acs";
   save=false;
+ 
   constructor(
     private languageServ: LanguageService,
     private expensesService: ExpensesService,
-    public modalController: ModalController
+    public modalController: ModalController,
+    private storage:Storage
 
   ) {}
 
   ngOnInit() {
+    this.expensesService.expenses.subscribe((expenses)=>{
+      this.expenses = expenses;
+    })
     this.languageServ.selectedLanguage.subscribe((lng: any) => {
       this.lng = lng;
       // const {name,amount,category,payMethod,fristPayDate,numberPays,lastPayDate,sortBy} = lng;
@@ -48,12 +56,14 @@ export class SortModalComponent implements OnInit {
 
   sort() {
     //console.log(this.selectedSortType,this.save,this.sortType);
-    this.expensesService.expenses = this.expensesService.sortExpenses(
-      [...this.expensesService.expenses],
+  this.expenses = this.expensesService.sortExpenses(
+      [...this.expenses],
       this.selectedSortType,this.sortType
     );
+
+    this.expensesService.setExpenses(this.expenses);
     if(this.save){
-        this.expensesService.saveLocalExpenses();
+      this.storage.set("expenses",this.expenses)
     }
 
 

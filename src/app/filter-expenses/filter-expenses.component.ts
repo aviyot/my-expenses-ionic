@@ -17,7 +17,9 @@ export class FilterExpensesComponent implements OnInit {
   constructor(private expensesService: ExpensesService) {}
 
   ngOnInit() {
-    this.filteredExpenses = this.expensesService.expenses;
+    this.expensesService.expenses.subscribe((expenses)=>{
+      this.filteredExpenses = expenses
+    });
   }
 
   changeStartTime(val: any) {
@@ -71,7 +73,7 @@ export class FilterExpensesComponent implements OnInit {
         );
         break;
       case "all":
-        this.expensesService.filteredExpenses = this.expensesService.expenses;
+        this.expensesService.filteredExpenses = this.filteredExpenses;
     }
   }
 

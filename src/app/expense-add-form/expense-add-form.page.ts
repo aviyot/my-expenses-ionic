@@ -5,7 +5,8 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { formatDate } from "@angular/common";
 import { PopoverController, ToastController } from "@ionic/angular";
 import { OpthionEditSettingsComponent } from "../opthion-edit-settings/opthion-edit-settings.component";
-import { LanguageService } from '../services/language/language.service';
+import { LanguageService } from "../services/language/language.service";
+import { Expense } from "../models/expense.model";
 
 @Component({
   selector: "app-expense-add-form",
@@ -14,6 +15,9 @@ import { LanguageService } from '../services/language/language.service';
 })
 export class ExpenseAddFormPage implements OnInit {
   id: string = null;
+  expense:Expense;
+  selectedExpense: Expense;
+  expenses:Expense[];
   editMode: boolean = false;
   form: FormGroup;
   title: string = "Add new Expense";
@@ -30,15 +34,27 @@ export class ExpenseAddFormPage implements OnInit {
     private route: ActivatedRoute,
     public popoverController: PopoverController,
     public toastController: ToastController,
-    private languageServ : LanguageService
+    private languageServ: LanguageService
+  ) {
+/*     this.selectedExpense = this.router.getCurrentNavigation().extras.state.selectedExpense;
+    console.log(this.selectedExpense); */
+  }
 
-  ) {}
-
-  ngOnInit(){
-    this.languageServ.selectedLanguage.subscribe(languageWords => {
-      this.languageWords = languageWords;
+  ngOnInit() {
+    this.expensesService.expenses.subscribe((expenses:Expense[])=>{
+this.expenses = expenses;
     })
-    this.expensesService.dataChanged.subscribe((val) => {
+    this.expensesService.categories.subscribe((categories: string[]) => {
+      this.categories = categories;
+    });
+    this.expensesService.paymentMethods.subscribe((paymentMethods) => {
+      this.paymentMethods = paymentMethods;
+    });
+
+    this.languageServ.selectedLanguage.subscribe((languageWords) => {
+      this.languageWords = languageWords;
+    });
+    /* this.expensesService.dataChanged.subscribe((val) => {
       this.categories = this.expensesService.categories;
       this.paymentMethods = this.expensesService.paymentMethods;
     });
@@ -46,14 +62,14 @@ export class ExpenseAddFormPage implements OnInit {
       if (val) {
         this.categories = this.expensesService.categories;
       }
-    });
+    }); */
 
-    this.expensesService.localPaymentMethodsLoaded.subscribe((val) => {
+    /*  this.expensesService.localPaymentMethodsLoaded.subscribe((val) => {
       if (val) {
         this.paymentMethods = this.expensesService.paymentMethods;
       }
     });
-
+ */
     this.id = this.route.snapshot.paramMap.get("id");
     let name = null,
       amount = null,
@@ -79,9 +95,7 @@ export class ExpenseAddFormPage implements OnInit {
         commitDate,
         fristPayDate,
         numberOfPay,
-      } = this.expensesService.expenses.filter(
-        (expense) => expense.id === +this.id
-      )[0]);
+      } = this.expenses.find((expense=>(expense.id === +this.id))));
     } else {
       this.editMode = false;
     }
@@ -102,16 +116,12 @@ export class ExpenseAddFormPage implements OnInit {
       }),
       freqPay: new FormControl(freqPay, { updateOn: "blur" }),
       benef: new FormControl(benef, { updateOn: "blur" }),
-      commitDate: new FormControl(commitDate,
-        {
-          updateOn: "blur",
-        }
-      ),
-      fristPayDate: new FormControl(fristPayDate,
-        {
-          updateOn: "blur",
-        }
-      ),
+      commitDate: new FormControl(commitDate, {
+        updateOn: "blur",
+      }),
+      fristPayDate: new FormControl(fristPayDate, {
+        updateOn: "blur",
+      }),
       numberOfPay: new FormControl(numberOfPay, {
         updateOn: "blur",
       }),
@@ -119,37 +129,45 @@ export class ExpenseAddFormPage implements OnInit {
   }
 
   onUpdate() {
-    this.expensesService.update(+this.id, this.form.value);
+    this.expensesService.updateExpense(+this.id, this.form.value,this.expenses);
     this.router.navigate(["/", "home"]);
   }
 
   onAdd() {
     if (this.form.valid) {
-      this.expensesService.addNew(this.form.value);
+     
+      this.expensesService.addNewExpense(this.form.value,this.expenses);
       this.form.reset();
-     // this.router.navigate(["/", "home"]);
-     this.presentToastDataAdded();
+      // this.router.navigate(["/", "home"]);
+      this.presentToastDataAdded();
     } else {
       this.presentToast();
       //alert("enter requided data(amount,category");
     }
   }
   onDelete() {
-    this.expensesService.delete(+this.id);
+    this.expensesService.removeExpense(+this.id,this.expenses);
   }
   onBack() {
     this.router.navigate(["/", "home"]);
   }
-
+/* 
   addCategory() {
-    this.isAddCategory = true;
+    this.expensesService.addNewCategory(this.newCategory,this.categories).then(()=>{
+      this.isAddCategory = true;
+    })
+  
   }
 
   addPaymentMethod() {
-    this.isAddPaymentMethod = true;
+    this.expensesService.addNewPaymentMethod(this.newPaymentMethod,this.paymentMethods).then(()=>{
+      this.isAddPaymentMethod = true;
+    })
+   
   }
 
   saveCategory() {
+    this.expensesService.categories.
     this.categories.push(this.newCategory);
     this.expensesService.category = this.newCategory;
     this.expensesService.saveLocalCategories();
@@ -163,7 +181,7 @@ export class ExpenseAddFormPage implements OnInit {
     this.expensesService.saveLocalPaymentMethods();
     this.isAddPaymentMethod = false;
     this.form.controls["methodPay"].setValue(this.newPaymentMethod);
-  }
+  } */
 
   onInputCategory(val) {
     this.newCategory = val.target.value;
@@ -186,7 +204,7 @@ export class ExpenseAddFormPage implements OnInit {
     const toast = await this.toastController.create({
       message: this.languageWords.enterRequired,
       duration: 2000,
-      color:'warning'
+      color: "warning",
     });
     toast.present();
   }
@@ -194,7 +212,7 @@ export class ExpenseAddFormPage implements OnInit {
     const toast = await this.toastController.create({
       message: this.languageWords.dataAdded,
       duration: 1000,
-      color:'success'
+      color: "success",
     });
     toast.present();
   }

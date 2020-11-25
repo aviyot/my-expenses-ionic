@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content>
-  <app-expenses (select)="onSelect($event)" [expenses]="expenses" [showDetails]="showDetails" [selectedId]="selectedId"
+  <app-expenses (select)=" onSelectExpense($event)" [expenses]="expenses" [showDetails]="showDetails" [selectedId]="selectedId"
     [selectedSortType]="selectedSortType" [selectedArr]="selectedArr" [multiypleSelect]="multiypleSelect"
     (selectedOp)="onSelectOp($event)">
   </app-expenses>
@@ -47,7 +47,7 @@
           <ion-col>
             <ion-icon name="cash-outline" size="large" [color]="(income-selectedTotalAmount) > 0 ?'success':'danger'"></ion-icon>
               <ion-label class="cal_label" [color]="(income-selectedTotalAmount) > 0 ?'success':'danger'">
-                {{(income-selectedTotalAmount)| number:'1.0-0'}}</ion-label>
+                {{(income - selectedTotalAmount)| number:'1.0-0'}}</ion-label>
           </ion-col>
         </ion-row>
    

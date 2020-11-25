@@ -21,13 +21,17 @@ export class OpthionEditSettingsComponent implements OnInit {
   constructor(private expensesService: ExpensesService,private languageServ:LanguageService) {}
 
   ngOnInit() {
-    this.categories = this.expensesService.categories;
-    this.paymentMethods = this.expensesService.paymentMethods;
+   this.expensesService.categories.subscribe((categories)=>{
+      this.categories =  categories;
+    });
+   this.expensesService.paymentMethods.subscribe((paymentMethods)=>{
+    this.paymentMethods = paymentMethods; 
+    });
 
-    this.expensesService.dataChanged.subscribe(val=>{
+    /* this.expensesService.dataChanged.subscribe(val=>{
       this.categories = this.expensesService.categories;
       this.paymentMethods = this.expensesService.paymentMethods;
-    })
+    }) */
     this.languageServ.selectedLanguage.subscribe(languageWords => {
       this.languageWords = languageWords;
     })
@@ -61,11 +65,11 @@ export class OpthionEditSettingsComponent implements OnInit {
     if(this.opthions.editPay)
        this.removePayMethod(this.selectedVlaue);
   }
-  removeCatgory(val){
-    this.categories = this.expensesService.removeCategory(val)
+  removeCatgory(catgory){
+   this.expensesService.removeCategory(catgory,this.categories);
   }
-  removePayMethod(val){
-    this.paymentMethods = this.expensesService.removePayMethod(val);
+  removePayMethod(payMethod){
+  this.expensesService.removePayMethod(payMethod,this.paymentMethods);
   }
 
   onSelectCatgory(val){
@@ -85,12 +89,16 @@ export class OpthionEditSettingsComponent implements OnInit {
        this.addNewPayMethod();
   }
   addNewCategory(){
-    this.expensesService.category = this.category.value;
-    this.category.reset();
+    this.expensesService.addNewCategory(this.category.value,this.categories).then(()=>{
+      this.category.reset();
+    });
+
   }
   addNewPayMethod(){
-    this.expensesService.paymentMethod = this.payMethod.value;
-    this.payMethod.reset();
+    this.expensesService.addNewPaymentMethod(this.payMethod.value,this.paymentMethods).then(()=>{
+      this.payMethod.reset();
+    })
+
   }
 
 
