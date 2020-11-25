@@ -56,6 +56,7 @@ export class HomePage implements OnInit {
 
     this.expensesService.totalExpenses.subscribe((totalExpenses) => {
       this.totalExpenses = totalExpenses;
+      this.savings = this.incomesService.calcTotalIncomes(this.incomesService.incomes) - this.totalExpenses;
     });
 
     this.incomesService.loadIncomesLocal().then((incomes) => {
@@ -74,10 +75,14 @@ export class HomePage implements OnInit {
     this.incomesService.income$.subscribe((income) => {
       this.income += income.amount;
       this.savings = this.income - this.totalExpenses ;
-      console.log(this.savings);
     });
     this.expensesService.expensesSorted.subscribe((val) => {
       this.expenses = this.expensesService.filteredExpenses;
+    });
+
+    
+    this.languageServ.selectedLanguage.subscribe((languageWords) => {
+      this.languageWords = languageWords;
     });
 
     /*    this.expensesService.dataChanged.subscribe(() => {
@@ -95,10 +100,6 @@ export class HomePage implements OnInit {
     this.expensesService.dataChanged.subscribe(() => {
       this.expenses = this.expensesService.expenses;
     }); */
-
-    this.languageServ.selectedLanguage.subscribe((languageWords) => {
-      this.languageWords = languageWords;
-    });
 
     /*     this.expensesService.loadLocalIncomesTotalAmount().then((val) => {
       if (val) {

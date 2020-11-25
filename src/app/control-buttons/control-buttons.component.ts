@@ -31,10 +31,10 @@ export class ControlButtonsComponent {
   showSortAlert(){
     this.actionType.emit("sort")
   }
-
+/* 
   editIncome() {
     this.actionType.emit("income")
-  }
+  } */
 
   selectMultiplt(multiypleSelect){
     if(multiypleSelect)

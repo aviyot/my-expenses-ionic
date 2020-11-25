@@ -201,11 +201,10 @@ set filteredExpenses(val:Expense[]){
  
 
   calcTotalExpenses(expenses: Expense[]): void {
-    this._totalExpenses.next(
-      expenses.reduce((total: number, val: Expense) => {
-        return total + val.amount;
-      }, 0)
-    );
+    const totalAmount =   expenses.reduce((total: number, val: Expense) => {
+      return total + val.amount;
+    }, 0)
+    this._totalExpenses.next(totalAmount);
   }
 /* 
   async saveLocal(value: any, key: string): Promise<any> {
