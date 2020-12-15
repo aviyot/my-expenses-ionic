@@ -27,7 +27,7 @@
     </ion-item>
     <ion-item>
       <ion-label position="floating">Select Income Type</ion-label>
-      <ion-select formControlName="incomeType" (ionChange)="clickOp()">
+      <ion-select formControlName="incomeType">
         <ion-select-option *ngFor="let incomeType of incomeTypes" [value]="incomeType">{{incomeType}}</ion-select-option>
         <ion-select-option value="new_type" >Add new...</ion-select-option>
       </ion-select>
