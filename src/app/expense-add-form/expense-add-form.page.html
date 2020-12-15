@@ -34,7 +34,18 @@
       <ion-input type="number" placeholder="" formControlName="amount"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-grid class="ion-no-padding">
+      <ion-label>{{languageWords.category}}</ion-label>
+      <ion-select  *ngIf="!isAddCategory" #val [interfaceOptions]="categoryCustomAlertOptions"
+      [value]="defaultCategory" multiple="false" [placeholder]="languageWords.select+' '+languageWords.category"
+      formControlName="category" interface="action-sheet" (select)="onFocus($event)">
+      <ion-select-option *ngFor="let category of categories " [value]="category">
+        {{category}}
+      </ion-select-option>
+    </ion-select>
+    <ion-button (click)="onSettingClick('category')" fill="clear" shape="round">
+      <ion-icon name="ellipsis-vertical-sharp"  ></ion-icon>
+    </ion-button>
+   <!--    <ion-grid class="ion-no-padding">
         <ion-row class="ion-nowrap ion-align-items-center">
           <ion-col>
             <ion-label>{{languageWords.category}}</ion-label>
@@ -46,10 +57,7 @@
               formControlName="category" interface="action-sheet" (select)="onFocus($event)">
               <ion-select-option *ngFor="let category of categories " [value]="category">
                 {{category}}
-              </ion-select-option>
-              <!--  <ion-select-option value="add_cat">
-              ADD NEW CATEGORY
-            </ion-select-option> -->
+              </ion-select-option>    
             </ion-select>
           </ion-col>
           <ion-col size="2" style="display: flex;justify-content: flex-end ;">
@@ -59,11 +67,22 @@
           </ion-col>
    
         </ion-row>
-      </ion-grid>
+      </ion-grid> -->
     </ion-item>
 
     <ion-item>
-      <ion-grid class="ion-no-padding">
+      <ion-label>{{languageWords.payMethod}}</ion-label>
+      <ion-select  [interfaceOptions]="payMethodCustomAlertOptions" interface="action-sheet"
+      *ngIf="!isAddPaymentMethod" [value]="defaultMethodPay"
+      [placeholder]="languageWords.select+' '+languageWords.payMethod" formControlName="methodPay">
+      <ion-select-option *ngFor="let paymentMethod of paymentMethods" [value]="paymentMethod">
+        {{paymentMethod }}
+      </ion-select-option>
+    </ion-select> 
+    <ion-button (click)="onSettingClick('payMethod')" fill="clear" shape="round">
+      <ion-icon  name="ellipsis-vertical-sharp"  ></ion-icon>
+    </ion-button>
+    <!--   <ion-grid class="ion-no-padding">
         <ion-row class="ion-nowrap ion-align-items-center">
           <ion-col>
             <ion-label>{{languageWords.payMethod}}</ion-label>
@@ -76,9 +95,7 @@
               <ion-select-option *ngFor="let paymentMethod of paymentMethods" [value]="paymentMethod">
                 {{paymentMethod }}
               </ion-select-option>
-              <!--  <ion-select-option value="add_pay" color="primary">
-              ADD NEW PAY METHOD
-            </ion-select-option> -->
+   
             </ion-select>
           
           </ion-col>
@@ -88,7 +105,7 @@
             </ion-button>
           </ion-col>
         </ion-row>
-      </ion-grid>
+      </ion-grid> -->
     </ion-item>
 
     <ion-item>
