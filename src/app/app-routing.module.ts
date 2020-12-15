@@ -14,7 +14,11 @@ const routes: Routes = [
   {
     path: 'expense-add-form',
     loadChildren: () => import('./expense-add-form/expense-add-form.module').then( m => m.ExpenseAddFormPageModule)
+  },  {
+    path: 'income',
+    loadChildren: () => import('./income/income.module').then( m => m.IncomePageModule)
   },
+
 ];
 
 @NgModule({

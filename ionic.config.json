@@ -1,7 +1,8 @@
 {
   "name": "my-expenses",
   "integrations": {
-    "cordova": {}
+    "cordova": {},
+    "capacitor": {}
   },
   "type": "angular"
 }

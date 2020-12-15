@@ -1,7 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
+import {  Component,
   OnInit,
 } from "@angular/core";
 import { ExpensesService } from "../services/expenses/expenses.service";
@@ -15,8 +12,8 @@ import {
 import { LanguageService } from "../services/language/language.service";
 import { SortModalComponent } from "../sort-modal/sort-modal.component";
 import { FilterExpensesComponent } from "../filter-expenses/filter-expenses.component";
-import { IncomeComponent } from "../income/income.component";
 import { IncomesService } from "../services/incomes/incomes.service";
+import { skip } from 'rxjs/operators';
 
 @Component({
   selector: "app-home",
@@ -37,6 +34,9 @@ export class HomePage implements OnInit {
   savings = 0;
   ev: any;
   expandToolbar = false;
+  emptyExpenesesList = false;
+  expensesDataLoaded = false;
+  showEmpty = false;
 
   constructor(
     private expensesService: ExpensesService,
@@ -49,19 +49,29 @@ export class HomePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.expensesService.expenses.subscribe((expenses) => {
+    this.expensesService.expenses.pipe(skip(1)).subscribe((expenses) => {
       this.expenses = expenses;
+      this.expensesDataLoaded = true;
+      if (expenses.length) this.emptyExpenesesList = false;
+      else this.emptyExpenesesList = true;
+    
+      this.showEmpty = this.emptyExpenesesList && this.expensesDataLoaded;
+
       this.expensesService.calcTotalExpenses(this.expenses);
     });
 
     this.expensesService.totalExpenses.subscribe((totalExpenses) => {
       this.totalExpenses = totalExpenses;
-      this.savings = this.incomesService.calcTotalIncomes(this.incomesService.incomes) - this.totalExpenses;
+      this.savings =
+        this.incomesService.calcTotalIncomes(this.incomesService.incomes) -
+        this.totalExpenses;
     });
 
     this.incomesService.loadIncomesLocal().then((incomes) => {
+      if(incomes) {
       this.income = this.incomesService.calcTotalIncomes(incomes);
-      this.savings =  this.income - this.totalExpenses;
+      this.savings = this.income - this.totalExpenses;
+      }
     });
 
     this.incomesService.incomeAction$.subscribe((action: string) => {
@@ -74,13 +84,12 @@ export class HomePage implements OnInit {
     });
     this.incomesService.income$.subscribe((income) => {
       this.income += income.amount;
-      this.savings = this.income - this.totalExpenses ;
+      this.savings = this.income - this.totalExpenses;
     });
     this.expensesService.expensesSorted.subscribe((val) => {
       this.expenses = this.expensesService.filteredExpenses;
     });
 
-    
     this.languageServ.selectedLanguage.subscribe((languageWords) => {
       this.languageWords = languageWords;
     });
@@ -118,8 +127,8 @@ export class HomePage implements OnInit {
     this.expandToolbar = false;
   }
 
-  onSelectExpense(expenseId:number) {
-    if (this.multiypleSelect){
+  onSelectExpense(expenseId: number) {
+    if (this.multiypleSelect) {
       if (this.selectedArr.includes(expenseId)) {
         this.selectedArr = this.selectedArr.filter(
           (item) => item !== expenseId
@@ -257,19 +266,14 @@ export class HomePage implements OnInit {
   }
 
   async showFilter(ev) {
-    const popover = await this.popoverController.create({
+    const filterModal = await this.modalController.create({
       component: FilterExpensesComponent,
-      cssClass: "my-custom-class",
-      translucent: true,
-      event: ev,
+      cssClass: "filter-modal",
     });
-    return await popover.present();
+    return await filterModal.present();
   }
 
-  async editIncome() {
-    const incomeModal = await this.modalController.create({
-      component: IncomeComponent,
-    });
-    return await incomeModal.present();
+   editIncome() {
+    this.router.navigate(["/", "income"])
   }
 }

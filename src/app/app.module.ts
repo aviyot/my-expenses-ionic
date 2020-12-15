@@ -11,6 +11,8 @@ import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app-routing.module";
 import { OpthionEditSettingsComponent } from './opthion-edit-settings/opthion-edit-settings.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [AppComponent,OpthionEditSettingsComponent],
@@ -20,7 +22,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     IonicModule.forRoot(),
     AppRoutingModule,
     IonicStorageModule.forRoot(),
-    ReactiveFormsModule 
+    ReactiveFormsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }) 
   ],
   providers: [
     StatusBar,

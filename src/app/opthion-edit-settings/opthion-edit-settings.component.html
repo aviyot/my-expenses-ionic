@@ -1,44 +1,32 @@
-<ion-toolbar>
-  <ion-buttons slot="secondary">
-    <ion-button *ngIf="!opthions.editMode" (click)="onAddNewItem()" [disabled]="category.invalid && payMethod.invalid">
-      <ion-icon name="add-circle-outline" size="large"></ion-icon>
-    </ion-button>
-    <ion-button *ngIf="!opthions.editMode" (click)="onRemoveNewItem()" [disabled]="!itemSelected">
-      <ion-icon name="remove-circle-outline" size="large"></ion-icon>
-    </ion-button>
-    <ion-button color="secondary" *ngIf="!opthions.editMode" (click)="onBack()">
-      <ion-icon name="arrow-back-circle-outline" size="large"></ion-icon>
-    </ion-button>
-  </ion-buttons>
-  <ion-title>{{languageWords.opthionEdit}}</ion-title>
-</ion-toolbar>
-<ion-list *ngIf="opthions.editMode">
-  <ion-item>
-    <ion-button (click)="onClickCat()" expand="block" fill="clear" shape="round">
-     {{languageWords.editExpenseCat}}
-    </ion-button>
-  </ion-item>
-  <ion-item>
-    <ion-button (click)="onClickPay()" expand="block" fill="clear" shape="round">
-      {{languageWords.editExpenseMethod}}
-    </ion-button>
-  </ion-item>
-</ion-list>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{title}}</ion-title>
+  </ion-toolbar>  
+</ion-header>
 
-
-<ion-list *ngIf="!opthions.editMode && opthions.editPay">
-  <ion-item>
-    <ion-input color="primary" [formControl]="payMethod" [placeholder]="languageWords.enterMethod"></ion-input>
-  </ion-item>
-  <ion-item *ngFor="let payMethod of paymentMethods"
-    [ngStyle]="(selectedVlaue === payMethod && itemSelected) && {'color':'red'}" (click)="onSelectPayMethod(payMethod)">
-    {{payMethod}} </ion-item>
-</ion-list>
-<ion-list *ngIf="!opthions.editMode && opthions.editCat">
-  <ion-item>
-    <ion-input color="primary" [formControl]="category" [placeholder]="languageWords.enterCat"></ion-input>
-  </ion-item>
-  <ion-item *ngFor="let catgory of categories" (click)="onSelectCatgory(catgory)"
-    [ngStyle]="(selectedVlaue === catgory && itemSelected) && {'color':'red'}">
-    {{catgory}} </ion-item>
-</ion-list>
+<ion-content>
+  <ion-card>
+    <ion-item>
+      <ion-label position="floating">{{languageWords.enterMethod}}</ion-label>
+      <ion-input color="primary" [formControl]="newOpthion"></ion-input>
+    </ion-item>
+  </ion-card>
+  <ion-list>
+    <ion-item *ngFor="let selectOpthion of selectOpthions"
+      (click)="onSelectOpthion(selectOpthion)">
+      <ion-label padding  [ngStyle]="(selectedOpthion === selectOpthion && itemSelected) && {'color':'white','background-color': 'blue','font-size':'x-large'}">{{selectOpthion}}</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="secondary">
+      <ion-button (click)="addNewOpthion()" [disabled]="newOpthion.invalid">
+        <ion-icon name="add-circle-outline" size="large"></ion-icon>
+      </ion-button>
+      <ion-button (click)="removeOpthion()" [disabled]="!itemSelected">
+        <ion-icon name="remove-circle-outline" size="large"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

@@ -11,7 +11,6 @@ import { ExpensesComponent } from "../expenses/expenses.component";
 import { ExpenseDetailsComponent } from "../expense-details/expense-details.component";
 import { SortModalComponent } from "../sort-modal/sort-modal.component";
 import { FilterExpensesComponent } from '../filter-expenses/filter-expenses.component';
-import { IncomeComponent } from '../income/income.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule, HomePageRoutingModule,  ReactiveFormsModule],
@@ -22,7 +21,6 @@ import { IncomeComponent } from '../income/income.component';
     ExpenseDetailsComponent,
     SortModalComponent,
     FilterExpensesComponent,
-    IncomeComponent
   ],
 })
 export class HomePageModule {}

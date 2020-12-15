@@ -1,65 +1,95 @@
 <ion-header>
   <ion-toolbar>
-    <ion-grid fixed>
+    <div style = "display: flex;justify-content: space-between;font-size: x-large;">
+      <div  style = "margin-left: 12px;">
+        <spnan>{{title}}</spnan>
+      </div>
+      <div style = "margin-right: 12px;"> 
+        <ion-icon name = "caret-back-circle-outline" size="large" (click)="onBack()"></ion-icon>
+      </div>
+    </div>
+   <!--  <ion-grid fixed>
       <ion-row>
+        <ion-col>
+          <ion-title>{{title}}</ion-title>
+        </ion-col>
+     
         <ion-col size="2">
           <ion-icon name="caret-back-circle-outline" size="large" (click)="onBack()"></ion-icon>
         </ion-col>
-        <ion-col size="8">
-          <ion-title>{{languageWords.addNewExp}}</ion-title>
-        </ion-col>
-        <ion-col size="2" class="ion-text-end">
-          <ion-icon name="ellipsis-vertical-sharp" size="large" (click)="onSettingClick($event)"></ion-icon>
-        </ion-col>
+      
       </ion-row>
-    </ion-grid>
-
+    </ion-grid> -->
   </ion-toolbar>
-
-
 </ion-header>
-<ion-content>
 
+<ion-content>
   <form [formGroup]="form">
-    <ion-item>
+    <ion-item class="flex-item">
       <ion-label>{{languageWords.name}}</ion-label>
-      <ion-input type="text" placeholder="" formControlName="name"></ion-input>
+      <ion-input type="text" formControlName="name"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>{{languageWords.amount}}</ion-label>
       <ion-input type="number" placeholder="" formControlName="amount"></ion-input>
     </ion-item>
+    <ion-item>
+      <ion-grid class="ion-no-padding">
+        <ion-row class="ion-nowrap ion-align-items-center">
+          <ion-col>
+            <ion-label>{{languageWords.category}}</ion-label>
+          </ion-col>
 
-    <ion-grid>
-      <ion-row>
-        <ion-col>
-          <ion-label>{{languageWords.category}}</ion-label>
-        </ion-col>
-        <ion-col>
+          <ion-col style="display: flex;justify-content: flex-end;">
+            <ion-select  *ngIf="!isAddCategory" #val [interfaceOptions]="categoryCustomAlertOptions"
+              [value]="defaultCategory" multiple="false" [placeholder]="languageWords.select+' '+languageWords.category"
+              formControlName="category" interface="action-sheet" (select)="onFocus($event)">
+              <ion-select-option *ngFor="let category of categories " [value]="category">
+                {{category}}
+              </ion-select-option>
+              <!--  <ion-select-option value="add_cat">
+              ADD NEW CATEGORY
+            </ion-select-option> -->
+            </ion-select>
+          </ion-col>
+          <ion-col size="2" style="display: flex;justify-content: flex-end ;">
+            <ion-button (click)="onSettingClick('category')" fill="clear" shape="round">
+              <ion-icon name="ellipsis-vertical-sharp"  ></ion-icon>
+            </ion-button>
+          </ion-col>
+   
+        </ion-row>
+      </ion-grid>
+    </ion-item>
 
-          <ion-select *ngIf="!isAddCategory" value="car" multiple="false"
-            [placeholder]="languageWords.select+' '+languageWords.category" formControlName="category">
-            <ion-select-option *ngFor="let category of categories " [value]="category"> {{category}}</ion-select-option>
-          </ion-select>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+    <ion-item>
+      <ion-grid class="ion-no-padding">
+        <ion-row class="ion-nowrap ion-align-items-center">
+          <ion-col>
+            <ion-label>{{languageWords.payMethod}}</ion-label>
+          </ion-col>
 
-    <ion-grid>
-      <ion-row>
-        <ion-col>
-          <ion-label>{{languageWords.payMethod}}</ion-label>
-        </ion-col>
-        <ion-col>
-
-          <ion-select *ngIf="!isAddPaymentMethod" value="methodPay"
-            [placeholder]="languageWords.select+' '+languageWords.payMethod" formControlName="methodPay">
-            <ion-select-option *ngFor="let paymentMethod of paymentMethods" [value]="paymentMethod">{{paymentMethod }}
-            </ion-select-option>
-          </ion-select>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+          <ion-col  style="display: flex;justify-content: flex-end ;">
+            <ion-select  [interfaceOptions]="payMethodCustomAlertOptions" interface="action-sheet"
+              *ngIf="!isAddPaymentMethod" [value]="defaultMethodPay"
+              [placeholder]="languageWords.select+' '+languageWords.payMethod" formControlName="methodPay">
+              <ion-select-option *ngFor="let paymentMethod of paymentMethods" [value]="paymentMethod">
+                {{paymentMethod }}
+              </ion-select-option>
+              <!--  <ion-select-option value="add_pay" color="primary">
+              ADD NEW PAY METHOD
+            </ion-select-option> -->
+            </ion-select>
+          
+          </ion-col>
+          <ion-col size="2" style="display: flex;justify-content: flex-end ;">
+            <ion-button (click)="onSettingClick('payMethod')" fill="clear" shape="round">
+              <ion-icon  name="ellipsis-vertical-sharp"  ></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
 
     <ion-item>
       <ion-label color="red">{{languageWords.numberPays}}</ion-label>
@@ -76,15 +106,16 @@
       <ion-input type="text" formControlName="benef"></ion-input>
     </ion-item>
 
-
     <ion-item>
       <ion-label>{{languageWords.commitTime}}</ion-label>
-      <ion-input type="datetime-local" formControlName="commitDate"></ion-input>
+      <!-- <ion-input type="datetime-local" formControlName="commitDate"></ion-input> -->
+      <ion-datetime display-format="DD.MM.YYYY HH:mm" formControlName="commitDate"></ion-datetime>
     </ion-item>
 
     <ion-item>
       <ion-label>{{languageWords.fristPayDate}}</ion-label>
-      <ion-input type="date" formControlName="fristPayDate"></ion-input>
+      <ion-datetime display-format="DD.MM.YYYY" formControlName="fristPayDate"></ion-datetime>
+      <!-- <ion-input type="date" formControlName="fristPayDate"></ion-input> -->
     </ion-item>
 
   </form>
@@ -92,15 +123,17 @@
 <ion-footer>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="onAdd()" *ngIf="!editMode">
-        <ion-icon slot="start" name="add"></ion-icon>
-        {{languageWords.add}}
+      <ion-button class="add-btn" (click)="onAdd(false)" *ngIf="!editMode" fill="solid" color="primary">
+        <ion-icon name="checkmark-outline" size="large" padding></ion-icon>
+      </ion-button>
+      <ion-button class="add-btn" (click)="onAdd(true)" *ngIf="!editMode" fill="solid" color="primary">
+        <ion-icon name="checkmark-done-outline" size="large" padding></ion-icon>
       </ion-button>
       <!--    <ion-button (click)="onDelete()">
         <ion-icon slot="start" name="trash-outline"></ion-icon>
         DELETE
       </ion-button> -->
-      <ion-button (click)="onUpdate()" *ngIf="editMode">
+      <ion-button class="save-btn" (click)="onUpdate()" *ngIf="editMode">
         <ion-icon slot="start" name="save-outline"></ion-icon>{{languageWords.update}}
       </ion-button>
     </ion-buttons>

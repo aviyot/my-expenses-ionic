@@ -2,11 +2,15 @@ import { Component, OnInit, Input } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExpensesService } from "../services/expenses/expenses.service";
 import { Router, ActivatedRoute } from "@angular/router";
-import { formatDate } from "@angular/common";
-import { PopoverController, ToastController } from "@ionic/angular";
+import {
+  AlertController,
+  PopoverController,
+  ToastController,
+} from "@ionic/angular";
 import { OpthionEditSettingsComponent } from "../opthion-edit-settings/opthion-edit-settings.component";
 import { LanguageService } from "../services/language/language.service";
 import { Expense } from "../models/expense.model";
+import { Storage } from "@ionic/storage";
 
 @Component({
   selector: "app-expense-add-form",
@@ -14,13 +18,25 @@ import { Expense } from "../models/expense.model";
   styleUrls: ["./expense-add-form.page.scss"],
 })
 export class ExpenseAddFormPage implements OnInit {
-  id: string = null;
-  expense:Expense;
+  intialExpenses: Expense = new Expense(
+    new Date().getTime(),
+    null,
+    null,
+    null,
+    null,
+    1,
+    null,
+    new Date(),
+    new Date(),
+    1
+  );
+  selectedId: string = null;
+  expense: Expense;
   selectedExpense: Expense;
-  expenses:Expense[];
+  expenses: Expense[];
   editMode: boolean = false;
   form: FormGroup;
-  title: string = "Add new Expense";
+  title: string = "Add New Expense";
   categories: string[];
   paymentMethods: string[];
   isAddCategory = false;
@@ -28,32 +44,70 @@ export class ExpenseAddFormPage implements OnInit {
   newPaymentMethod = "new pay";
   isAddPaymentMethod = false;
   languageWords = null;
+  defaultMethodPay: string;
+  defaultCategory: string;
+  payMethodCustomAlertOptions: any = {
+    header: "Select Pay Method",
+    buttons: [
+      { text: "Delete", role: "destructive" },
+      { text: "Share" },
+      { text: "Play" },
+      { text: "Favorite" },
+      { text: "Cancel", role: "cancel" },
+    ],
+  };
+  categoryCustomAlertOptions: any = {
+    header: "Select Category",
+    buttons: [
+      { text: "Delete", role: "destructive" },
+      { text: "Share" },
+      { text: "Play" },
+      { text: "Favorite" },
+      { text: "Cancel", role: "cancel" },
+    ],
+  };
   constructor(
     private expensesService: ExpensesService,
     private router: Router,
     private route: ActivatedRoute,
-    public popoverController: PopoverController,
+    public modalController: PopoverController,
     public toastController: ToastController,
-    private languageServ: LanguageService
+    private languageServ: LanguageService,
+    private storage: Storage,
+    private alertController: AlertController
   ) {
-/*     this.selectedExpense = this.router.getCurrentNavigation().extras.state.selectedExpense;
+    /*     this.selectedExpense = this.router.getCurrentNavigation().extras.state.selectedExpense;
     console.log(this.selectedExpense); */
   }
 
   ngOnInit() {
-    this.expensesService.expenses.subscribe((expenses:Expense[])=>{
-this.expenses = expenses;
-    })
+    this.createForm();
+
+    this.expensesService.expenses.subscribe((expenses: Expense[]) => {
+      this.expenses = expenses;
+      this.getExpenseId();
+    });
     this.expensesService.categories.subscribe((categories: string[]) => {
       this.categories = categories;
+      this.defaultCategory = this.categories[0];
+      this.intialExpenses = {
+        ...this.intialExpenses,
+        category: this.defaultCategory,
+      };
     });
     this.expensesService.paymentMethods.subscribe((paymentMethods) => {
       this.paymentMethods = paymentMethods;
+      this.defaultMethodPay = this.paymentMethods[0];
+      this.intialExpenses = {
+        ...this.intialExpenses,
+        methodPay: this.defaultMethodPay,
+      };
     });
 
     this.languageServ.selectedLanguage.subscribe((languageWords) => {
       this.languageWords = languageWords;
     });
+
     /* this.expensesService.dataChanged.subscribe((val) => {
       this.categories = this.expensesService.categories;
       this.paymentMethods = this.expensesService.paymentMethods;
@@ -70,22 +124,54 @@ this.expenses = expenses;
       }
     });
  */
-    this.id = this.route.snapshot.paramMap.get("id");
-    let name = null,
+
+    /* let name = null,
       amount = null,
       category = null,
       methodPay = null,
-      freqPay = null,
+      freqPay = 1,
       benef = null,
-      commitDate = null,
-      fristPayDate = null,
-      numberOfPay = null;
+      commitDate = new Date(),
+      fristPayDate = new Date(),
+      numberOfPay = 1;
+ */
+  }
+  createForm() {
+    this.form = new FormGroup({
+      name: new FormControl("", {
+        updateOn: "blur",
+        validators: [Validators.required],
+      }),
+      amount: new FormControl("", {
+        updateOn: "blur",
+        validators: [Validators.required],
+      }),
+      category: new FormControl("", {
+        updateOn: "blur",
+      }),
+      methodPay: new FormControl("", {
+        updateOn: "blur",
+      }),
+      freqPay: new FormControl("", { updateOn: "blur" }),
+      benef: new FormControl("", { updateOn: "blur" }),
+      commitDate: new FormControl("", {
+        updateOn: "blur",
+      }),
+      fristPayDate: new FormControl("", {
+        updateOn: "blur",
+      }),
+      numberOfPay: new FormControl("", {
+        updateOn: "blur",
+      }),
+    });
+  }
 
-    if (this.id !== null) {
+  getExpenseId() {
+    this.selectedId = this.route.snapshot.paramMap.get("id");
+    if (this.selectedId) {
       this.title = "Edit expense";
       this.editMode = true;
-
-      ({
+      const {
         name,
         amount,
         category,
@@ -95,63 +181,77 @@ this.expenses = expenses;
         commitDate,
         fristPayDate,
         numberOfPay,
-      } = this.expenses.find((expense=>(expense.id === +this.id))));
+      } = this.expenses.find((expense) => expense.id === +this.selectedId);
+      this.form.setValue({
+        name: name,
+        amount: amount,
+        category: category,
+        methodPay: methodPay,
+        freqPay: freqPay,
+        benef: benef,
+        commitDate: commitDate,
+        fristPayDate: fristPayDate,
+        numberOfPay: numberOfPay,
+      });
     } else {
       this.editMode = false;
+      const {
+        name,
+        amount,
+        category,
+        methodPay,
+        freqPay,
+        benef,
+        commitDate,
+        fristPayDate,
+        numberOfPay,
+      } = this.intialExpenses;
+      this.form.setValue({
+        name: name,
+        amount: amount,
+        category: category,
+        methodPay: methodPay,
+        freqPay: freqPay,
+        benef: benef,
+        commitDate: commitDate,
+        fristPayDate: fristPayDate,
+        numberOfPay: numberOfPay,
+      });
     }
-    this.form = new FormGroup({
-      name: new FormControl(name, {
-        updateOn: "blur",
-        validators: [Validators.required],
-      }),
-      amount: new FormControl(amount, {
-        updateOn: "blur",
-        validators: [Validators.required],
-      }),
-      category: new FormControl(category, {
-        updateOn: "blur",
-      }),
-      methodPay: new FormControl(methodPay, {
-        updateOn: "blur",
-      }),
-      freqPay: new FormControl(freqPay, { updateOn: "blur" }),
-      benef: new FormControl(benef, { updateOn: "blur" }),
-      commitDate: new FormControl(commitDate, {
-        updateOn: "blur",
-      }),
-      fristPayDate: new FormControl(fristPayDate, {
-        updateOn: "blur",
-      }),
-      numberOfPay: new FormControl(numberOfPay, {
-        updateOn: "blur",
-      }),
-    });
   }
 
   onUpdate() {
-    this.expensesService.updateExpense(+this.id, this.form.value,this.expenses);
+    this.expensesService.updateExpense(
+      +this.selectedId,
+      this.form.value,
+      this.expenses
+    );
     this.router.navigate(["/", "home"]);
   }
 
-  onAdd() {
+  onAdd(muliplay: boolean) {
     if (this.form.valid) {
-     
-      this.expensesService.addNewExpense(this.form.value,this.expenses);
+      this.expensesService.addNewExpense(
+        { ...this.form.value, id: new Date().getTime() },
+        this.expenses
+      );
       this.form.reset();
       // this.router.navigate(["/", "home"]);
-      this.presentToastDataAdded();
+      this.presentToastDataAdded().then(() => {
+        if (!muliplay) this.router.navigate(["/", "home"]);
+      });
     } else {
       this.presentToast();
       //alert("enter requided data(amount,category");
     }
   }
   onDelete() {
-    this.expensesService.removeExpense(+this.id,this.expenses);
+    this.expensesService.removeExpense(+this.selectedId, this.expenses);
   }
   onBack() {
     this.router.navigate(["/", "home"]);
   }
-/* 
+  /* 
   addCategory() {
     this.expensesService.addNewCategory(this.newCategory,this.categories).then(()=>{
       this.isAddCategory = true;
@@ -190,14 +290,15 @@ this.expenses = expenses;
   onInputPaymentMethod(val) {
     this.newPaymentMethod = val.target.value;
   }
-  async onSettingClick(ev: any) {
-    const popover = await this.popoverController.create({
+  async onSettingClick(selectName:string) {
+    const modal = await this.modalController.create({
       component: OpthionEditSettingsComponent,
-      cssClass: "my-custom-class",
-      event: ev,
+      componentProps : {
+        selectName:selectName
+      },
       translucent: true,
     });
-    return await popover.present();
+    return await modal.present();
   }
 
   async presentToast() {
@@ -215,5 +316,57 @@ this.expenses = expenses;
       color: "success",
     });
     toast.present();
+  }
+
+  async editOpthions(opthion: string) {
+    let header = opthion;
+    if (opthion === "cat") {
+      header = "Add new category";
+    }
+    if (opthion === "pay") {
+      header = "Add new pay method";
+    }
+
+    const editOpthionsAlertController = await this.alertController
+      .create({
+        header,
+        inputs:[
+          {
+            name:'newOpthion',
+            type:"text",
+            placeholder:"Type new opthion",
+
+          }
+        ],
+        buttons:[
+          {
+            text:'Cancel',
+            role:'cancel'
+          },
+          {
+            text:'Add',
+            role:'ok',
+            handler:(inputs)=>{
+
+              if (opthion === "cat") {
+                this.expensesService.addNewCategory(inputs.newOpthion,this.categories);
+                
+              }
+              if (opthion === "pay") {
+                this.expensesService.addNewPaymentMethod(inputs.newOpthion,this.paymentMethods);
+                this.newPaymentMethod = inputs.newOpthion;
+              
+              }
+            }
+          }
+        ]
+      })
+
+      editOpthionsAlertController.present();
+    
+  }
+  onFocus(ev){
+   // alert("hhh");
+    console.log(ev);
   }
 }

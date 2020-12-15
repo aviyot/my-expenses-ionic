@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { ModalController } from '@ionic/angular';
 import { Expense } from "../models/expense.model";
 import { ExpensesService } from "../services/expenses/expenses.service";
 
@@ -14,7 +15,7 @@ export class FilterExpensesComponent implements OnInit {
   fillterType: string;
   showStartDate = false;
   showEndDate = false;
-  constructor(private expensesService: ExpensesService) {}
+  constructor(private expensesService: ExpensesService,private modalController: ModalController) {}
 
   ngOnInit() {
     this.expensesService.expenses.subscribe((expenses)=>{
@@ -30,6 +31,9 @@ export class FilterExpensesComponent implements OnInit {
     this.endTime = val;
   }
 
+  dismissModal(){
+    this.modalController.dismiss();
+  }
   filter() {
     const pastDtae = new Date(2000, 1, 1);
     const futtureDtae = new Date(2100, 1, 1);
@@ -75,6 +79,7 @@ export class FilterExpensesComponent implements OnInit {
       case "all":
         this.expensesService.filteredExpenses = this.filteredExpenses;
     }
+    this.dismissModal();
   }
 
   endTimeFilter(fillterType) {

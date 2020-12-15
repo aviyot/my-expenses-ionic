@@ -52,7 +52,7 @@ const languages = {
       ok: "Ok",
       acs: "acs",
       des: "Des",
-      addNewExp: "Add new expenses",
+      addNewExp: "Add New Expenses",
       optList: "Opthion list",
       edit: "Edit",
       editCategoery: "Edit Categoery",
