@@ -57,6 +57,7 @@ export class ExpenseAddFormPage implements OnInit {
       { text: "Cancel", role: "cancel" },
     ],
   };
+  modal = null;
   categoryCustomAlertOptions: any = {
     header: "Select Category",
     buttons: [
@@ -291,14 +292,24 @@ export class ExpenseAddFormPage implements OnInit {
   onInputPaymentMethod(val) {
     this.newPaymentMethod = val.target.value;
   }
-  async onSettingClick(selectName:string) {
-    const modal = await this.modalController.create({
+  async onSettingClick(selectName: string) {
+    this.modal = await this.modalController.create({
       component: OpthionEditSettingsComponent,
-      componentProps : {
-        selectName:selectName,
+      componentProps: {
+        selectName: selectName,
       },
     });
-    return await modal.present();
+
+    this.modal.onDidDismiss().then((data) => {
+      if ((data["data"]["selectName"] === "category")){
+        this.form.patchValue({ category: data["data"]["value"] });
+      }
+
+      if ((data["data"]["selectName"] === "payMethod")){
+        this.form.patchValue({ payMethod: data["data"]["value"] });
+      }
+    });
+    return await this.modal.present();
   }
 
   async presentToast() {
@@ -327,46 +338,46 @@ export class ExpenseAddFormPage implements OnInit {
       header = "Add new pay method";
     }
 
-    const editOpthionsAlertController = await this.alertController
-      .create({
-        header,
-        inputs:[
-          {
-            name:'newOpthion',
-            type:"text",
-            placeholder:"Type new opthion",
-
-          }
-        ],
-        buttons:[
-          {
-            text:'Cancel',
-            role:'cancel'
-          },
-          {
-            text:'Add',
-            role:'ok',
-            handler:(inputs)=>{
-
-              if (opthion === "cat") {
-                this.expensesService.addNewCategory(inputs.newOpthion,this.categories);
-                
-              }
-              if (opthion === "pay") {
-                this.expensesService.addNewPaymentMethod(inputs.newOpthion,this.paymentMethods);
-                this.newPaymentMethod = inputs.newOpthion;
-              
-              }
+    const editOpthionsAlertController = await this.alertController.create({
+      header,
+      inputs: [
+        {
+          name: "newOpthion",
+          type: "text",
+          placeholder: "Type new opthion",
+        },
+      ],
+      buttons: [
+        {
+          text: "Cancel",
+          role: "cancel",
+        },
+        {
+          text: "Add",
+          role: "ok",
+          handler: (inputs) => {
+            if (opthion === "cat") {
+              this.expensesService.addNewCategory(
+                inputs.newOpthion,
+                this.categories
+              );
             }
-          }
-        ]
-      })
+            if (opthion === "pay") {
+              this.expensesService.addNewPaymentMethod(
+                inputs.newOpthion,
+                this.paymentMethods
+              );
+              this.newPaymentMethod = inputs.newOpthion;
+            }
+          },
+        },
+      ],
+    });
 
-      editOpthionsAlertController.present();
-    
+    editOpthionsAlertController.present();
   }
-  onFocus(ev){
-   // alert("hhh");
+  onFocus(ev) {
+    // alert("hhh");
     console.log(ev);
   }
 }
