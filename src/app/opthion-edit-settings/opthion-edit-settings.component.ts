@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { ExpensesService } from "../services/expenses/expenses.service";
 import { FormControl, Validators } from "@angular/forms";
 import { LanguageService } from "../services/language/language.service";
+import { SharedService } from "../services/shared/shared.service";
 
 @Component({
   selector: "app-opthion-edit-settings",
@@ -18,7 +19,8 @@ export class OpthionEditSettingsComponent implements OnInit {
   languageWords: any;
   constructor(
     private expensesService: ExpensesService,
-    private languageServ: LanguageService
+    private languageServ: LanguageService,
+    private sharedService : SharedService
   ) {}
 
   ngOnInit() {
@@ -57,11 +59,19 @@ export class OpthionEditSettingsComponent implements OnInit {
         this.selectOpthions
       );
     }
+    this.selectedOpthion = null;
+    this.itemSelected = false;
   }
 
   onSelectOpthion(val) {
+    if(this.itemSelected) {
+      this.selectedOpthion = null;
+      this.itemSelected = false;
+    } 
+    else {
     this.selectedOpthion = val;
     this.itemSelected = true;
+    }
   }
 
   addNewOpthion() {
@@ -88,5 +98,19 @@ export class OpthionEditSettingsComponent implements OnInit {
       this.itemSelected = true;
     }
     this.newOpthion.reset();
+  }
+
+  closeModal(){
+    this.sharedService.closeModal({
+      selectName:this.selectName,
+      value:this.newOpthion.value
+    });
+  }
+
+  selectOpthion(){
+    this.sharedService.closeModal({
+      selectName:this.selectName,
+      value:this.selectedOpthion
+    });
   }
 }
