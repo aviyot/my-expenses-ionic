@@ -1,32 +1,45 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>{{title}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()" color="primary">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>  
 </ion-header>
 
 <ion-content>
-  <ion-card>
-    <ion-item>
-      <ion-label position="floating">{{languageWords.enterMethod}}</ion-label>
-      <ion-input color="primary" [formControl]="newOpthion"></ion-input>
-    </ion-item>
-  </ion-card>
+  <ion-toolbar>
+    <ion-searchbar 
+     showCancelButton = "focus" 
+     [formControl] = "newOpthion"
+     placeholder = "Enter New Item / Search">
+    </ion-searchbar>
+    
+  </ion-toolbar> 
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="addNewOpthion()" [disabled]="newOpthion.invalid">
+        <ion-icon name="add-outline" color="success"></ion-icon>
+      </ion-button>
+      <ion-button  [disabled]="!itemSelected" (click)="selectOpthion()">
+        <ion-icon name="checkmark-outline" color="primary"></ion-icon>
+      </ion-button>
+      <ion-button (click)="removeOpthion()" [disabled]="!itemSelected">
+        <ion-icon name="trash-outline"  color="danger"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
   <ion-list>
     <ion-item *ngFor="let selectOpthion of selectOpthions"
       (click)="onSelectOpthion(selectOpthion)">
-      <ion-label padding  [ngStyle]="(selectedOpthion === selectOpthion && itemSelected) && {'color':'white','background-color': 'blue','font-size':'x-large'}">{{selectOpthion}}</ion-label>
+      <ion-label [ngStyle]="(selectedOpthion === selectOpthion && itemSelected) && {'color':'brown','font-size':'x-large'}">{{selectOpthion}}</ion-label>
     </ion-item>
   </ion-list>
 </ion-content>
 <ion-footer>
   <ion-toolbar>
-    <ion-buttons slot="secondary">
-      <ion-button (click)="addNewOpthion()" [disabled]="newOpthion.invalid">
-        <ion-icon name="add-circle-outline" size="large"></ion-icon>
-      </ion-button>
-      <ion-button (click)="removeOpthion()" [disabled]="!itemSelected">
-        <ion-icon name="remove-circle-outline" size="large"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    
   </ion-toolbar>
 </ion-footer>
