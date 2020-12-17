@@ -4,6 +4,7 @@ import { ExpensesService } from "../services/expenses/expenses.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import {
   AlertController,
+  ModalController,
   PopoverController,
   ToastController,
 } from "@ionic/angular";
@@ -70,7 +71,7 @@ export class ExpenseAddFormPage implements OnInit {
     private expensesService: ExpensesService,
     private router: Router,
     private route: ActivatedRoute,
-    public modalController: PopoverController,
+    public modalController: ModalController,
     public toastController: ToastController,
     private languageServ: LanguageService,
     private storage: Storage,
@@ -294,9 +295,8 @@ export class ExpenseAddFormPage implements OnInit {
     const modal = await this.modalController.create({
       component: OpthionEditSettingsComponent,
       componentProps : {
-        selectName:selectName
+        selectName:selectName,
       },
-      translucent: true,
     });
     return await modal.present();
   }
