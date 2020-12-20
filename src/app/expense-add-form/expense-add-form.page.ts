@@ -301,13 +301,9 @@ export class ExpenseAddFormPage implements OnInit {
     });
 
     this.modal.onDidDismiss().then((data) => {
-      if ((data["data"]["selectName"] === "category")){
-        this.form.patchValue({ category: data["data"]["value"] });
-      }
 
-      if ((data["data"]["selectName"] === "payMethod")){
-        this.form.patchValue({ payMethod: data["data"]["value"] });
-      }
+      this.form.patchValue({[data["data"]["selectName"]]:data["data"]["value"]});
+      
     });
     return await this.modal.present();
   }
