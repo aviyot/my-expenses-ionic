@@ -301,9 +301,9 @@ export class ExpenseAddFormPage implements OnInit {
     });
 
     this.modal.onDidDismiss().then((data) => {
-
-      this.form.patchValue({[data["data"]["selectName"]]:data["data"]["value"]});
-      
+      this.form.patchValue({
+        [data["data"]["selectName"]]: data["data"]["value"],
+      });
     });
     return await this.modal.present();
   }
