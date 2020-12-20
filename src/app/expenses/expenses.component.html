@@ -11,7 +11,7 @@
           <ion-label>{{expense.name}}</ion-label>
         </ion-col>
         <ion-col >
-          <ion-label>{{expense.amount}}</ion-label>
+          <ion-label>{{expense.amount * expense.freqPay}}</ion-label>
         </ion-col>
    
         <ion-col [size]="4" *ngIf="selectedSortType">
