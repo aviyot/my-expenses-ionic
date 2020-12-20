@@ -224,7 +224,7 @@ export class ExpensesService {
 
   calcTotalExpenses(expenses: Expense[]): void {
     const totalAmount = expenses.reduce((total: number, val: Expense) => {
-      return total + val.amount;
+      return total + val.amount*val.freqPay;
     }, 0);
     this._totalExpenses.next(totalAmount);
   }
@@ -259,7 +259,40 @@ export class ExpensesService {
     sortBy: string,
     sortType?: string
   ): Expense[] {
-    if (sortType === "acs") {
+ 
+    let ascendingSort = expenses.sort((a, b) => {
+      if (sortBy === "fristPayDate") {
+        if (new Date(a[sortBy]).getTime() > new Date(b[sortBy]).getTime())
+          return -1;
+        if (new Date(a[sortBy]).getTime() < new Date(b[sortBy]).getTime())
+          return 1;
+        return 0;
+      }
+      if (sortBy === "lastPayDate" && a.fristPayDate && a.numberOfPay) {
+        if (
+          this.calcLastPayDate(a.fristPayDate, a.numberOfPay) >
+          this.calcLastPayDate(b.fristPayDate, b.numberOfPay)
+        )
+          return -1;
+        if (
+          this.calcLastPayDate(a.fristPayDate, a.numberOfPay) <
+          this.calcLastPayDate(b.fristPayDate, b.numberOfPay)
+        )
+          return 1;
+        return 0;
+      } else {
+        if (a[sortBy] > b[sortBy]) return -1;
+        if (a[sortBy] < b[sortBy]) return 1;
+        return 0;
+      }
+    })
+    
+    if (sortType === "acs")
+       return ascendingSort;
+    else 
+       return ascendingSort.reverse();
+
+  /*   if (sortType === "acs") {
       return [
         ...expenses.sort((a, b) => {
           if (sortBy === "fristPayDate") {
@@ -318,6 +351,7 @@ export class ExpensesService {
         }),
       ];
     }
+     */
   }
 
   filterDateExpenses(
