@@ -129,18 +129,18 @@ export class HomePage implements OnInit {
 
   onSelectExpense(expenseId: number) {
     if (this.multiypleSelect) {
+       let selectedExpense = this.expenses.find((ex) => {
+        return ex.id === expenseId;
+      })
+       
       if (this.selectedArr.includes(expenseId)) {
         this.selectedArr = this.selectedArr.filter(
           (item) => item !== expenseId
         );
-        this.selectedTotalAmount -= this.expenses.find((ex) => {
-          return ex.id === expenseId;
-        }).amount;
+        this.selectedTotalAmount -= selectedExpense.amount*selectedExpense.freqPay;
       } else {
         this.selectedArr = [...this.selectedArr, expenseId];
-        this.selectedTotalAmount += this.expenses.find((ex) => {
-          return ex.id === expenseId;
-        }).amount;
+        this.selectedTotalAmount += selectedExpense.amount*selectedExpense.freqPay;
       }
     }
     if (this.selectedId === expenseId) {
