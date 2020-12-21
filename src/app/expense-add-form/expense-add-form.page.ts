@@ -5,7 +5,6 @@ import { Router, ActivatedRoute } from "@angular/router";
 import {
   AlertController,
   ModalController,
-  PopoverController,
   ToastController,
 } from "@ionic/angular";
 import { OpthionEditSettingsComponent } from "../opthion-edit-settings/opthion-edit-settings.component";
@@ -47,27 +46,8 @@ export class ExpenseAddFormPage implements OnInit {
   languageWords = null;
   defaultMethodPay: string;
   defaultCategory: string;
-  payMethodCustomAlertOptions: any = {
-    header: "Select Pay Method",
-    buttons: [
-      { text: "Delete", role: "destructive" },
-      { text: "Share" },
-      { text: "Play" },
-      { text: "Favorite" },
-      { text: "Cancel", role: "cancel" },
-    ],
-  };
   modal = null;
-  categoryCustomAlertOptions: any = {
-    header: "Select Category",
-    buttons: [
-      { text: "Delete", role: "destructive" },
-      { text: "Share" },
-      { text: "Play" },
-      { text: "Favorite" },
-      { text: "Cancel", role: "cancel" },
-    ],
-  };
+
   constructor(
     private expensesService: ExpensesService,
     private router: Router,
@@ -77,14 +57,10 @@ export class ExpenseAddFormPage implements OnInit {
     private languageServ: LanguageService,
     private storage: Storage,
     private alertController: AlertController
-  ) {
-    /*     this.selectedExpense = this.router.getCurrentNavigation().extras.state.selectedExpense;
-    console.log(this.selectedExpense); */
-  }
+  ) {}
 
   ngOnInit() {
     this.createForm();
-
     this.expensesService.expenses.subscribe((expenses: Expense[]) => {
       this.expenses = expenses;
       this.getExpenseId();
@@ -109,34 +85,6 @@ export class ExpenseAddFormPage implements OnInit {
     this.languageServ.selectedLanguage.subscribe((languageWords) => {
       this.languageWords = languageWords;
     });
-
-    /* this.expensesService.dataChanged.subscribe((val) => {
-      this.categories = this.expensesService.categories;
-      this.paymentMethods = this.expensesService.paymentMethods;
-    });
-    this.expensesService.localCategoriesLoaded.subscribe((val) => {
-      if (val) {
-        this.categories = this.expensesService.categories;
-      }
-    }); */
-
-    /*  this.expensesService.localPaymentMethodsLoaded.subscribe((val) => {
-      if (val) {
-        this.paymentMethods = this.expensesService.paymentMethods;
-      }
-    });
- */
-
-    /* let name = null,
-      amount = null,
-      category = null,
-      methodPay = null,
-      freqPay = 1,
-      benef = null,
-      commitDate = new Date(),
-      fristPayDate = new Date(),
-      numberOfPay = 1;
- */
   }
   createForm() {
     this.form = new FormGroup({
@@ -238,13 +186,11 @@ export class ExpenseAddFormPage implements OnInit {
         this.expenses
       );
       this.form.reset();
-      // this.router.navigate(["/", "home"]);
       this.presentToastDataAdded().then(() => {
         if (!muliplay) this.router.navigate(["/", "home"]);
       });
     } else {
       this.presentToast();
-      //alert("enter requided data(amount,category");
     }
   }
   onDelete() {
@@ -253,37 +199,6 @@ export class ExpenseAddFormPage implements OnInit {
   onBack() {
     this.router.navigate(["/", "home"]);
   }
-  /* 
-  addCategory() {
-    this.expensesService.addNewCategory(this.newCategory,this.categories).then(()=>{
-      this.isAddCategory = true;
-    })
-  
-  }
-
-  addPaymentMethod() {
-    this.expensesService.addNewPaymentMethod(this.newPaymentMethod,this.paymentMethods).then(()=>{
-      this.isAddPaymentMethod = true;
-    })
-   
-  }
-
-  saveCategory() {
-    this.expensesService.categories.
-    this.categories.push(this.newCategory);
-    this.expensesService.category = this.newCategory;
-    this.expensesService.saveLocalCategories();
-    this.isAddCategory = false;
-    this.form.controls["category"].setValue(this.newCategory);
-  }
-
-  savePaymentMethod() {
-    this.paymentMethods.push(this.newPaymentMethod);
-    this.expensesService.paymentMethod = this.newPaymentMethod;
-    this.expensesService.saveLocalPaymentMethods();
-    this.isAddPaymentMethod = false;
-    this.form.controls["methodPay"].setValue(this.newPaymentMethod);
-  } */
 
   onInputCategory(val) {
     this.newCategory = val.target.value;
@@ -323,57 +238,5 @@ export class ExpenseAddFormPage implements OnInit {
       color: "success",
     });
     toast.present();
-  }
-
-  async editOpthions(opthion: string) {
-    let header = opthion;
-    if (opthion === "cat") {
-      header = "Add new category";
-    }
-    if (opthion === "pay") {
-      header = "Add new pay method";
-    }
-
-    const editOpthionsAlertController = await this.alertController.create({
-      header,
-      inputs: [
-        {
-          name: "newOpthion",
-          type: "text",
-          placeholder: "Type new opthion",
-        },
-      ],
-      buttons: [
-        {
-          text: "Cancel",
-          role: "cancel",
-        },
-        {
-          text: "Add",
-          role: "ok",
-          handler: (inputs) => {
-            if (opthion === "cat") {
-              this.expensesService.addNewCategory(
-                inputs.newOpthion,
-                this.categories
-              );
-            }
-            if (opthion === "pay") {
-              this.expensesService.addNewPaymentMethod(
-                inputs.newOpthion,
-                this.paymentMethods
-              );
-              this.newPaymentMethod = inputs.newOpthion;
-            }
-          },
-        },
-      ],
-    });
-
-    editOpthionsAlertController.present();
-  }
-  onFocus(ev) {
-    // alert("hhh");
-    console.log(ev);
   }
 }
