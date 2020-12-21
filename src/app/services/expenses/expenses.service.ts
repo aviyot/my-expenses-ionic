@@ -2,14 +2,12 @@ import { Injectable } from "@angular/core";
 import { Expense } from "../../models/expense.model";
 import { Storage } from "@ionic/storage";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
-import { Expenses } from "../../models/expenses.model";
 
 @Injectable({
   providedIn: "root",
 })
 export class ExpensesService {
-  /*   private _exps = new Subject<Expenses>();
-   */
+
   private _expenses: Subject<Expense[]> = new BehaviorSubject<Expense[]>([]);
   private _categories: Subject<string[]> = new BehaviorSubject<string[]>([]);
   private _paymentMethods: Subject<string[]> = new BehaviorSubject<string[]>(
@@ -27,11 +25,7 @@ export class ExpensesService {
   public expensesSorted = new BehaviorSubject(false);
 
   constructor(private storage: Storage) {
-    /*  this.storage.get("expenses_data").then((expensesData:Expenses)=>{
-      if(expensesData){
-        this._exps.next(expensesData);
-      }
-    }) */
+  
     this.loadLocalExpenses();
     this.loadLocalCategories();
     this.loadLocalPaymentMethods();
@@ -58,20 +52,7 @@ export class ExpensesService {
   }
 
   loadLocalExpenses() {
-    const intialExpenes: Expense[] = [
-   /*    new Expense(
-        new Date().getTime(),
-        "foood",
-        500,
-        "food",
-        "cash",
-        1,
-        "me",
-        new Date(),
-        new Date(),
-        1
-      ), */
-    ];
+    const intialExpenes: Expense[] = [];
 
     this.storage.get("expenses").then((expenses) => {
       if (expenses) {
@@ -101,8 +82,7 @@ export class ExpensesService {
   }
 
   addNewExpense(newExpense: Expense, expenses: Expense[]) {
-    /*  let expenseWithId = { ...expense, id: Date.now() };
-     */
+ 
     const newExpenses = [...expenses, newExpense];
 
     this.storage
@@ -142,30 +122,6 @@ export class ExpensesService {
       });
   }
 
-  /*   set expenses(expenses: Expense[]) {
-    this._expenses = [...expenses];
-    this.dataChanged.next(true);
-  } */
-  /*  set expense(value: Expense) {
-    this._expenses = [...this._expenses, value];
-    this.saveLocalExpenses();
-  } */
-
-  /*   delete(id: number) {
-    this._expenses = this._expenses.filter((expense) => expense.id !== id);
-    this.calcTotalExpenses(this._expenses);
-    this.dataChanged.next(true);
-    this.saveLocalExpenses();
-  } */
-
-  /*  
-
-  set category(value: string) {
-    this._categories = [...this._categories, value];
-    this.saveLocalCategories();
-    this.dataChanged.next(true);
-  } */
-
   removeCategory(categoryName: string, categories: string[]) {
     const newCategories = categories.filter((item) => item !== categoryName);
     return this.storage.set("categories", newCategories).then(() => {
@@ -200,19 +156,7 @@ export class ExpensesService {
     });
   }
 
-  /*  set paymentMethod(value: string) {
-    this._paymentMethods = [...this._paymentMethods, value];
-    this.saveLocalPaymentMethods();
-    this.dataChanged.next(true);
-  } */
 
-  /*   removePayMethod(val) {
-    this._paymentMethods = this._paymentMethods.filter((item) => item !== val);
-    this.saveLocalPaymentMethods();
-    this.dataChanged.next(true);
-
-    return this.paymentMethods;
-  } */
   get filteredExpenses() {
     return [...this._filteredExpenses];
   }
@@ -228,26 +172,7 @@ export class ExpensesService {
     }, 0);
     this._totalExpenses.next(totalAmount);
   }
-  /* 
-  async saveLocal(value: any, key: string): Promise<any> {
-    await this.storage.set(key, value);
-  }
 
-  saveLocalExpenses() {
-    this.storage.set("expenses", this._expenses);
-  }
-
-  saveLocalCategories() {
-    this.storage.set("categories", this._categories);
-  }
-
-  saveLocalPaymentMethods() {
-    this.storage.set("paymentMethods", this._paymentMethods);
-  }
-
-  saveLoacalIncomesTotalAmount(val){
-    return this.storage.set('incomesTotalAmount',val);
-  } */
 
   calcLastPayDate(fristPayDate, numberOfPay: number): number {
     let fd = new Date(fristPayDate);
@@ -280,7 +205,13 @@ export class ExpensesService {
         )
           return 1;
         return 0;
-      } else {
+      } 
+      if (sortBy === "amount"){
+        if (a.amount*a.freqPay > b.amount*b.freqPay) return -1;
+        if (a.amount*a.freqPay  < b.amount*b.freqPay ) return 1;
+        return 0;
+      }
+      else {
         if (a[sortBy] > b[sortBy]) return -1;
         if (a[sortBy] < b[sortBy]) return 1;
         return 0;
@@ -292,66 +223,7 @@ export class ExpensesService {
     else 
        return ascendingSort.reverse();
 
-  /*   if (sortType === "acs") {
-      return [
-        ...expenses.sort((a, b) => {
-          if (sortBy === "fristPayDate") {
-            if (new Date(a[sortBy]).getTime() > new Date(b[sortBy]).getTime())
-              return -1;
-            if (new Date(a[sortBy]).getTime() < new Date(b[sortBy]).getTime())
-              return 1;
-            return 0;
-          }
-          if (sortBy === "lastPayDate" && a.fristPayDate && a.numberOfPay) {
-            if (
-              this.calcLastPayDate(a.fristPayDate, a.numberOfPay) >
-              this.calcLastPayDate(b.fristPayDate, b.numberOfPay)
-            )
-              return -1;
-            if (
-              this.calcLastPayDate(a.fristPayDate, a.numberOfPay) <
-              this.calcLastPayDate(b.fristPayDate, b.numberOfPay)
-            )
-              return 1;
-            return 0;
-          } else {
-            if (a[sortBy] > b[sortBy]) return -1;
-            if (a[sortBy] < b[sortBy]) return 1;
-            return 0;
-          }
-        }),
-      ];
-    } else {
-      return [
-        ...expenses.sort((a, b) => {
-          if (sortBy === "fristPayDate") {
-            if (new Date(a[sortBy]).getTime() < new Date(b[sortBy]).getTime())
-              return -1;
-            if (new Date(a[sortBy]).getTime() > new Date(b[sortBy]).getTime())
-              return 1;
-            return 0;
-          }
-          if (sortBy === "lastPayDate" && a.fristPayDate && a.numberOfPay) {
-            if (
-              this.calcLastPayDate(a.fristPayDate, a.numberOfPay) <
-              this.calcLastPayDate(b.fristPayDate, b.numberOfPay)
-            )
-              return -1;
-            if (
-              this.calcLastPayDate(a.fristPayDate, a.numberOfPay) >
-              this.calcLastPayDate(b.fristPayDate, b.numberOfPay)
-            )
-              return 1;
-            return 0;
-          } else {
-            if (a[sortBy] < b[sortBy]) return -1;
-            if (a[sortBy] > b[sortBy]) return 1;
-            return 0;
-          }
-        }),
-      ];
-    }
-     */
+  
   }
 
   filterDateExpenses(
@@ -368,13 +240,7 @@ export class ExpensesService {
             endDate
         );
       else return false;
-      /* if (expense.numberOfPay)
-          return (
-            this.calcLastPayDate(expense.fristPayDate, expense.numberOfPay) > startDate &&
-            this.calcLastPayDate(expense.fristPayDate, expense.numberOfPay) <
-              endDate
-          );
-        else return true; */
+  
     });
   }
 }
