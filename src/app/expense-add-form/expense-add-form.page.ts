@@ -3,14 +3,12 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExpensesService } from "../services/expenses/expenses.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import {
-  AlertController,
   ModalController,
   ToastController,
 } from "@ionic/angular";
 import { OpthionEditSettingsComponent } from "../opthion-edit-settings/opthion-edit-settings.component";
 import { LanguageService } from "../services/language/language.service";
 import { Expense } from "../models/expense.model";
-import { Storage } from "@ionic/storage";
 
 @Component({
   selector: "app-expense-add-form",
@@ -28,7 +26,7 @@ export class ExpenseAddFormPage implements OnInit {
     null,
     new Date(),
     new Date(),
-    1
+    1,
   );
   selectedId: string = null;
   expense: Expense;
@@ -55,8 +53,6 @@ export class ExpenseAddFormPage implements OnInit {
     public modalController: ModalController,
     public toastController: ToastController,
     private languageServ: LanguageService,
-    private storage: Storage,
-    private alertController: AlertController
   ) {}
 
   ngOnInit() {
@@ -182,7 +178,9 @@ export class ExpenseAddFormPage implements OnInit {
   onAdd(muliplay: boolean) {
     if (this.form.valid) {
       this.expensesService.addNewExpense(
-        { ...this.form.value, id: new Date().getTime() },
+        { ...this.form.value, 
+          id: new Date().getTime(),
+        },
         this.expenses
       );
       this.form.reset();
