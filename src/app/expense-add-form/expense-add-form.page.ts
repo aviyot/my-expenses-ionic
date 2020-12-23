@@ -128,7 +128,7 @@ export class ExpenseAddFormPage implements OnInit {
         fristPayDate,
         numberOfPay,
       } = this.expenses.find((expense) => expense.id === +this.selectedId);
-      this.form.setValue({
+      this.form.patchValue({
         name: name,
         amount: amount,
         category: category,
@@ -152,7 +152,7 @@ export class ExpenseAddFormPage implements OnInit {
         fristPayDate,
         numberOfPay,
       } = this.intialExpenses;
-      this.form.setValue({
+      this.form.patchValue({
         name: name,
         amount: amount,
         category: category,
