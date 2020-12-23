@@ -15,17 +15,15 @@ export class ExpensesService {
   );
 
   private _filteredExpenses: Expense[] = [];
-  private _incomesTotalAmount: number = 9000;
   private _totalExpenses = new BehaviorSubject<number>(0);
 
-  public dataLoaded = new BehaviorSubject<boolean>(false);
+ /*  public dataLoaded = new BehaviorSubject<boolean>(false);
   public localCategoriesLoaded = new BehaviorSubject(false);
   public localPaymentMethodsLoaded = new BehaviorSubject(false);
-  public dataChanged = new BehaviorSubject(false);
+  public dataChanged = new BehaviorSubject(false); */
   public expensesSorted = new BehaviorSubject(false);
 
   constructor(private storage: Storage) {
-  
     this.loadLocalExpenses();
     this.loadLocalCategories();
     this.loadLocalPaymentMethods();
@@ -82,9 +80,7 @@ export class ExpensesService {
   }
 
   addNewExpense(newExpense: Expense, expenses: Expense[]) {
- 
     const newExpenses = [...expenses, newExpense];
-
     this.storage
       .set("expenses", newExpenses)
       .then(() => {
