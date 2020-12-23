@@ -93,34 +93,6 @@ export class HomePage implements OnInit {
     this.languageServ.selectedLanguage.subscribe((languageWords) => {
       this.languageWords = languageWords;
     });
-
-    /*    this.expensesService.dataChanged.subscribe(() => {
-      this.expensesService.calcTotalExpenses(this.expenses);
-    });
-
-    this.expensesService.dataLoaded.subscribe((val) => {
-      if (val) {
-        this.expenses = this.expensesService.expenses;
-        //this.expenses = this.expensesService.filterDateExpenses(this.expenses, new Date(2022,1,1).getTime(),new Date(2024,5,1).getTime())
-        this.expensesService.calcTotalExpenses(this.expenses);
-      }
-    });
-
-    this.expensesService.dataChanged.subscribe(() => {
-      this.expenses = this.expensesService.expenses;
-    }); */
-
-    /*     this.expensesService.loadLocalIncomesTotalAmount().then((val) => {
-      if (val) {
-        this.income$.next(val);
-      } else {
-        this.expensesService
-          .saveLoacalIncomesTotalAmount(this.income)
-          .then((val) => {
-            this.income$.next(val);
-          });
-      }
-    }); */
   }
 
   ionViewDidEnter() {
@@ -193,9 +165,9 @@ export class HomePage implements OnInit {
   }
 
   onAdd() {
-    this.router.navigate(["/", "expense-add-form"]);
-    this.expensesService.dataChanged.next(true);
     this.selectedId = null;
+    this.router.navigate(["/", "expense-add-form"]) ;
+   // this.expensesService.dataChanged.next(true);
   }
 
   onEdit() {
