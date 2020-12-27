@@ -24,9 +24,9 @@ export class ExpensesService {
   public expensesSorted = new BehaviorSubject(false);
 
   constructor(private storage: Storage) {
-    this.loadLocalExpenses();
-    this.loadLocalCategories();
-    this.loadLocalPaymentMethods();
+    //this.loadLocalExpenses();
+    //this.loadLocalCategories();
+    //this.loadLocalPaymentMethods();
   }
 
   get expenses(): Observable<Expense[]> {

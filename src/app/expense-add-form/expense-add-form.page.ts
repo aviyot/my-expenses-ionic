@@ -63,24 +63,28 @@ export class ExpenseAddFormPage implements OnInit {
     });
     this.expensesService.categories.subscribe((categories: string[]) => {
       this.categories = categories;
-      this.defaultCategory = this.categories[0];
+     /*  this.defaultCategory = this.categories[0];
       this.intialExpenses = {
         ...this.intialExpenses,
         category: this.defaultCategory,
-      };
+      }; */
     });
     this.expensesService.paymentMethods.subscribe((paymentMethods) => {
       this.paymentMethods = paymentMethods;
-      this.defaultMethodPay = this.paymentMethods[0];
+     /*  this.defaultMethodPay = this.paymentMethods[0];
       this.intialExpenses = {
         ...this.intialExpenses,
         methodPay: this.defaultMethodPay,
-      };
+      }; */
     });
 
     this.languageServ.selectedLanguage.subscribe((languageWords) => {
       this.languageWords = languageWords;
     });
+
+      this.expensesService.loadLocalCategories();
+      this.expensesService.loadLocalPaymentMethods();
+
   }
   createForm() {
     this.form = new FormGroup({
