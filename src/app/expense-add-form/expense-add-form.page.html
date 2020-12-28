@@ -30,7 +30,7 @@
           {{category}}
         </ion-select-option>
       </ion-select>
-      <ion-button (click)="onSettingClick('category')" fill="clear" shape="round">
+      <ion-button (click)="onSettingClick('categories')" fill="clear" shape="round">
         <ion-icon name="ellipsis-vertical-sharp"></ion-icon>
       </ion-button>
     </ion-item>
@@ -43,7 +43,7 @@
           {{paymentMethod }}
         </ion-select-option>
       </ion-select>
-      <ion-button (click)="onSettingClick('payMethod')" fill="clear" shape="round">
+      <ion-button (click)="onSettingClick('paymentMethods')" fill="clear" shape="round">
         <ion-icon name="ellipsis-vertical-sharp"></ion-icon>
       </ion-button>
     </ion-item>
@@ -57,7 +57,18 @@
     </ion-item>
     <ion-item>
       <ion-label>{{languageWords.beneficiary}}</ion-label>
-      <ion-input type="text" formControlName="benef"></ion-input>
+      <ion-select interface="action-sheet"
+       [placeholder]="languageWords.select+' '+languageWords.beneficiary"
+        formControlName="benef">
+        <ion-select-option *ngFor="let payee of payees" [value]="payee">
+          {{payee}}
+        </ion-select-option>
+      </ion-select>
+      <ion-button (click)="onSettingClick('payees')" fill="clear" shape="round">
+        <ion-icon name="ellipsis-vertical-sharp"></ion-icon>
+      </ion-button>
+     <!--  <ion-label>{{languageWords.beneficiary}}</ion-label>
+      <ion-input type="text" formControlName="benef"></ion-input> -->
     </ion-item>
     <ion-item>
       <ion-label>{{languageWords.commitTime}}</ion-label>

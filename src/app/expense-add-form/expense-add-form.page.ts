@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExpensesService } from "../services/expenses/expenses.service";
+import { SelectOpthionService } from "../services/select-opthion/select-opthion.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import {
   ModalController,
@@ -37,6 +38,7 @@ export class ExpenseAddFormPage implements OnInit {
   title: string = "Add New Expense";
   categories: string[];
   paymentMethods: string[];
+  payees:string[];
   isAddCategory = false;
   newCategory = "new cat";
   newPaymentMethod = "new pay";
@@ -53,6 +55,7 @@ export class ExpenseAddFormPage implements OnInit {
     public modalController: ModalController,
     public toastController: ToastController,
     private languageServ: LanguageService,
+    private selectOpthion : SelectOpthionService
   ) {}
 
   ngOnInit() {
@@ -61,29 +64,26 @@ export class ExpenseAddFormPage implements OnInit {
       this.expenses = expenses;
       this.getExpenseId();
     });
-    this.expensesService.categories.subscribe((categories: string[]) => {
+    this.selectOpthion.categories.subscribe((categories: string[]) => {
       this.categories = categories;
-     /*  this.defaultCategory = this.categories[0];
-      this.intialExpenses = {
-        ...this.intialExpenses,
-        category: this.defaultCategory,
-      }; */
+ 
     });
-    this.expensesService.paymentMethods.subscribe((paymentMethods) => {
+    this.selectOpthion.paymentMethods.subscribe((paymentMethods) => {
       this.paymentMethods = paymentMethods;
-     /*  this.defaultMethodPay = this.paymentMethods[0];
-      this.intialExpenses = {
-        ...this.intialExpenses,
-        methodPay: this.defaultMethodPay,
-      }; */
+  
     });
 
+    this.selectOpthion.payees.subscribe((payees)=>{
+      this.payees = payees;
+    })
     this.languageServ.selectedLanguage.subscribe((languageWords) => {
       this.languageWords = languageWords;
     });
 
-      this.expensesService.loadLocalCategories();
-      this.expensesService.loadLocalPaymentMethods();
+      this.selectOpthion.loadSelectOpthion("categories");
+      this.selectOpthion.loadSelectOpthion("paymentMethods");
+      this.selectOpthion.loadSelectOpthion("payees");
+
 
   }
   createForm() {

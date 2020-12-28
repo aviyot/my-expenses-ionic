@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { ExpensesService } from "../services/expenses/expenses.service";
 import { FormControl, Validators } from "@angular/forms";
 import { LanguageService } from "../services/language/language.service";
 import { SharedService } from "../services/shared/shared.service";
+import { SelectOpthionService } from "../services/select-opthion/select-opthion.service";
 
 @Component({
   selector: "app-opthion-edit-settings",
@@ -18,81 +18,68 @@ export class OpthionEditSettingsComponent implements OnInit {
   itemSelected: boolean = false;
   languageWords: any;
   constructor(
-    private expensesService: ExpensesService,
     private languageServ: LanguageService,
-    private sharedService : SharedService
+    private sharedService: SharedService,
+    private selectOpthionService: SelectOpthionService
   ) {}
 
   ngOnInit() {
-    if (this.selectName === "category") {
-      this.expensesService.categories.subscribe((categories) => {
-        this.selectOpthions = categories;
-        this.title = "Edit Expenses Category";
-      });
-    }
-    if (this.selectName === "payMethod") {
-      this.expensesService.paymentMethods.subscribe((paymentMethods) => {
-        this.selectOpthions = paymentMethods;
-        this.title = "Edit Pay Methods ";
-      });
-    }
-    /* this.expensesService.dataChanged.subscribe(val=>{
-      this.categories = this.expensesService.categories;
-      this.paymentMethods = this.expensesService.paymentMethods;
-    }) */
+
+    this.selectOpthionService[this.selectName].subscribe((selectOpthions) => {
+      this.selectOpthions = selectOpthions;
+      switch (this.selectName) {
+        case "categories": 
+          this.title = "Categories";
+         break;
+        case "paymentMethods":
+          this.title = "Payment methods";
+          break;
+        case "payees":
+          this.title = "Payees"
+          break;
+        default:
+          this.title = "Edit Opthions"
+      }
+    });
+
+ 
     this.languageServ.selectedLanguage.subscribe((languageWords) => {
       this.languageWords = languageWords;
     });
   }
 
   removeOpthion() {
-    if (this.selectName === "category") {
-      this.expensesService.removeCategory(
-        this.selectedOpthion,
-        this.selectOpthions
-      );
-    }
+    this.selectOpthionService.removeSelectOpthion(
+      this.selectName,
+      this.selectedOpthion,
+      this.selectOpthions
+    );
 
-    if (this.selectName === "payMethod") {
-      this.expensesService.removePayMethod(
-        this.selectedOpthion,
-        this.selectOpthions
-      );
-    }
     this.selectedOpthion = null;
     this.itemSelected = false;
   }
 
   onSelectOpthion(val) {
-    if(this.itemSelected) {
+    if (this.itemSelected) {
       this.selectedOpthion = null;
       this.itemSelected = false;
-    } 
-    else {
-    this.selectedOpthion = val;
-    this.itemSelected = true;
+    } else {
+      this.selectedOpthion = val;
+      this.itemSelected = true;
     }
   }
 
   addNewOpthion() {
     let valueExit = this.selectOpthions.includes(this.newOpthion.value);
- 
 
-    if(this.selectOpthions.length === 0)
-        valueExit = false;
+    if (this.selectOpthions.length === 0) valueExit = false;
 
     if (!valueExit) {
-      if (this.selectName === "category") {
-        this.expensesService
-          .addNewCategory(this.newOpthion.value, this.selectOpthions)
-          .then(() => {});
-      }
-
-      if (this.selectName === "payMethod") {
-        this.expensesService
-          .addNewPaymentMethod(this.newOpthion.value, this.selectOpthions)
-          .then(() => {});
-      }
+      this.selectOpthionService.addNewSelectOpthion(
+        this.newOpthion.value,
+        this.selectName,
+        this.selectOpthions
+      );
 
       this.selectedOpthion = this.newOpthion.value;
       this.itemSelected = true;
@@ -100,17 +87,17 @@ export class OpthionEditSettingsComponent implements OnInit {
     this.newOpthion.reset();
   }
 
-  closeModal(){
+  closeModal() {
     this.sharedService.closeModal({
-      selectName:this.selectName,
-      value:this.newOpthion.value
+      selectName: this.selectName,
+      value: this.newOpthion.value,
     });
   }
 
-  selectOpthion(){
+  selectOpthion() {
     this.sharedService.closeModal({
-      selectName:this.selectName,
-      value:this.selectedOpthion
+      selectName: this.selectName,
+      value: this.selectedOpthion,
     });
   }
 }

@@ -9,10 +9,6 @@ import { BehaviorSubject, Observable, Subject } from "rxjs";
 export class ExpensesService {
 
   private _expenses: Subject<Expense[]> = new BehaviorSubject<Expense[]>([]);
-  private _categories: Subject<string[]> = new BehaviorSubject<string[]>([]);
-  private _paymentMethods: Subject<string[]> = new BehaviorSubject<string[]>(
-    []
-  );
 
   private _filteredExpenses: Expense[] = [];
   private _totalExpenses = new BehaviorSubject<number>(0);
@@ -33,14 +29,6 @@ export class ExpensesService {
     return this._expenses.asObservable();
   }
 
-  get categories(): Observable<string[]> {
-    return this._categories.asObservable();
-  }
-
-  get paymentMethods(): Observable<string[]> {
-    return this._paymentMethods.asObservable();
-  }
-
   get totalExpenses(): Observable<number> {
     return this._totalExpenses.asObservable();
   }
@@ -58,23 +46,6 @@ export class ExpensesService {
       }
     });
   }
-
-  loadLocalCategories() {
-    this.storage.get("categories").then((categories: string[]) => {
-      if (categories) {
-        this._categories.next(categories);
-      }
-    });
-  }
-
-  loadLocalPaymentMethods() {
-    this.storage.get("paymentMethods").then((paymentMethods) => {
-      if (paymentMethods) {
-        this._paymentMethods.next(paymentMethods);
-      }
-    });
-  }
-
   loadLocalIncomesTotalAmount(): Promise<any> {
     return this.storage.get("incomesTotalAmount");
   }
@@ -118,39 +89,6 @@ export class ExpensesService {
       });
   }
 
-  removeCategory(categoryName: string, categories: string[]) {
-    const newCategories = categories.filter((item) => item !== categoryName);
-    return this.storage.set("categories", newCategories).then(() => {
-      this._categories.next(newCategories);
-    });
-  }
-
-  removePayMethod(payMethodName: string, paymentMethods: string[]) {
-    const newpaymentMethods = paymentMethods.filter(
-      (item) => item !== payMethodName
-    );
-    return this.storage.set("paymentMethods", newpaymentMethods).then(() => {
-      this._paymentMethods.next(newpaymentMethods);
-    });
-  }
-
-  addNewCategory(newCategory: string, categories: string[]): Promise<any> {
-    const newCategories = [...categories, newCategory];
-    return this.storage.set("categories", newCategories).then(() => {
-      this._categories.next(newCategories);
-    });
-  }
-
-  addNewPaymentMethod(
-    newPaymentMethod: string,
-    paymentMethods: string[]
-  ): Promise<any> {
-    const newPaymentMethods = [...paymentMethods, newPaymentMethod];
-
-    return this.storage.set("paymentMethods", newPaymentMethods).then(() => {
-      this._paymentMethods.next(newPaymentMethods);
-    });
-  }
 
 
   get filteredExpenses() {
