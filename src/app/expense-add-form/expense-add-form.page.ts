@@ -210,6 +210,7 @@ export class ExpenseAddFormPage implements OnInit {
     this.newPaymentMethod = val.target.value;
   }
   async onSettingClick(selectName: string) {
+    
     this.modal = await this.modalController.create({
       component: OpthionEditSettingsComponent,
       componentProps: {
@@ -218,8 +219,20 @@ export class ExpenseAddFormPage implements OnInit {
     });
 
     this.modal.onDidDismiss().then((data) => {
+      let propName:string;
+      switch (selectName) {
+        case "categories": 
+        propName = "category";
+         break;
+        case "paymentMethods":
+          propName= "methodPay";
+          break;
+        case "payees":
+          propName = "benef"
+          break;
+      }
       this.form.patchValue({
-        [data["data"]["selectName"]]: data["data"]["value"],
+        [propName]: data["data"]["value"],
       });
     });
     return await this.modal.present();
