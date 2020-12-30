@@ -4,10 +4,8 @@ import { ExpensesService } from "../services/expenses/expenses.service";
 import { SelectOpthionService } from "../services/select-opthion/select-opthion.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import {
-  ModalController,
   ToastController,
 } from "@ionic/angular";
-import { OpthionEditSettingsComponent } from "../opthion-edit-settings/opthion-edit-settings.component";
 import { LanguageService } from "../services/language/language.service";
 import { Expense } from "../models/expense.model";
 
@@ -52,7 +50,6 @@ export class ExpenseAddFormPage implements OnInit {
     private expensesService: ExpensesService,
     private router: Router,
     private route: ActivatedRoute,
-    public modalController: ModalController,
     public toastController: ToastController,
     private languageServ: LanguageService,
     private selectOpthion : SelectOpthionService
@@ -210,32 +207,25 @@ export class ExpenseAddFormPage implements OnInit {
     this.newPaymentMethod = val.target.value;
   }
   async onSettingClick(selectName: string) {
-    
-    this.modal = await this.modalController.create({
-      component: OpthionEditSettingsComponent,
-      componentProps: {
-        selectName: selectName,
-      },
-    });
-
-    this.modal.onDidDismiss().then((data) => {
-      let propName:string;
-      switch (selectName) {
-        case "categories": 
-        propName = "category";
-         break;
-        case "paymentMethods":
-          propName= "methodPay";
-          break;
-        case "payees":
-          propName = "benef"
-          break;
-      }
-      this.form.patchValue({
-        [propName]: data["data"]["value"],
+    this.selectOpthion.createSelectOpthionModal(selectName).then(()=>{
+      this.selectOpthion.selectOpthionModal.onDidDismiss().then((data:string) => {
+        switch (selectName) {
+          case "categories": 
+          selectName = "category";
+           break;
+          case "paymentMethods":
+            selectName= "methodPay";
+            break;
+          case "payees":
+            selectName = "benef"
+            break;
+        }
+        this.form.patchValue({
+          [selectName]: data["data"]["value"],
+        });
       });
+
     });
-    return await this.modal.present();
   }
 
   async presentToast() {
