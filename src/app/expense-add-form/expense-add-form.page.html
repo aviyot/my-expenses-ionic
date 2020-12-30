@@ -23,9 +23,9 @@
     </ion-item>
     <ion-item>
       <ion-label>{{languageWords.category}}</ion-label>
-      <ion-select *ngIf="!isAddCategory" #val [interfaceOptions]="categoryCustomAlertOptions" [value]="defaultCategory"
-        multiple="false" [placeholder]="languageWords.select+' '+languageWords.category" formControlName="category"
-        interface="action-sheet" (select)="onFocus($event)">
+      <ion-select 
+      [placeholder]="languageWords.select+' '+languageWords.category" formControlName="category"
+        interface="action-sheet">
         <ion-select-option *ngFor="let category of categories " [value]="category">
           {{category}}
         </ion-select-option>
@@ -36,8 +36,8 @@
     </ion-item>
     <ion-item>
       <ion-label>{{languageWords.payMethod}}</ion-label>
-      <ion-select [interfaceOptions]="payMethodCustomAlertOptions" interface="action-sheet" *ngIf="!isAddPaymentMethod"
-        [value]="defaultMethodPay" [placeholder]="languageWords.select+' '+languageWords.payMethod"
+      <ion-select interface="action-sheet" 
+      [placeholder]="languageWords.select+' '+languageWords.payMethod"
         formControlName="methodPay">
         <ion-select-option *ngFor="let paymentMethod of paymentMethods" [value]="paymentMethod">
           {{paymentMethod }}
@@ -67,8 +67,6 @@
       <ion-button (click)="onSettingClick('payees')" fill="clear" shape="round">
         <ion-icon name="ellipsis-vertical-sharp"></ion-icon>
       </ion-button>
-     <!--  <ion-label>{{languageWords.beneficiary}}</ion-label>
-      <ion-input type="text" formControlName="benef"></ion-input> -->
     </ion-item>
     <ion-item>
       <ion-label>{{languageWords.commitTime}}</ion-label>
