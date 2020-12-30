@@ -49,7 +49,7 @@ export class HomePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.expensesService.expenses.pipe(skip(1)).subscribe((expenses) => {
+    this.expensesService.expenses.subscribe((expenses) => {
       this.expenses = expenses;
       this.expensesDataLoaded = true;
       if (expenses.length) this.emptyExpenesesList = false;
