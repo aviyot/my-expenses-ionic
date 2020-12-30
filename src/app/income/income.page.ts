@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ModalController } from "@ionic/angular";
 import { Income } from "../models/income.model";
 import { IncomesService } from "../services/incomes/incomes.service";
+import { SelectOpthionService } from "../services/select-opthion/select-opthion.service";
 
 @Component({
   selector: 'app-income',
@@ -11,13 +12,8 @@ import { IncomesService } from "../services/incomes/incomes.service";
   styleUrls: ['./income.page.scss'],
 })
 export class IncomePage implements OnInit {
-
-/*   amount = new FormControl();
-  incomeType = new FormControl();
-  startDate = new FormControl(new Date());
-  from = new FormControl(); */
-  newIncomeType = new FormControl();
-  fc = new FormControl();
+ newIncomeType = new FormControl();
+  fc = new FormControl(); 
   incomeGroup = new FormGroup({
     amount :new FormControl('',Validators.required),
     from : new FormControl('',Validators.required),
@@ -25,7 +21,7 @@ export class IncomePage implements OnInit {
     startDate : new FormControl(),
   });
   incomes: Income[] = [];
-  incomeTypes = ['typ1',"type2","type3"];
+  incomeTypes:string[] = [];
   newAdd = false;
   addNewIncomeType = false;
   formIsValid = false;
@@ -34,7 +30,8 @@ export class IncomePage implements OnInit {
   constructor(
     private router: Router,
     public modalController: ModalController,
-    private incomesService: IncomesService
+    private incomesService: IncomesService,
+    private selectOpthion : SelectOpthionService
   ) {}
 
   ngOnInit() {
@@ -48,6 +45,11 @@ export class IncomePage implements OnInit {
       this.totalIncomes = this.incomesService.calcTotalIncomes(this.incomes);
       }
     });
+    this.selectOpthion.incomeTypes.subscribe((incomeTypes)=>{
+         this.incomeTypes = incomeTypes;
+    })
+
+    this.selectOpthion.loadSelectOpthion("incomeTypes");
   }
   closeModal() {
     //this.modalController.dismiss();
@@ -140,5 +142,22 @@ export class IncomePage implements OnInit {
     console.log("input focus");
     this.fc.setValue("new value");
   }
+
+  showSelectOpthion(selectName){
+  this.selectOpthion.createSelectOpthionModal(selectName).then(()=>{
+    this.selectOpthion.selectOpthionModal.onDidDismiss().then((data:string) => {
+      switch (selectName) {
+        case "incomeTypes": 
+        selectName = "incomeType";
+         break;
+      }
+      console.log(selectName);
+    this.incomeGroup.patchValue({
+        [selectName]: data["data"]["value"],
+      }); 
+    });
+
+  });
+}
 
 }

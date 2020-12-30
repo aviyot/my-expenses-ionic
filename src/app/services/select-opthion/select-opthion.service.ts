@@ -1,19 +1,15 @@
 import { Injectable } from "@angular/core";
-import { Observable} from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { BehaviorSubject } from "rxjs";
 import { Storage } from "@ionic/storage";
+import { OpthionEditSettingsComponent } from "src/app/opthion-edit-settings/opthion-edit-settings.component";
+import { ModalController } from "@ionic/angular";
 
-class SelectOpthion {
-  constructor(private selectName: string, private opthions: string[]) {}
-}
 
 @Injectable({
   providedIn: "root",
 })
 export class SelectOpthionService {
-  private _selectOpthions: BehaviorSubject<
-    SelectOpthion[]
-  > = new BehaviorSubject<SelectOpthion[]>([]);
 
   private _categories: BehaviorSubject<string[]> = new BehaviorSubject<
     string[]
@@ -26,13 +22,15 @@ export class SelectOpthionService {
     []
   );
 
-  
-  constructor(private storage: Storage) {}
+  private _incomeTypes : BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]); 
 
-  get selectOpthions(): Observable<SelectOpthion[]> {
-    return this._selectOpthions.asObservable();
-  }
+  selectOpthionModal: any;
 
+  constructor(
+    private storage: Storage,
+    private modalController: ModalController
+  ) {}
+ 
   get categories(): Observable<string[]> {
     return this._categories.asObservable();
   }
@@ -44,9 +42,13 @@ export class SelectOpthionService {
     return this._paymentMethods.asObservable();
   }
 
+  get incomeTypes():Observable<string[]>{
+    return this._incomeTypes.asObservable();
+  }
+
   doNextBySelectOpthions(selectOpthionKey: string, selectOpthions: string[]) {
     switch (selectOpthionKey) {
-      case "categories": 
+      case "categories":
         this._categories.next(selectOpthions);
         break;
       case "paymentMethods":
@@ -55,7 +57,8 @@ export class SelectOpthionService {
       case "payees":
         this._payees.next(selectOpthions);
         break;
-
+      case "incomeTypes":
+        this._incomeTypes.next(selectOpthions);
     }
   }
 
@@ -73,7 +76,7 @@ export class SelectOpthionService {
     selectOpthions: string[]
   ): Promise<any> {
     const newSelectOpthions = [...selectOpthions, newSelectOpthion];
-    return this.storage.set(selectOpthionKey,newSelectOpthions).then(() => {
+    return this.storage.set(selectOpthionKey, newSelectOpthions).then(() => {
       this.doNextBySelectOpthions(selectOpthionKey, newSelectOpthions);
     });
   }
@@ -89,5 +92,15 @@ export class SelectOpthionService {
     return this.storage.set(selectOpthionKey, newSelectOpthion).then(() => {
       this.doNextBySelectOpthions(selectOpthionKey, newSelectOpthion);
     });
+  }
+
+  async createSelectOpthionModal(selectName:string) {
+    this.selectOpthionModal = await this.modalController.create({
+      component: OpthionEditSettingsComponent,
+      componentProps: {
+        selectName: selectName,
+      },
+    });
+    return await this.selectOpthionModal.present();
   }
 }
