@@ -23,8 +23,7 @@
     </ion-item>
     <ion-item>
       <ion-label>{{languageWords.category}}</ion-label>
-      <ion-select 
-      [placeholder]="languageWords.select+' '+languageWords.category" formControlName="category"
+      <ion-select [placeholder]="languageWords.select+' '+languageWords.category" formControlName="category"
         interface="action-sheet">
         <ion-select-option *ngFor="let category of categories " [value]="category">
           {{category}}
@@ -36,8 +35,7 @@
     </ion-item>
     <ion-item>
       <ion-label>{{languageWords.payMethod}}</ion-label>
-      <ion-select interface="action-sheet" 
-      [placeholder]="languageWords.select+' '+languageWords.payMethod"
+      <ion-select interface="action-sheet" [placeholder]="languageWords.select+' '+languageWords.payMethod"
         formControlName="methodPay">
         <ion-select-option *ngFor="let paymentMethod of paymentMethods" [value]="paymentMethod">
           {{paymentMethod }}
@@ -57,8 +55,7 @@
     </ion-item>
     <ion-item>
       <ion-label>{{languageWords.beneficiary}}</ion-label>
-      <ion-select interface="action-sheet"
-       [placeholder]="languageWords.select+' '+languageWords.beneficiary"
+      <ion-select interface="action-sheet" [placeholder]="languageWords.select+' '+languageWords.beneficiary"
         formControlName="benef">
         <ion-select-option *ngFor="let payee of payees" [value]="payee">
           {{payee}}
@@ -82,13 +79,13 @@
 <ion-footer>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button class="add-btn" (click)="onAdd(false)" *ngIf="!editMode" fill="solid" color="primary">
-        <ion-icon name="checkmark-outline" size="large" padding></ion-icon>
+      <ion-button class="add-btn" (click)="onAdd(false)" *ngIf="!editMode" color="primary">
+        <ion-icon slot="start" name="checkmark-outline" size="large" padding></ion-icon> הוסף וצא
       </ion-button>
-      <ion-button class="add-btn" (click)="onAdd(true)" *ngIf="!editMode" fill="solid" color="primary">
-        <ion-icon name="checkmark-done-outline" size="large" padding></ion-icon>
+      <ion-button class="add-btn" (click)="onAdd(true)" *ngIf="!editMode" color="primary">
+        <ion-icon name="checkmark-done-outline" size="large" padding></ion-icon> הוסף
       </ion-button>
-      <ion-button class="save-btn" (click)="onUpdate()" *ngIf="editMode">
+      <ion-button class="save-btn" color="primary" (click)="onUpdate()" *ngIf="editMode">
         <ion-icon slot="start" name="save-outline"></ion-icon>{{languageWords.update}}
       </ion-button>
     </ion-buttons>
