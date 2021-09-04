@@ -7,14 +7,17 @@
 <ion-content>
 
 
-    <ion-text style="color: brown" *ngIf="showEmpty">
-    <h1  style="text-align: center">Add New Expense By Press 
-      <ion-icon slot="start" size="large" name="add"></ion-icon>
+  <ion-text style="color: brown" *ngIf="showEmpty">
+    <h1 style="text-align: center">
+      <ion-button (click)="onAdd()" color="warning">
+        <ion-icon slot="end" size="large" name="add"></ion-icon>
+        Add new Expense
+      </ion-button>
     </h1>
   </ion-text>
-  <app-expenses (select)=" onSelectExpense($event)" [expenses]="expenses" [showDetails]="showDetails" [selectedId]="selectedId"
-    [selectedSortType]="selectedSortType" [selectedArr]="selectedArr" [multiypleSelect]="multiypleSelect"
-    (selectedOp)="onSelectOp($event)">
+  <app-expenses (select)=" onSelectExpense($event)" [expenses]="expenses" [showDetails]="showDetails"
+    [selectedId]="selectedId" [selectedSortType]="selectedSortType" [selectedArr]="selectedArr"
+    [multiypleSelect]="multiypleSelect" (selectedOp)="onSelectOp($event)">
   </app-expenses>
 
 </ion-content>
@@ -24,7 +27,7 @@
     <div *ngIf="!multiypleSelect">
       <ion-grid>
         <ion-row style="justify-content: center;">
-          <ion-col (click)="editIncome()" >
+          <ion-col (click)="editIncome()">
             <ion-icon name="enter-outline" size="large" color="success"></ion-icon>
             <ion-label class="cal_label" color="success">{{income | number:'1.0-0'}}</ion-label>
           </ion-col>
@@ -32,7 +35,7 @@
             <ion-icon name="exit-outline" size="large" color="danger"></ion-icon>
             <ion-label class="cal_label" color="danger">{{totalExpenses | number:'1.0-0'}}</ion-label>
           </ion-col>
-          
+
           <ion-col>
             <ion-icon name="cash-outline" size="large" [color]="savings > 0 ?'success':'danger'"></ion-icon>
             <ion-label class="cal_label" [color]="savings > 0 ?'success':'danger'">{{savings | number:'1.0-0'}}
@@ -52,14 +55,15 @@
             <ion-icon name="exit-outline" size="large" color="danger"></ion-icon>
             <ion-label class="cal_label" color="danger">{{selectedTotalAmount | number:'1.0-0'}}</ion-label>
           </ion-col>
-        
+
           <ion-col>
-            <ion-icon name="cash-outline" size="large" [color]="(income-selectedTotalAmount) > 0 ?'success':'danger'"></ion-icon>
-              <ion-label class="cal_label" [color]="(income-selectedTotalAmount) > 0 ?'success':'danger'">
-                {{(income - selectedTotalAmount)| number:'1.0-0'}}</ion-label>
+            <ion-icon name="cash-outline" size="large" [color]="(income-selectedTotalAmount) > 0 ?'success':'danger'">
+            </ion-icon>
+            <ion-label class="cal_label" [color]="(income-selectedTotalAmount) > 0 ?'success':'danger'">
+              {{(income - selectedTotalAmount)| number:'1.0-0'}}</ion-label>
           </ion-col>
         </ion-row>
-   
+
       </ion-grid>
     </div>
 
