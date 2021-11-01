@@ -1,18 +1,9 @@
 <ion-header>
   <ion-toolbar>
-    <ion-grid>
-      <ion-row class="ion-align-items-start ion-justify-content-between">
-        <ion-col>
-          <ion-title>{{languageWords.income}}</ion-title>
-        </ion-col>
-        <ion-col class="ion-text-end">
-          <ion-button (click)="closeModal()" shape="round" color="white">
-            <ion-icon name="close-outline" size="large" color="danger"></ion-icon>
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-
+    <ion-title>{{languageWords.income}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content>
