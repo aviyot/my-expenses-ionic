@@ -2,18 +2,12 @@
     <app-app-menu></app-app-menu>
     <ion-header>
         <ion-toolbar>
-            <ion-grid>
-                <ion-row>
-                    <ion-col>
-                        <ion-title>
-                            {{languageWords.title | uppercase }}
-                        </ion-title>
-                    </ion-col>
-                    <ion-col size="3">
-                        <ion-menu-button></ion-menu-button>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
+            <ion-title>
+                {{languageWords.title | uppercase }}
+            </ion-title>
+            <ion-buttons slot="end">
+                <ion-menu-button></ion-menu-button>
+            </ion-buttons>
         </ion-toolbar>
     </ion-header>
 
