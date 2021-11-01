@@ -1,9 +1,10 @@
 interface Entries {
   title: string;
-  totalExpenses: string;
+  total: string;
   sortBy: string;
   cancel: string;
   ok: string;
+  new: string;
   acs: string;
   des: string;
   addNewExp: string;
@@ -24,6 +25,7 @@ interface Entries {
   update: string;
   enter: string;
   addNew: string;
+  addExit: string;
   pay: string;
   opthion: string;
   select: string;
@@ -42,6 +44,14 @@ interface Entries {
   english: string;
   hebrew: string;
   language: string;
+  reset: string;
+  exit: string;
+
+  //INCOME B
+  income: string;
+  type: string;
+  from: string;
+  //INCOME E
 }
 
 interface Language {
@@ -50,10 +60,11 @@ interface Language {
 const languages: Language = {
   hebrew: {
     title: "הוצאות שלי",
-    totalExpenses: 'סה"כ',
+    total: 'סה"כ',
     sortBy: "מיין לפי",
     cancel: "בטל",
     ok: "אשר",
+    new: "חדש",
     acs: "סדר עולה",
     des: "סדר יורד",
     addNewExp: "הוסף הוצאה חדשה",
@@ -78,6 +89,7 @@ const languages: Language = {
     opthion: "אפשרות",
     select: "בחר",
     add: "הוסף",
+    addExit: "הוסף וצא",
     sortAcs: "סדר עולה",
     sortDcs: "סדר יורד",
     enterRequired: "הכנס נתונים נדרשים",
@@ -92,13 +104,19 @@ const languages: Language = {
     english: "אנגלית",
     hebrew: "עברית",
     language: "שפה",
+    reset: "אפס",
+    exit: "צא",
+    income: "הכנסה",
+    type: "סוג",
+    from: "מקור",
   },
   english: {
     title: "my expenses",
-    totalExpenses: "total",
+    total: "total",
     sortBy: "Sort By",
     cancel: "Cancel",
     ok: "Ok",
+    new: "new",
     acs: "acs",
     des: "Des",
     addNewExp: "Add New Expenses",
@@ -119,6 +137,7 @@ const languages: Language = {
     update: "Update",
     enter: "Enter",
     addNew: "Add New",
+    addExit: "ADD & EXIT",
     pay: "Pay",
     opthion: "Opthion",
     select: "Select",
@@ -137,6 +156,11 @@ const languages: Language = {
     english: "English",
     hebrew: "Hebrew",
     language: "Language",
+    reset: "reset",
+    exit: "exit",
+    income: "income",
+    type: "type",
+    from: "from",
   },
 };
 

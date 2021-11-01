@@ -3,10 +3,10 @@
     <ion-grid>
       <ion-row class="ion-align-items-start ion-justify-content-between">
         <ion-col>
-          <ion-title>Income</ion-title>
+          <ion-title>{{languageWords.income}}</ion-title>
         </ion-col>
         <ion-col class="ion-text-end">
-          <ion-button (click)="closeModal()"  shape="round"  color="white">
+          <ion-button (click)="closeModal()" shape="round" color="white">
             <ion-icon name="close-outline" size="large" color="danger"></ion-icon>
           </ion-button>
         </ion-col>
@@ -16,55 +16,6 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-button (click)="openAddForm()" expand="block">
-    <ion-label *ngIf="!newAdd">Open New Add Form</ion-label>
-    <ion-label *ngIf="newAdd">Close Form</ion-label>
-  </ion-button>
-  <form *ngIf="newAdd" [formGroup] = "incomeGroup" (ngSubmit)="onSave()">
-    <ion-item>
-      <ion-label position="floating">Amount</ion-label>
-      <ion-input formControlName="amount" type="number"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="floating">Select Income Type</ion-label>
-      <ion-select formControlName="incomeType">
-        <ion-select-option *ngFor="let incomeType of incomeTypes" [value]="incomeType">{{incomeType}}</ion-select-option>
-      </ion-select>
-      <ion-button (click)="showSelectOpthion('incomeTypes')" fill="clear" shape="round">
-        <ion-icon name="ellipsis-vertical-sharp"></ion-icon>
-      </ion-button>
-    </ion-item>
-    <ion-item *ngIf="addNewIncomeType">
-      <ion-label position="floating">New Icome Type</ion-label>
-      <ion-input type="text" [formControl]="newIncomeType"></ion-input>
-      <ion-button (click)="onAddNewIncomeType()" expand="block"  shape="round">
-        add
-      </ion-button>
-    </ion-item> 
-    <ion-item>
-      <ion-label position="floating">Income From</ion-label>
-      <ion-input formControlName="from" type="text"></ion-input>
-    </ion-item>
-     
-    <ion-item>
-      <ion-label position="floating">Start Date</ion-label>
-      <ion-datetime formControlName="startDate" display-format="DD/MM/YYYY"></ion-datetime>
-    </ion-item>
-
-  <ion-item>
-    <ion-label position="floating">E-Mail</ion-label>
-    <ion-input   [formControl]="fc" type="text" (ionFocus)="onFocus()"></ion-input>
-  </ion-item>
-    <ion-button type="submit">
-      Add
-    </ion-button>
-    <ion-button (click)="resetForm()">
-      reset
-    </ion-button>
-    <ion-item *ngIf="formIsValid" >
-    <ion-label position="inline"> <ion-text color="danger">*</ion-text> "Amount" And "Income From" field is required </ion-label>
-  </ion-item>
-  </form>
   <ion-list>
     <ion-item *ngFor="let income of incomes" (click)="onSelectIncome(income.id)">
       <ion-label>{{income.from}}</ion-label>
@@ -75,5 +26,52 @@
   </ion-list>
   <ion-button (click)="onDelete()" *ngIf="selectedIncomeId">Delete</ion-button>
 
-  <h1>Total Incomes : {{totalIncomes}}</h1>
+  <h1>{{languageWords.total}} : {{totalIncomes}}</h1>
+  <ion-button (click)="openAddForm(true)" expand="block">
+    <ion-label *ngIf="!newAdd">{{languageWords.addNew}}</ion-label>
+    <ion-label *ngIf="newAdd">{{languageWords.income}}</ion-label>
+  </ion-button>
+  <form *ngIf="newAdd" [formGroup]="incomeGroup" (ngSubmit)="onSave()">
+    <ion-item *ngIf="addNewIncomeType">
+      <ion-label position="floating">{{languageWords.type}}</ion-label>
+      <ion-input type="text" [formControl]="newIncomeType"></ion-input>
+      <ion-button (click)="onAddNewIncomeType()" expand="block" shape="round">
+        {{languageWords.add}}
+      </ion-button>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">{{languageWords.amount}}</ion-label>
+      <ion-input formControlName="amount" type="number"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">{{languageWords.type}}</ion-label>
+      <ion-select formControlName="incomeType">
+        <ion-select-option *ngFor="let incomeType of incomeTypes" [value]="incomeType">{{incomeType}}
+        </ion-select-option>
+      </ion-select>
+      <ion-button (click)="showSelectOpthion('incomeTypes')" fill="clear" shape="round">
+        <ion-icon name="ellipsis-vertical-sharp"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">{{languageWords.from}}</ion-label>
+      <ion-input formControlName="from" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">{{languageWords.fristPayDate}}</ion-label>
+      <ion-datetime formControlName="startDate" display-format="DD/MM/YYYY"></ion-datetime>
+    </ion-item>
+    <ion-button type="submit">
+      {{languageWords.add}}
+    </ion-button>
+    <ion-button (click)="resetForm()">
+      {{languageWords.reset}}
+    </ion-button>
+    <ion-button (click)="openAddForm(false)">
+      {{languageWords.exit}}
+    </ion-button>
+  </form>
+
 </ion-content>

@@ -2,7 +2,7 @@
   <ion-toolbar>
     <div style="display: flex;justify-content: space-between;font-size: x-large;">
       <div style="margin-left: 12px;">
-        <span>{{title}}</span>
+        <span>{{languageWords.addNewExp}}</span>
       </div>
       <div style="margin-right: 12px;">
         <ion-icon name="caret-back-circle-outline" size="large" (click)="onBack()"></ion-icon>
@@ -80,10 +80,10 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button class="add-btn" (click)="onAdd(false)" *ngIf="!editMode" color="primary">
-        <ion-icon slot="start" name="checkmark-outline" size="large" padding></ion-icon> הוסף וצא
+        <ion-icon slot="start" name="checkmark-outline" size="large" padding></ion-icon> {{languageWords.add}}
       </ion-button>
       <ion-button class="add-btn" (click)="onAdd(true)" *ngIf="!editMode" color="primary">
-        <ion-icon name="checkmark-done-outline" size="large" padding></ion-icon> הוסף
+        <ion-icon name="checkmark-done-outline" size="large" padding></ion-icon> {{languageWords.addExit}}
       </ion-button>
       <ion-button class="save-btn" color="primary" (click)="onUpdate()" *ngIf="editMode">
         <ion-icon slot="start" name="save-outline"></ion-icon>{{languageWords.update}}
