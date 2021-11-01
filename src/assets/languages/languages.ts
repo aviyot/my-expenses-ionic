@@ -1,101 +1,53 @@
-interface Language {
+interface Entries {
+  title: string;
+  totalExpenses: string;
+  sortBy: string;
+  cancel: string;
+  ok: string;
+  acs: string;
+  des: string;
+  addNewExp: string;
+  optList: string;
+  edit: string;
+  editCategoery: string;
+  editExpensesMethod: string;
+  amount: string;
   name: string;
-  entries: {
-    title: string;
-    totalExpenses: string;
-    sortBy: string;
-    cancel: string;
-    ok: string;
-    acs: string;
-    des: string;
-    addNewExp: string;
-    optList: string;
-    edit: string;
-    editCategoery: string;
-    editExpensesMethod: string;
-    amount: string;
-    name: string;
-    category: string;
-    payMethod: string;
-    fristPayDate: string;
-    lastPayDate: string;
-    numberPays: string;
-    freqPay: string;
-    beneficiary: string;
-    commitTime: string;
-    update: string;
-    enter: string;
-    addNew: string;
-    pay: string;
-    opthion: string;
-    select: string;
-    add: string;
-    sortAcs: string;
-    sortDcs: string;
-    enterRequired: string;
-    dataAdded: string;
-    del: string;
-    opthionEdit: string;
-    editExpenseCat: string;
-    editExpenseMethod: string;
-    enterCat: string;
-    enterMethod: string;
-    menu: string;
-    english: string;
-    hebrew: string;
-    language: string;
-  };
+  category: string;
+  payMethod: string;
+  fristPayDate: string;
+  lastPayDate: string;
+  numberPays: string;
+  freqPay: string;
+  beneficiary: string;
+  commitTime: string;
+  update: string;
+  enter: string;
+  addNew: string;
+  pay: string;
+  opthion: string;
+  select: string;
+  add: string;
+  sortAcs: string;
+  sortDcs: string;
+  enterRequired: string;
+  dataAdded: string;
+  del: string;
+  opthionEdit: string;
+  editExpenseCat: string;
+  editExpenseMethod: string;
+  enterCat: string;
+  enterMethod: string;
+  menu: string;
+  english: string;
+  hebrew: string;
+  language: string;
 }
 
-const hebrewLang: Language = {
-  name: "hebrew",
-  entries: {
-    title: "הוצאות שלי",
-    totalExpenses: 'סה"כ',
-    sortBy: "מיין לפי",
-    cancel: "בטל",
-    ok: "אשר",
-    acs: "סדר עולה",
-    des: "סדר יורד",
-    addNewExp: "הוסף הוצאה חדשה",
-    optList: "עריכת אפשריות",
-    edit: "ערוך",
-    editCategoery: "ערוך קטגוריות",
-    editExpensesMethod: "ערוך שיטת תשלום",
-    amount: "סכום",
-    name: "שם",
-    category: "קטגוריה",
-    payMethod: "שיטת תשלום",
-    fristPayDate: "תשלום ראשון",
-    lastPayDate: "תשלום אחרון",
-    numberPays: "מספר תשלומים",
-    freqPay: "תדירות תשלום",
-    beneficiary: "המוטב",
-    commitTime: "תאריך העסקה",
-    update: "עדכן",
-    enter: "הכנס",
-    addNew: "חדש",
-    pay: "תשלום",
-    opthion: "אפשרות",
-    select: "בחר",
-    add: "הוסף",
-    sortAcs: "סדר עולה",
-    sortDcs: "סדר יורד",
-    enterRequired: "הכנס נתונים נדרשים",
-    dataAdded: "הנתונים נשמרו בהצלחה",
-    del: "הסר",
-    opthionEdit: "עריכת אפשרויות",
-    editExpenseCat: "ערוך קטגורית הוצאות",
-    editExpenseMethod: "ערוך סוג התשלום",
-    enterCat: "הכנס קטגוריה חדשה",
-    enterMethod: "הכנס סוג תשלום חדש",
-    menu: "תפריט",
-    english: "אנגלית",
-    hebrew: "עברית",
-    language: "שפה",
-  },
-};
-const languages = {
+interface Language {
+  [key: string]: Entries;
+}
+const languages: Language = {
   hebrew: {
     title: "הוצאות שלי",
     totalExpenses: 'סה"כ',
@@ -121,7 +73,7 @@ const languages = {
     commitTime: "תאריך העסקה",
     update: "עדכן",
     enter: "הכנס",
-    new: "חדש",
+    addNew: "חדש",
     pay: "תשלום",
     opthion: "אפשרות",
     select: "בחר",
