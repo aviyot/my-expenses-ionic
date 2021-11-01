@@ -1,28 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 
-import { Platform } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { LanguageService } from './services/language/language.service';
-import { Subscription } from 'rxjs';
-
+import { Platform } from "@ionic/angular";
+import { SplashScreen } from "@ionic-native/splash-screen/ngx";
+import { StatusBar } from "@ionic-native/status-bar/ngx";
+import { LanguageService } from "./services/language/language.service";
+import { Subscription } from "rxjs";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: 'app.component.html',
-  styleUrls: ['app.component.scss']
+  selector: "app-root",
+  templateUrl: "app.component.html",
+  styleUrls: ["app.component.scss"],
 })
 export class AppComponent implements OnInit {
   selectedLanguageWords = null;
-  title="";
-  sb:Subscription = new Subscription();
+  title = "";
+  sb: Subscription = new Subscription();
   languageWords: any;
-  languageMenuOpen:boolean = false
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private languageServ : LanguageService,
+    private languageServ: LanguageService
   ) {
     this.initializeApp();
   }
@@ -33,28 +31,10 @@ export class AppComponent implements OnInit {
       this.splashScreen.hide();
     });
   }
-  
-  ngOnInit(){
-   this.sb = this.languageServ.selectedLanguage.subscribe((words:any)=>{
-         this.languageWords  = words;
-      
-    })
-  }
 
-  openLanguageMenu(){
-    this.languageMenuOpen = !this.languageMenuOpen;
-  }
-  onMenuClose(){
-    this.languageMenuOpen = false;
-  }
-  onClick1(){
-    this.languageServ.changeLang("english");
-  }
-  onClick2(){
-    this.languageServ.changeLang("hebrew");
-  }
-  ngOnDestroy(){
-    console.log("un");
-    this.sb.unsubscribe();
+  ngOnInit() {
+    this.sb = this.languageServ.selectedLanguage.subscribe((words: any) => {
+      this.languageWords = words;
+    });
   }
 }

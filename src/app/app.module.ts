@@ -9,13 +9,14 @@ import { StatusBar } from "@ionic-native/status-bar/ngx";
 
 import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app-routing.module";
-import { OpthionEditSettingsComponent } from './opthion-edit-settings/opthion-edit-settings.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
+import { OpthionEditSettingsComponent } from "./opthion-edit-settings/opthion-edit-settings.component";
+import { ReactiveFormsModule } from "@angular/forms";
+import { ServiceWorkerModule } from "@angular/service-worker";
+import { environment } from "../environments/environment";
+import { AppMenuComponent } from "./app-menu/app-menu.component";
 
 @NgModule({
-  declarations: [AppComponent,OpthionEditSettingsComponent],
+  declarations: [AppComponent, OpthionEditSettingsComponent, AppMenuComponent],
   entryComponents: [],
   imports: [
     BrowserModule,
@@ -23,7 +24,9 @@ import { environment } from '../environments/environment';
     AppRoutingModule,
     IonicStorageModule.forRoot(),
     ReactiveFormsModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }) 
+    ServiceWorkerModule.register("ngsw-worker.js", {
+      enabled: environment.production,
+    }),
   ],
   providers: [
     StatusBar,
