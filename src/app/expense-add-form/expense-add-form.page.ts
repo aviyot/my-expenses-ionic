@@ -3,9 +3,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExpensesService } from "../services/expenses/expenses.service";
 import { SelectOpthionService } from "../services/select-opthion/select-opthion.service";
 import { Router, ActivatedRoute } from "@angular/router";
-import {
-  ToastController,
-} from "@ionic/angular";
+import { ToastController } from "@ionic/angular";
 import { LanguageService } from "../services/language/language.service";
 import { Expense } from "../models/expense.model";
 
@@ -25,7 +23,7 @@ export class ExpenseAddFormPage implements OnInit {
     null,
     new Date(),
     new Date(),
-    1,
+    1
   );
   selectedId: string = null;
   expense: Expense;
@@ -36,7 +34,7 @@ export class ExpenseAddFormPage implements OnInit {
   title: string = "Add New Expense";
   categories: string[];
   paymentMethods: string[];
-  payees:string[];
+  payees: string[];
   isAddCategory = false;
   newCategory = "new cat";
   newPaymentMethod = "new pay";
@@ -52,7 +50,7 @@ export class ExpenseAddFormPage implements OnInit {
     private route: ActivatedRoute,
     public toastController: ToastController,
     private languageServ: LanguageService,
-    private selectOpthion : SelectOpthionService
+    private selectOpthion: SelectOpthionService
   ) {}
 
   ngOnInit() {
@@ -63,25 +61,21 @@ export class ExpenseAddFormPage implements OnInit {
     });
     this.selectOpthion.categories.subscribe((categories: string[]) => {
       this.categories = categories;
- 
     });
     this.selectOpthion.paymentMethods.subscribe((paymentMethods) => {
       this.paymentMethods = paymentMethods;
-  
     });
 
-    this.selectOpthion.payees.subscribe((payees)=>{
+    this.selectOpthion.payees.subscribe((payees) => {
       this.payees = payees;
-    })
+    });
     this.languageServ.selectedLanguage.subscribe((languageWords) => {
       this.languageWords = languageWords;
     });
 
-      this.selectOpthion.loadSelectOpthion("categories");
-      this.selectOpthion.loadSelectOpthion("paymentMethods");
-      this.selectOpthion.loadSelectOpthion("payees");
-
-
+    this.selectOpthion.loadSelectOpthion("categories");
+    this.selectOpthion.loadSelectOpthion("paymentMethods");
+    this.selectOpthion.loadSelectOpthion("payees");
   }
   createForm() {
     this.form = new FormGroup({
@@ -179,9 +173,7 @@ export class ExpenseAddFormPage implements OnInit {
   onAdd(muliplay: boolean) {
     if (this.form.valid) {
       this.expensesService.addNewExpense(
-        { ...this.form.value, 
-          id: new Date().getTime(),
-        },
+        { ...this.form.value, id: new Date().getTime() },
         this.expenses
       );
       this.form.reset();
@@ -207,24 +199,25 @@ export class ExpenseAddFormPage implements OnInit {
     this.newPaymentMethod = val.target.value;
   }
   async onSettingClick(selectName: string) {
-    this.selectOpthion.createSelectOpthionModal(selectName).then(()=>{
-      this.selectOpthion.selectOpthionModal.onDidDismiss().then((data:string) => {
-        switch (selectName) {
-          case "categories": 
-          selectName = "category";
-           break;
-          case "paymentMethods":
-            selectName= "methodPay";
-            break;
-          case "payees":
-            selectName = "benef"
-            break;
-        }
-        this.form.patchValue({
-          [selectName]: data["data"]["value"],
+    this.selectOpthion.createSelectOpthionModal(selectName).then(() => {
+      this.selectOpthion.selectOpthionModal
+        .onDidDismiss()
+        .then((data: string) => {
+          switch (selectName) {
+            case "categories":
+              selectName = "category";
+              break;
+            case "paymentMethods":
+              selectName = "methodPay";
+              break;
+            case "payees":
+              selectName = "benef";
+              break;
+          }
+          this.form.patchValue({
+            [selectName]: data["data"]["value"],
+          });
         });
-      });
-
     });
   }
 

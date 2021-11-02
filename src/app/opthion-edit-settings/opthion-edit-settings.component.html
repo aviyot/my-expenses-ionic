@@ -6,40 +6,38 @@
         <ion-icon name="close-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-  </ion-toolbar>  
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-toolbar>
-    <ion-searchbar 
-     showCancelButton = "focus" 
-     [formControl] = "newOpthion"
-     placeholder = "Enter New Opthion">
+    <ion-searchbar showCancelButton="focus" [formControl]="newOpthion" [placeholder]="languageWords.newOpthion">
     </ion-searchbar>
-    
-  </ion-toolbar> 
+
+  </ion-toolbar>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button (click)="addNewOpthion()" [disabled]="newOpthion.invalid">
         <ion-icon name="add-outline" color="success"></ion-icon>
       </ion-button>
-      <ion-button  [disabled]="!itemSelected" (click)="selectOpthion()">
+      <ion-button [disabled]="!itemSelected" (click)="selectOpthion()">
         <ion-icon name="checkmark-outline" color="primary"></ion-icon>
       </ion-button>
       <ion-button (click)="removeOpthion()" [disabled]="!itemSelected">
-        <ion-icon name="trash-outline"  color="danger" ></ion-icon>
+        <ion-icon name="trash-outline" color="danger"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
   <ion-list>
-    <ion-item *ngFor="let selectOpthion of selectOpthions"
-      (click)="onSelectOpthion(selectOpthion)">
-      <ion-label [ngStyle]="(selectedOpthion === selectOpthion && itemSelected) && {'color':'brown','font-size':'x-large'}">{{selectOpthion}}</ion-label>
+    <ion-item *ngFor="let selectOpthion of selectOpthions" (click)="onSelectOpthion(selectOpthion)">
+      <ion-label
+        [ngStyle]="(selectedOpthion === selectOpthion && itemSelected) && {'color':'brown','font-size':'x-large'}">
+        {{selectOpthion}}</ion-label>
     </ion-item>
   </ion-list>
 </ion-content>
 <ion-footer>
   <ion-toolbar>
-    
+
   </ion-toolbar>
 </ion-footer>

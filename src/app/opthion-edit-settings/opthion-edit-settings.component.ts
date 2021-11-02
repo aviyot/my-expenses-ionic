@@ -24,28 +24,28 @@ export class OpthionEditSettingsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.selectOpthionService[this.selectName].subscribe((selectOpthions) => {
-      this.selectOpthions = selectOpthions;
-      switch (this.selectName) {
-        case "categories":
-          this.title = "Categories";
-          break;
-        case "paymentMethods":
-          this.title = "Payment methods";
-          break;
-        case "payees":
-          this.title = "Payees";
-          break;
-        case "incomeTypes":
-          this.title = "Income Types";
-          break;
-        default:
-          this.title = "Edit Opthions";
-      }
-    });
-
     this.languageServ.selectedLanguage.subscribe((languageWords) => {
       this.languageWords = languageWords;
+
+      this.selectOpthionService[this.selectName].subscribe((selectOpthions) => {
+        this.selectOpthions = selectOpthions;
+        switch (this.selectName) {
+          case "categories":
+            this.title = this.languageWords[this.selectName];
+            break;
+          case "paymentMethods":
+            this.title = this.languageWords[this.selectName];
+            break;
+          case "payees":
+            this.title = this.languageWords[this.selectName];
+            break;
+          case "incomeTypes":
+            this.title = this.languageWords[this.selectName];
+            break;
+          default:
+            this.title = "Edit Opthions";
+        }
+      });
     });
   }
 

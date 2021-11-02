@@ -5,6 +5,7 @@ interface Entries {
   cancel: string;
   ok: string;
   new: string;
+  newOpthion: string;
   acs: string;
   des: string;
   addNewExp: string;
@@ -16,6 +17,7 @@ interface Entries {
   name: string;
   category: string;
   payMethod: string;
+  paymentMethods: string;
   fristPayDate: string;
   lastPayDate: string;
   numberPays: string;
@@ -27,6 +29,7 @@ interface Entries {
   addNew: string;
   addExit: string;
   pay: string;
+  payees: string;
   opthion: string;
   select: string;
   add: string;
@@ -49,9 +52,14 @@ interface Entries {
 
   //INCOME B
   income: string;
+  incomeTypes: string;
   type: string;
   from: string;
   //INCOME E
+
+  //OPTION SETING BEFGIN
+  categories: string;
+  //OPTION SETING END
 }
 
 interface Language {
@@ -65,6 +73,7 @@ const languages: Language = {
     cancel: "בטל",
     ok: "אשר",
     new: "חדש",
+    newOpthion: "הכנס חדש",
     acs: "סדר עולה",
     des: "סדר יורד",
     addNewExp: "הוסף הוצאה חדשה",
@@ -76,6 +85,7 @@ const languages: Language = {
     name: "שם",
     category: "קטגוריה",
     payMethod: "שיטת תשלום",
+    paymentMethods: "שיטות תשלום",
     fristPayDate: "תשלום ראשון",
     lastPayDate: "תשלום אחרון",
     numberPays: "מספר תשלומים",
@@ -86,6 +96,7 @@ const languages: Language = {
     enter: "הכנס",
     addNew: "חדש",
     pay: "תשלום",
+    payees: "מוטבים",
     opthion: "אפשרות",
     select: "בחר",
     add: "הוסף",
@@ -107,8 +118,10 @@ const languages: Language = {
     reset: "אפס",
     exit: "צא",
     income: "הכנסה",
+    incomeTypes: "סוגי הכנסה",
     type: "סוג",
     from: "מקור",
+    categories: "קטגוריות",
   },
   english: {
     title: "my expenses",
@@ -118,6 +131,7 @@ const languages: Language = {
     ok: "Ok",
     new: "new",
     acs: "acs",
+    newOpthion: "New opthion",
     des: "Des",
     addNewExp: "Add New Expenses",
     optList: "Opthion list",
@@ -128,6 +142,7 @@ const languages: Language = {
     name: "Name",
     category: "Category",
     payMethod: "Pay Method",
+    paymentMethods: "Pay methods",
     fristPayDate: "Frist Pay Date",
     lastPayDate: "Last Pay Date",
     numberPays: "Number Of Pays",
@@ -139,6 +154,7 @@ const languages: Language = {
     addNew: "Add New",
     addExit: "ADD & EXIT",
     pay: "Pay",
+    payees: "Payees",
     opthion: "Opthion",
     select: "Select",
     add: "add",
@@ -159,8 +175,10 @@ const languages: Language = {
     reset: "reset",
     exit: "exit",
     income: "income",
+    incomeTypes: "Income types",
     type: "type",
     from: "from",
+    categories: "categories",
   },
 };
 
