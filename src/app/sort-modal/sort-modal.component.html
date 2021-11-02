@@ -3,7 +3,7 @@
     <ion-row>
       <ion-col size="8">
         <label class="ion-text-uppercase">
-          <h1>{{lng.sortBy}}</h1>
+          <h1>{{languageWords.sortBy}}</h1>
         </label>
 
       </ion-col>
@@ -22,9 +22,9 @@
     <ion-list-header>
       <ion-label>
         <ion-radio-group [(ngModel)]="sortType">
-          <ion-label class="ion-padding"> Acs</ion-label>
+          <ion-label class="ion-padding"> {{languageWords.sortAcs}}</ion-label>
           <ion-radio value="acs" checked name="sorttype"></ion-radio>
-          <ion-label class="ion-padding"> Dcs</ion-label>
+          <ion-label class="ion-padding"> {{languageWords.sortDcs}}</ion-label>
           <ion-radio value="dcs" name="sorttype"></ion-radio>
         </ion-radio-group>
       </ion-label>
@@ -41,11 +41,11 @@
 <ion-footer>
   <ion-row>
     <ion-col>
-      <label class="ion-text-uppercase ">save sort</label>
+      <label class="ion-text-uppercase ">{{languageWords.saveSort}}</label>
       <ion-toggle [(ngModel)]="save"> </ion-toggle>
     </ion-col>
     <ion-col class="ion-text-end">
-      <ion-button (click)="sort()">sort</ion-button>
+      <ion-button (click)="sort()">{{languageWords.sort}}</ion-button>
     </ion-col>
   </ion-row>
 </ion-footer>

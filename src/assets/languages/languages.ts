@@ -74,6 +74,11 @@ interface Entries {
   startDate: string;
   endDate: string;
   //FILTER
+
+  //SORT B
+  sort: string;
+  saveSort: string;
+  //SORT E
 }
 
 interface Language {
@@ -149,6 +154,11 @@ const languages: Language = {
     startDate: "תאריך התחלה",
     endDate: "תאריך סיום",
     //FILTER #E
+
+    //SORT B
+    sort: "מיין",
+    saveSort: "שמור מיון",
+    //SORT E
   },
   english: {
     title: "my expenses",
@@ -219,6 +229,11 @@ const languages: Language = {
     startDate: "Start Date",
     endDate: "End Date",
     //FILTER #E
+
+    //SORT B
+    sort: "Sort",
+    saveSort: "Save Sort",
+    //SORT E
   },
 };
 
