@@ -60,6 +60,20 @@ interface Entries {
   //OPTION SETING BEFGIN
   categories: string;
   //OPTION SETING END
+
+  //FILTER
+  filterBy: string;
+  endTime: string;
+  all: string;
+  future: string;
+  finished: string;
+  fromDate: string;
+  untilDate: string;
+  betweenDate: string;
+  filter: string;
+  startDate: string;
+  endDate: string;
+  //FILTER
 }
 
 interface Language {
@@ -122,6 +136,19 @@ const languages: Language = {
     type: "סוג",
     from: "מקור",
     categories: "קטגוריות",
+    //FILTER #B
+    filterBy: 'סנן ע"פ',
+    endTime: "תאריך סיום",
+    all: "הכל",
+    future: "עתיד",
+    finished: "הסתיים",
+    fromDate: "מתאריך",
+    untilDate: "עד תאריך",
+    betweenDate: "בין התאריכים",
+    filter: "סנן",
+    startDate: "תאריך התחלה",
+    endDate: "תאריך סיום",
+    //FILTER #E
   },
   english: {
     title: "my expenses",
@@ -179,6 +206,19 @@ const languages: Language = {
     type: "type",
     from: "from",
     categories: "categories",
+    //FILTER #B
+    filterBy: "Filter By",
+    endTime: "End Time",
+    all: "All",
+    future: "Future",
+    finished: "Finished",
+    fromDate: "From Date",
+    untilDate: "Until Date",
+    betweenDate: "Between Date",
+    filter: "Filter",
+    startDate: "Start Date",
+    endDate: "End Date",
+    //FILTER #E
   },
 };
 

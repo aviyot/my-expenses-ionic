@@ -3,7 +3,7 @@
     <ion-grid fixed>
       <ion-row class="ion-justify-content-end">
         <ion-col size="6">
-          <ion-title>FILTER BY</ion-title>
+          <ion-title>{{languageWords.filterBy}}</ion-title>
         </ion-col>
         <ion-col size="6" class="ion-text-end">
           <ion-button (click)="dismissModal()">
@@ -20,31 +20,31 @@
     <ion-radio-group #rg (ionChange)="endTimeFilter(rg)" value="futture">
       <ion-list-header>
         <ion-label>
-          <h1>End Time</h1>
+          <h1>{{languageWords.endTime}}</h1>
         </ion-label>
       </ion-list-header>
       <ion-item>
-        <ion-label>All</ion-label>
+        <ion-label>{{languageWords.all}}</ion-label>
         <ion-radio value="all"></ion-radio>
       </ion-item>
       <ion-item>
-        <ion-label>Future</ion-label>
+        <ion-label>{{languageWords.future}}</ion-label>
         <ion-radio value="futture"></ion-radio>
       </ion-item>
       <ion-item>
-        <ion-label>Finished</ion-label>
+        <ion-label>{{languageWords.finished}}</ion-label>
         <ion-radio value="finished"></ion-radio>
       </ion-item>
       <ion-item>
-        <ion-label>From Date</ion-label>
+        <ion-label>{{languageWords.fromDate}}</ion-label>
         <ion-radio value="fromDate"></ion-radio>
       </ion-item>
       <ion-item>
-        <ion-label>Until Date</ion-label>
+        <ion-label>{{languageWords.untilDate}}</ion-label>
         <ion-radio value="untilDate"></ion-radio>
       </ion-item>
       <ion-item>
-        <ion-label>Betwwen Date</ion-label>
+        <ion-label>{{languageWords.betweenDate}}</ion-label>
         <ion-radio value="betwwen"></ion-radio>
       </ion-item>
     </ion-radio-group>
@@ -52,15 +52,15 @@
   <ion-row>
     <ion-col>
       <ion-item>
-        <ion-label>Start Date</ion-label>
-        <ion-datetime displayFormat="DD MM YY" max="2050" #valstart placeholder="Start Date"
+        <ion-label>{{languageWords.startDate}}</ion-label>
+        <ion-datetime displayFormat="DD MM YY" max="2050" #valstart [placeholder]="languageWords.startDate"
           (ionChange)="changeStartTime(valstart.value)" [disabled]="!showStartDate"></ion-datetime>
       </ion-item>
     </ion-col>
     <ion-col>
       <ion-item>
-        <ion-label>End Date</ion-label>
-        <ion-datetime displayFormat="DD MM YY" max="2050" #valend placeholder="End Date"
+        <ion-label>{{languageWords.endDate}}</ion-label>
+        <ion-datetime displayFormat="DD MM YY" max="2050" #valend [placeholder]="languageWords.endDate"
           (ionChange)="changeEndTime(valend.value)" [disabled]="!showEndDate"></ion-datetime>
       </ion-item>
     </ion-col>
@@ -69,7 +69,7 @@
 <ion-footer>
   <ion-toolbar>
     <ion-button (click)="filter()" expand="block">
-      filter
+      {{languageWords.filter}}
     </ion-button>
   </ion-toolbar>
 </ion-footer>

@@ -1,7 +1,8 @@
 import { Component, OnInit } from "@angular/core";
-import { ModalController } from '@ionic/angular';
+import { ModalController } from "@ionic/angular";
 import { Expense } from "../models/expense.model";
 import { ExpensesService } from "../services/expenses/expenses.service";
+import { LanguageService } from "../services/language/language.service";
 
 @Component({
   selector: "app-filter-expenses",
@@ -15,11 +16,20 @@ export class FilterExpensesComponent implements OnInit {
   fillterType: string;
   showStartDate = false;
   showEndDate = false;
-  constructor(private expensesService: ExpensesService,private modalController: ModalController) {}
+  languageWords: string;
+  constructor(
+    private expensesService: ExpensesService,
+    private modalController: ModalController,
+    private languageServ: LanguageService
+  ) {}
 
   ngOnInit() {
-    this.expensesService.expenses.subscribe((expenses)=>{
-      this.filteredExpenses = expenses
+    this.expensesService.expenses.subscribe((expenses) => {
+      this.filteredExpenses = expenses;
+    });
+
+    this.languageServ.selectedLanguage.subscribe((languageWords) => {
+      this.languageWords = languageWords;
     });
   }
 
@@ -31,7 +41,7 @@ export class FilterExpensesComponent implements OnInit {
     this.endTime = val;
   }
 
-  dismissModal(){
+  dismissModal() {
     this.modalController.dismiss();
   }
   filter() {
@@ -42,39 +52,44 @@ export class FilterExpensesComponent implements OnInit {
 
     switch (this.fillterType) {
       case "fromDate":
-        this.expensesService.filteredExpenses = this.expensesService.filterDateExpenses(
-          this.filteredExpenses,
-          pastDtae.getTime(),
-          endTime
-        );
+        this.expensesService.filteredExpenses =
+          this.expensesService.filterDateExpenses(
+            this.filteredExpenses,
+            pastDtae.getTime(),
+            endTime
+          );
         break;
       case "untilDate":
-        this.expensesService.filteredExpenses = this.expensesService.filterDateExpenses(
-          this.filteredExpenses,
-          startTime,
-          futtureDtae.getTime()
-        );
+        this.expensesService.filteredExpenses =
+          this.expensesService.filterDateExpenses(
+            this.filteredExpenses,
+            startTime,
+            futtureDtae.getTime()
+          );
         break;
       case "futture":
-        this.expensesService.filteredExpenses = this.expensesService.filterDateExpenses(
-          this.filteredExpenses,
-          new Date().getTime(),
-          futtureDtae.getTime()
-        );
+        this.expensesService.filteredExpenses =
+          this.expensesService.filterDateExpenses(
+            this.filteredExpenses,
+            new Date().getTime(),
+            futtureDtae.getTime()
+          );
         break;
       case "finished":
-        this.expensesService.filteredExpenses = this.expensesService.filterDateExpenses(
-          this.filteredExpenses,
-          pastDtae.getTime(),
-          new Date().getTime()
-        );
+        this.expensesService.filteredExpenses =
+          this.expensesService.filterDateExpenses(
+            this.filteredExpenses,
+            pastDtae.getTime(),
+            new Date().getTime()
+          );
         break;
       case "betwwen":
-        this.expensesService.filteredExpenses = this.expensesService.filterDateExpenses(
-          this.filteredExpenses,
-          startTime,
-          endTime
-        );
+        this.expensesService.filteredExpenses =
+          this.expensesService.filterDateExpenses(
+            this.filteredExpenses,
+            startTime,
+            endTime
+          );
         break;
       case "all":
         this.expensesService.filteredExpenses = this.filteredExpenses;
@@ -106,10 +121,10 @@ export class FilterExpensesComponent implements OnInit {
         this.showStartDate = true;
         this.showEndDate = true;
         break;
-        case "all":
-          this.showStartDate = false;
-          this.showEndDate = false;
-          break;
+      case "all":
+        this.showStartDate = false;
+        this.showEndDate = false;
+        break;
     }
   }
 }
