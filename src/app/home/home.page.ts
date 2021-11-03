@@ -1,6 +1,4 @@
-import {  Component,
-  OnInit,
-} from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ExpensesService } from "../services/expenses/expenses.service";
 import { Expense } from "../models/expense.model";
 import { Router } from "@angular/router";
@@ -13,7 +11,7 @@ import { LanguageService } from "../services/language/language.service";
 import { SortModalComponent } from "../sort-modal/sort-modal.component";
 import { FilterExpensesComponent } from "../filter-expenses/filter-expenses.component";
 import { IncomesService } from "../services/incomes/incomes.service";
-import { skip } from 'rxjs/operators';
+import { skip } from "rxjs/operators";
 
 @Component({
   selector: "app-home",
@@ -54,7 +52,7 @@ export class HomePage implements OnInit {
       this.expensesDataLoaded = true;
       if (expenses.length) this.emptyExpenesesList = false;
       else this.emptyExpenesesList = true;
-    
+
       this.showEmpty = this.emptyExpenesesList && this.expensesDataLoaded;
 
       this.expensesService.calcTotalExpenses(this.expenses);
@@ -68,9 +66,9 @@ export class HomePage implements OnInit {
     });
 
     this.incomesService.loadIncomesLocal().then((incomes) => {
-      if(incomes) {
-      this.income = this.incomesService.calcTotalIncomes(incomes);
-      this.savings = this.income - this.totalExpenses;
+      if (incomes) {
+        this.income = this.incomesService.calcTotalIncomes(incomes);
+        this.savings = this.income - this.totalExpenses;
       }
     });
 
@@ -102,19 +100,22 @@ export class HomePage implements OnInit {
   }
 
   onSelectExpense(expenseId: number) {
+    //if it is select option return the selected expenses;
     if (this.multiypleSelect) {
-       let selectedExpense = this.expenses.find((ex) => {
+      let selectedExpense = this.expenses.find((ex) => {
         return ex.id === expenseId;
-      })
-       
+      });
+
       if (this.selectedArr.includes(expenseId)) {
         this.selectedArr = this.selectedArr.filter(
           (item) => item !== expenseId
         );
-        this.selectedTotalAmount -= selectedExpense.amount*selectedExpense.freqPay;
+        this.selectedTotalAmount -=
+          selectedExpense.amount * selectedExpense.freqPay;
       } else {
         this.selectedArr = [...this.selectedArr, expenseId];
-        this.selectedTotalAmount += selectedExpense.amount*selectedExpense.freqPay;
+        this.selectedTotalAmount +=
+          selectedExpense.amount * selectedExpense.freqPay;
       }
     }
     if (this.selectedId === expenseId) {
@@ -168,8 +169,8 @@ export class HomePage implements OnInit {
 
   onAdd() {
     this.selectedId = null;
-    this.router.navigate(["/", "expense-add-form"]) ;
-   // this.expensesService.dataChanged.next(true);
+    this.router.navigate(["/", "expense-add-form"]);
+    // this.expensesService.dataChanged.next(true);
   }
 
   onEdit() {
@@ -247,7 +248,7 @@ export class HomePage implements OnInit {
     return await filterModal.present();
   }
 
-   editIncome() {
-    this.router.navigate(["/", "income"])
+  editIncome() {
+    this.router.navigate(["/", "income"]);
   }
 }
