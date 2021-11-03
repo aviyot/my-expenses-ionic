@@ -1,9 +1,12 @@
 <ion-grid>
-  <ion-row *ngFor="let expense of expenses; index as i" (click)="onSelect(expense.id)" [ngStyle]="{'color': (isItemInclude(expense.id) && multiypleSelect) ? 'red':'',
+  <ion-row *ngFor="let expense of expenses; index as i" (click)="onSelect(expense.id)" [ngStyle]="{
   'background-color':(i%2 === 0) ? 'var(--ion-color-medium)':'var(--ion-color-light)'}">
     <ion-col>
-      <ion-row style="font-size: x-large">
-        <ion-col [size]="2">
+      <ion-row style="font-size: 1.2rem">
+        <ion-col *ngIf="multiypleSelect">
+          <ion-checkbox [checked]="(isItemInclude(expense.id) && multiypleSelect)"></ion-checkbox>
+        </ion-col>
+        <ion-col *ngIf="!multiypleSelect" [size]="2">
           <ion-label>{{i+1}}</ion-label>
         </ion-col>
         <ion-col [size]="4+colDiv" style="text-align: right;padding-right: 32px">
