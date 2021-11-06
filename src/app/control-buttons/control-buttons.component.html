@@ -3,27 +3,28 @@
     <ion-button (click)="onAdd()">
       <ion-icon slot="start" size="large" name="add"></ion-icon>
     </ion-button>
-  <!--   <ion-button (click)="onDelete()" [disabled]="!expenseSelected || multiypleSelect" color="danger">
+    <!--   <ion-button (click)="onDelete()" [disabled]="!expenseSelected || multiypleSelect" color="danger">
       <ion-icon slot="start" size="large" name="trash-outline"></ion-icon>
     </ion-button>
     <ion-button (click)="onEdit()" [disabled]="!expenseSelected || multiypleSelect">
       <ion-icon slot="start" size="large" name="create-outline"></ion-icon>
     </ion-button> -->
-    <ion-button (click)="onShowDetials()">
+    <!--  <ion-button (click)="onShowDetials()">
       <ion-icon size="large" name="list-outline"></ion-icon>
-    </ion-button>
+    </ion-button> -->
     <ion-button>
-    <ion-label>
-      <ion-toggle style="font-size: x-large;" [(ngModel)]="multiypleSelect" (ionChange)="selectMultiplt(multiypleSelect)"></ion-toggle>
-    </ion-label>
-  </ion-button>
+      <ion-label>
+        <ion-toggle style="font-size: x-large;" [(ngModel)]="multiypleSelect"
+          (ionChange)="selectMultiplt(multiypleSelect)"></ion-toggle>
+      </ion-label>
+    </ion-button>
     <ion-button (click)="showSortAlert()">
       <ion-icon size="large" name="swap-vertical-outline"></ion-icon>
     </ion-button>
     <ion-button (click)="filterClicked($event)">
-      <ion-icon size="large" name="funnel-outline"></ion-icon>   
-   </ion-button>
-<!--    <ion-button (click)="onClick()" expand="block" fill="clear" shape="round">
+      <ion-icon size="large" name="funnel-outline"></ion-icon>
+    </ion-button>
+    <!--    <ion-button (click)="onClick()" expand="block" fill="clear" shape="round">
     <ion-icon size="large" *ngIf="!expandToolbar" name="chevron-down-outline"></ion-icon>
     <ion-icon size="large" *ngIf="expandToolbar" name="chevron-up-outline"></ion-icon>
   </ion-button> -->
