@@ -14,17 +14,14 @@
         <ion-col>
           <ion-label>{{expense.amount * expense.freqPay}}</ion-label>
         </ion-col>
-
         <ion-col [size]="4" *ngIf="selectedSortType">
           <ion-label>{{expense[selectedSortType]}}</ion-label>
         </ion-col>
-
       </ion-row>
       <ion-row *ngIf="((selectedId && (selectedId === expense.id)) && !multiypleSelect) ||showDetails">
         <ion-col>
           <app-expense-details [expense]="expense"></app-expense-details>
         </ion-col>
-
       </ion-row>
       <ion-row *ngIf="((selectedId && (selectedId === expense.id)) && !multiypleSelect )">
         <ion-button (click)="onDelete($event)" color="danger" fill="clear">
@@ -36,5 +33,4 @@
       </ion-row>
     </ion-col>
   </ion-row>
-
 </ion-grid>
