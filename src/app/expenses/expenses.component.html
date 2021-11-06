@@ -1,6 +1,5 @@
 <ion-grid>
-  <ion-row *ngFor="let expense of expenses; index as i" (click)="onSelect(expense.id)" [ngStyle]="{
-  'background-color':(i%2 === 0) ? 'var(--ion-color-medium)':'var(--ion-color-light)'}">
+  <ion-row *ngFor="let expense of expenses; index as i" (click)="onSelect(expense.id)">
     <ion-col>
       <ion-row style="font-size: 1.2rem">
         <ion-col *ngIf="multiypleSelect">
