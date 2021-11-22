@@ -1,18 +1,14 @@
+import { expenseBase } from "./expenseBase.model";
 
-export class Expense {
-    constructor(
-    public id :number,
-    public name:string,
-    public amount:number,
-    public category:string,
-    public methodPay:string,
-    public freqPay: number,
-    public benef: string,
-    public commitDate:Date,
-    public fristPayDate:Date, 
-    public numberOfPay:number
-    ){
-  
-    }
-    
+export interface Expense extends expenseBase {
+  id: number;
+  name: string;
+  amount: number;
+  category: string;
+  methodPay: string;
+  freqPay: number;
+  benef: string;
+  commitDate: Date;
+  fristPayDate: Date;
+  numberOfPay: number;
 }

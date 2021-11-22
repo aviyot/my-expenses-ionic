@@ -1,4 +1,4 @@
-interface Entries {
+export interface Entries {
   title: string;
   total: string;
   sortBy: string;
@@ -79,6 +79,15 @@ interface Entries {
   sort: string;
   saveSort: string;
   //SORT E
+
+  //Expenses header B
+  methodPay: string;
+  benef: string;
+  commitDate: string;
+  numberOfPay: string;
+  totalAmount: string;
+  id: string;
+  //Expenses header e
 }
 
 interface Language {
@@ -159,6 +168,14 @@ const languages: Language = {
     sort: "מיין",
     saveSort: "שמור מיון",
     //SORT E
+    //Expenses header B
+    methodPay: "שיטת תשלום",
+    benef: "מוטב",
+    commitDate: "זמן עסקה",
+    numberOfPay: "מספר תשלומים",
+    totalAmount: "סכום כולל",
+    id: "מפתח",
+    //Expenses header e
   },
   english: {
     title: "my expenses",
@@ -234,6 +251,15 @@ const languages: Language = {
     sort: "Sort",
     saveSort: "Save Sort",
     //SORT E
+
+    //Expenses header B
+    methodPay: "Method pay",
+    benef: "Benef",
+    commitDate: "Commit Date",
+    numberOfPay: "Number Pay",
+    totalAmount: "Total Amount",
+    id: "Id",
+    //Expenses header e
   },
 };
 

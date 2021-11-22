@@ -11,7 +11,7 @@ import { LanguageService } from "../services/language/language.service";
 import { SortModalComponent } from "../sort-modal/sort-modal.component";
 import { FilterExpensesComponent } from "../filter-expenses/filter-expenses.component";
 import { IncomesService } from "../services/incomes/incomes.service";
-import { skip } from "rxjs/operators";
+import { Entries } from "src/assets/languages/languages";
 
 @Component({
   selector: "app-home",
@@ -24,7 +24,7 @@ export class HomePage implements OnInit {
   income = 0;
   selectedId: number = null;
   showDetails: boolean = false;
-  languageWords: any;
+  languageWords: Entries;
   selectedSortType: string;
   selectedTotalAmount = 0;
   selectedArr: number[] = [];

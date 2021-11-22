@@ -1,4 +1,9 @@
 <ion-grid>
+  <ion-row>
+    <ion-col>#</ion-col>
+    <ion-col *ngIf="expenseHeader.name.display">{{expenseHeader.name.headerName}}</ion-col>
+    <ion-col *ngIf="expenseHeader.amount.display">{{expenseHeader.amount.headerName}}</ion-col>
+  </ion-row>
   <ion-row *ngFor="let expense of expenses; index as i" (click)="onSelect(expense.id)">
     <ion-col>
       <ion-row style="font-size: 1.2rem">

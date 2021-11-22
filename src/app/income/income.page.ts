@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { ModalController } from "@ionic/angular";
+import { Entries } from "src/assets/languages/languages";
 import { Income } from "../models/income.model";
 import { IncomesService } from "../services/incomes/incomes.service";
 import { LanguageService } from "../services/language/language.service";
@@ -27,7 +28,7 @@ export class IncomePage implements OnInit {
   formIsValid = false;
   totalIncomes = 0;
   selectedIncomeId: number;
-  languageWords: string;
+  languageWords: Entries;
   constructor(
     private router: Router,
     public modalController: ModalController,

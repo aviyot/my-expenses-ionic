@@ -6,6 +6,8 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { ToastController } from "@ionic/angular";
 import { LanguageService } from "../services/language/language.service";
 import { Expense } from "../models/expense.model";
+import { Entries } from "src/assets/languages/languages";
+import { combineLatest } from "rxjs";
 
 @Component({
   selector: "app-expense-add-form",
@@ -13,35 +15,31 @@ import { Expense } from "../models/expense.model";
   styleUrls: ["./expense-add-form.page.scss"],
 })
 export class ExpenseAddFormPage implements OnInit {
-  intialExpenses: Expense = new Expense(
-    new Date().getTime(),
-    null,
-    null,
-    null,
-    null,
-    1,
-    null,
-    new Date(),
-    new Date(),
-    1
-  );
+  form: FormGroup;
+
+  intialExpenses: Expense = {
+    id: new Date().getTime(),
+    name: null,
+    amount: null,
+    category: null,
+    methodPay: null,
+    freqPay: 1,
+    benef: null,
+    commitDate: new Date(),
+    fristPayDate: new Date(),
+    numberOfPay: 1,
+  };
   selectedId: string = null;
   expense: Expense;
   selectedExpense: Expense;
   expenses: Expense[];
   editMode: boolean = false;
-  form: FormGroup;
-  title: string = "Add New Expense";
   categories: string[];
   paymentMethods: string[];
   payees: string[];
   isAddCategory = false;
-  newCategory = "new cat";
-  newPaymentMethod = "new pay";
   isAddPaymentMethod = false;
-  languageWords = null;
-  defaultMethodPay: string;
-  defaultCategory: string;
+  languageWords: Entries = null;
   modal = null;
 
   constructor(
@@ -57,7 +55,8 @@ export class ExpenseAddFormPage implements OnInit {
     this.createForm();
     this.expensesService.expenses.subscribe((expenses: Expense[]) => {
       this.expenses = expenses;
-      this.getExpenseId();
+      if (this.expenses.length) this.getExpenseId();
+      else this.router.navigate(["/"]);
     });
     this.selectOpthion.categories.subscribe((categories: string[]) => {
       this.categories = categories;
@@ -72,7 +71,14 @@ export class ExpenseAddFormPage implements OnInit {
     this.languageServ.selectedLanguage.subscribe((languageWords) => {
       this.languageWords = languageWords;
     });
-
+    combineLatest([
+      this.expensesService.expenses,
+      this.selectOpthion.categories,
+      this.selectOpthion.paymentMethods,
+      this.selectOpthion.payees,
+    ]).subscribe((v) => {
+      console.log(v.length);
+    });
     this.selectOpthion.loadSelectOpthion("categories");
     this.selectOpthion.loadSelectOpthion("paymentMethods");
     this.selectOpthion.loadSelectOpthion("payees");
@@ -110,7 +116,6 @@ export class ExpenseAddFormPage implements OnInit {
   getExpenseId() {
     this.selectedId = this.route.snapshot.paramMap.get("id");
     if (this.selectedId) {
-      this.title = "Edit expense";
       this.editMode = true;
       const {
         name,
@@ -191,13 +196,13 @@ export class ExpenseAddFormPage implements OnInit {
     this.router.navigate(["/", "home"]);
   }
 
-  onInputCategory(val) {
+  /*   onInputCategory(val) {
     this.newCategory = val.target.value;
   }
 
   onInputPaymentMethod(val) {
     this.newPaymentMethod = val.target.value;
-  }
+  } */
   async onSettingClick(selectName: string) {
     this.selectOpthion.createSelectOpthionModal(selectName).then(() => {
       this.selectOpthion.selectOpthionModal

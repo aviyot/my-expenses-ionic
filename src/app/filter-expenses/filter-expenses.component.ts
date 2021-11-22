@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ModalController } from "@ionic/angular";
+import { Entries } from "src/assets/languages/languages";
 import { Expense } from "../models/expense.model";
 import { ExpensesService } from "../services/expenses/expenses.service";
 import { LanguageService } from "../services/language/language.service";
@@ -16,7 +17,7 @@ export class FilterExpensesComponent implements OnInit {
   fillterType: string;
   showStartDate = false;
   showEndDate = false;
-  languageWords: string;
+  languageWords: Entries;
   constructor(
     private expensesService: ExpensesService,
     private modalController: ModalController,

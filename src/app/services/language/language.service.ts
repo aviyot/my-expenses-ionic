@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
 
-import languages from "../../../assets/languages/languages";
+import languages, { Entries } from "../../../assets/languages/languages";
 
 @Injectable({
   providedIn: "root",
@@ -11,7 +11,7 @@ export class LanguageService {
   private _selectedLanguage: BehaviorSubject<any> = new BehaviorSubject(
     this.languages["hebrew"]
   );
-  public selectedLanguage: Observable<string> =
+  public selectedLanguage: Observable<Entries> =
     this._selectedLanguage.asObservable();
 
   constructor() {}
