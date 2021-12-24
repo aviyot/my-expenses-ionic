@@ -1,3 +1,8 @@
+<ion-header *ngIf="!showEmpty">
+  <app-control-buttons (actionType)="actionRespone($event)" [expenseSelected]="selectedId"
+    [multiypleSelect]="multiypleSelect" [expandToolbar]="expandToolbar">
+  </app-control-buttons>
+</ion-header>
 <ion-content>
   <ion-text style="color: brown" *ngIf="showEmpty">
     <h1 style="text-align: center">
@@ -8,11 +13,6 @@
     </h1>
   </ion-text>
   <div *ngIf="!showEmpty">
-    <ion-header>
-      <app-control-buttons (actionType)="actionRespone($event)" [expenseSelected]="selectedId"
-        [multiypleSelect]="multiypleSelect" [expandToolbar]="expandToolbar">
-      </app-control-buttons>
-    </ion-header>
     <app-expenses (select)=" onSelectExpense($event)" [expenses]="expenses" [showDetails]="showDetails"
       [selectedId]="selectedId" [selectedSortType]="selectedSortType" [selectedArr]="selectedArr"
       [multiypleSelect]="multiypleSelect" (selectedOp)="onSelectOp($event)">
