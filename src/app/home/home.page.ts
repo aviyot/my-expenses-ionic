@@ -90,6 +90,7 @@ export class HomePage implements OnInit {
 
     this.languageServ.selectedLanguage.subscribe((languageWords) => {
       this.languageWords = languageWords;
+      languageWords.addNewExp;
     });
 
     this.expensesService.loadLocalExpenses();

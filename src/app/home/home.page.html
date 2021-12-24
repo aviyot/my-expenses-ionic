@@ -8,11 +8,11 @@
     <h1 style="text-align: center">
       <ion-button (click)="onAdd()" color="warning">
         <ion-icon slot="end" size="large" name="add"></ion-icon>
-        Add new Expense
+        {{languageWords.addNewExp}}
       </ion-button>
     </h1>
   </ion-text>
-  <app-expenses (select)=" onSelectExpense($event)" [expenses]="expenses" [showDetails]="showDetails"
+  <app-expenses *ngIf="!showEmpty" (select)=" onSelectExpense($event)" [expenses]="expenses" [showDetails]="showDetails"
     [selectedId]="selectedId" [selectedSortType]="selectedSortType" [selectedArr]="selectedArr"
     [multiypleSelect]="multiypleSelect" (selectedOp)="onSelectOp($event)">
   </app-expenses>

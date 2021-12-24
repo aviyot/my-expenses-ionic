@@ -55,8 +55,7 @@ export class ExpenseAddFormPage implements OnInit {
     this.createForm();
     this.expensesService.expenses.subscribe((expenses: Expense[]) => {
       this.expenses = expenses;
-      if (this.expenses.length) this.getExpenseId();
-      else this.router.navigate(["/"]);
+      this.getExpenseId();
     });
     this.selectOpthion.categories.subscribe((categories: string[]) => {
       this.categories = categories;
